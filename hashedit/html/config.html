@@ -1,0 +1,166 @@
+<div class="context-body">
+
+	<h2><span i18n>Element</span> <a class="plugin-remove" i18n>Remove</a></h2>
+	
+	<div class="context-block">
+	
+		<div class="form-group">
+			<label for="id" i18n>Id</label>
+			<input name="id" type="text" maxlength="128"
+				data-model="node.id">
+		</div>
+		
+		<div class="form-group">
+			<label for="class" i18n>CSS Class</label>
+			<input name="cssClass" type="text" maxlength="128"
+				data-model="node.class">
+		</div>
+	
+	</div>
+
+</div>
+
+<div class="context-text-events">
+
+	<h2><span i18n>Text</span> 
+		<a data-action="hashedit.text.undo"><i class="fa fa-undo"></i></a></h2>
+	
+	<div class="context-block">
+	
+		<a data-action="hashedit.text.bold"><i class="fa fa-bold"></i></a>
+		<a data-action="hashedit.text.italic"><i class="fa fa-italic"></i></a>
+		<a data-action="hashedit.text.strike"><i class="fa fa-strikethrough"></i></a>
+		<a data-action="hashedit.text.subscript"><i class="fa fa-subscript"></i></a>
+		<a data-action="hashedit.text.superscript"><i class="fa fa-superscript"></i></a>
+		<a data-action="hashedit.text.underline"><i class="fa fa-underline"></i></a>
+		<a data-action="hashedit.text.link"><i class="fa fa-link"></i></a>
+		<a data-action="hashedit.text.code"><i class="fa fa-code"></i></a>
+	
+	</div>
+	<!-- /.context-block -->
+	
+	<h2 i18n>Alignment</h2>
+	
+	<div class="context-block">
+		<a data-action="hashedit.text.alignLeft"><i class="fa fa-align-left"></i></a>
+		<a data-action="hashedit.text.alignCenter"><i class="fa fa-align-center"></i></a>
+		<a data-action="hashedit.text.alignRight"><i class="fa fa-align-right"></i></a>
+	</div>
+
+</div>
+<!-- /.context-text-events -->
+
+<div class="context-body">
+	
+	<h2 i18n>Style</h2>
+	
+	<div class="context-block">
+		
+		<div class="form-group">
+			<label for="color" class="control-label" i18n>Color</label>
+			<input name="textColor" type="color" maxlength="128" value="" 
+				data-model="node.textColor">
+		</div>
+		
+		<div class="form-group">
+			<label for="class" i18n>Size</label>
+			<select name="textsize"
+				data-model="node.textSize">
+				<option value="0.5em">-5</option>
+				<option value="0.6em">-4</option>
+				<option value="0.7em">-3</option>
+				<option value="0.8em">-2</option>
+				<option value="0.9em">-1</option>	
+				<option value="">--</option>
+				<option value="1.1em">+1</option>
+				<option value="1.2em">+2</option>
+				<option value="1.3em">+3</option>
+				<option value="1.4em">+4</option>
+				<option value="1.5em">+5</option>
+				<option value="1.6em">+6</option>
+				<option value="1.7em">+7</option>
+				<option value="1.8em">+8</option>
+				<option value="1.9em">+9</option>
+				<option value="2.0em">+10</option>
+				<option value="2.5em">+15</option>
+				<option value="3.0em">+20</option>
+			</select>
+		</div>
+	
+	</div>
+	<!-- /.context-block -->
+
+</div>
+<!-- /.context-body -->
+
+<div class="context-body">
+	
+	<h2 i18n>Text Shadow</h2>
+	
+	<div class="context-block">
+		
+		<div class="form-group">
+			<label for="color" class="control-label" i18n>Color</label>
+			<input name="shadowColor" type="color" maxlength="128" value="" 
+				data-model="node.textShadowColor">
+		</div>
+		
+		<div class="form-group">
+			<label for="class" i18n>Horizontal</label>
+			<select name="textshadowhorizontal"
+				data-model="node.textShadowHorizontal">	
+				<option value=""></option>
+				<option value="1px">1</option>
+				<option value="2px">2</option>
+				<option value="3px">3</option>
+				<option value="4px">4</option>
+				<option value="5px">5</option>
+				<option value="6px">6</option>
+				<option value="7px">7</option>
+				<option value="8px">8</option>
+				<option value="9px">9</option>
+				<option value="10px">10</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<label for="class" i18n>Vertical</label>
+			<select name="textshadowvertical"
+				data-model="node.textShadowVertical">	
+				<option value=""></option>
+				<option value="1px">1</option>
+				<option value="2px">2</option>
+				<option value="3px">3</option>
+				<option value="4px">4</option>
+				<option value="5px">5</option>
+				<option value="6px">6</option>
+				<option value="7px">7</option>
+				<option value="8px">8</option>
+				<option value="9px">9</option>
+				<option value="10px">10</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<label for="class" i18n>Blur</label>
+			<select name="textshadowblur"
+				data-model="node.textShadowBlur">	
+				<option value=""></option>
+				<option value="1px">1</option>
+				<option value="2px">2</option>
+				<option value="3px">3</option>
+				<option value="4px">4</option>
+				<option value="5px">5</option>
+				<option value="6px">6</option>
+				<option value="7px">7</option>
+				<option value="8px">8</option>
+				<option value="9px">9</option>
+				<option value="10px">10</option>
+			</select>
+		</div>
+	
+	</div>
+	<!-- /.context-block -->
+
+</div>
+<!-- /.context-body -->

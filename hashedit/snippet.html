@@ -1,0 +1,19 @@
+<script>
+	// write new document out of session storage
+	if(window.location.href.indexOf('#edit') != -1){
+		var key = window.location.href;
+
+		if(localStorage.getItem(key) != null){
+		
+			function write(){
+				html = localStorage.getItem(key);				
+				document.body.innerHTML = html;
+			}
+			
+			write();
+		}
+	}
+</script>
+
+<!-- minified -->
+<script>function write(){html=localStorage.getItem(key),document.body.innerHTML=html}if(-1!=window.location.href.indexOf("#edit")){var key=window.location.href;null!=localStorage.getItem(key)&&write()}</script>

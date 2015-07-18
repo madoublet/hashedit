@@ -1,0 +1,32 @@
+<link rel="import" href="lib/polymer/polymer.html">
+
+<dom-module id="respond-content">
+  <template>
+	
+		<h1>Test</h1>
+	
+	</template>
+</dom-module>
+
+<script>
+  Polymer({
+	  	is: "respond-content",
+	
+	  	// element attributes
+	  	properties: {
+	  		url: { type: String },
+	  		contentid: { type: String },
+	  		cssclass: { type: String }
+		},
+		
+		// attached
+		attached: function() {
+			
+			//var toLight = document.createElement('div');
+			//toLight.innerHTML = '<h1>This worked in Polymer 0.9</h1>';
+			//Polymer.dom(this).appendChild(toLight);
+		
+		}
+	
+	});
+</script>

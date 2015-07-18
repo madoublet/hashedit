@@ -1,0 +1,247 @@
+body[hashedit]{
+	padding-left: 50px;
+	padding-right: 250px;
+}
+
+.hashedit-sortable{
+	border-bottom: 0;
+}
+
+.hashedit-element{
+	position: relative;
+}
+
+.hashedit-move{
+	cursor: move;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 50px;
+	height: 50px;
+}
+
+.hashedit-move span{
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: rgba(255,153,0,1);
+	width: 15px;
+	height: 15px;
+	transition: all 0.25s ease;
+}
+
+.hashedit-move:hover span{
+	width: 35px;
+	height: 35px;
+}
+
+.hashedit-highlight{
+	background-color: rgba(255,153,0,1);
+    min-height: 50px;
+    display: block;
+} 
+
+body [contentEditable=true]:focus{
+	outline: none;
+	background-color: rgba(240,240,240,.5);
+}
+
+/* menu */
+.hashedit-menu{
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 50px;
+	background-color: rgba(255,255,255,.95);
+	margin: 0;
+	padding: 0;
+	box-shadow: 1px 2px 3px rgba(119,119,119,0.4);
+	color: #888;
+}
+
+	.hashedit-menu .hashedit-menu-logo {
+		width: 30px;
+		margin: 10px;
+	}
+	
+	.hashedit-menu .hashedit-save{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		background-color: rgba(255,153,0,1);
+		color: #fff;
+		width: 50px;
+		height: 50px;
+		border: 0;
+		outline: none;
+		font-size: 20px;
+	}
+
+	.hashedit-menu a{
+		display: block;
+		cursor: pointer;
+		width: 50px;
+		height: 50px;
+		color: #777;
+		text-align: center;
+		line-height: 50px;
+		font-size: 13px;
+		border-top: 1px solid #f0f0f0;
+	}
+	
+		.hashedit-menu a:last-child{
+			border-bottom: 1px solid #f0f0f0;
+		}
+	
+	.hashedit-menu a:hover{
+		background-color: #f8f8f8;
+	}
+	
+/* aside */
+body .hashedit-config{
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 250px;
+	background-color: rgba(255,255,255,.95);
+	margin: 0;
+	padding: 0;
+	box-shadow: -1px 2px 3px rgba(119,119,119,0.4);
+	color: #888;
+	overflow: scroll;
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+}
+
+	body .hashedit-config label, body .hashedit-config input, body .hashedit-config select, body .hashedit-config h2, body .hashedit-config a, body .hashedit-config small{
+		font-family: 'Helvetica', 'Arial', 'sans-serif';	
+	}
+
+
+	body .hashedit-config .font-up, body .hashedit-config .font-down{
+		font-size: 12px;
+		color: #888;
+		margin-left: -2px;
+	}
+
+	body .hashedit-config .text-block{
+		display: inline-block;
+		padding-top: 7px;
+	}
+
+	body .hashedit-config h2{
+		margin: -1px 0 0 0;
+		padding: 11px 5px;
+		font-size: 13px;
+		color: #aaa;
+		border-bottom: 1px solid #ddd;
+		border-top: 1px solid #ddd;
+		text-transform: uppercase;
+		font-weight: 300;
+		background-color: #f8f8f8;
+	}
+	
+	body .hashedit-config h2 a{
+		float: right;
+		text-transform: none;
+		margin-left: 15px; 
+		text-transform: uppercase;
+	}
+	
+	body .hashedit-config h2 i{
+		color: #888;
+	}
+	
+	/* toggles context menu */
+	body .hashedit-config .config{
+		display: none;
+	}
+	
+	body .hashedit-config .config.active{
+		display: block;
+	}
+	
+	body .hashedit-config .context-text-events .context-block a{
+		display: inline-block;
+		position: relative;
+		width: 35px; 
+		height: 35px;
+		margin: 0 0 5px 0;
+		padding: 0;
+		text-align: center;
+		line-height: 35px;
+		color: #555;
+		font-size: 13px;
+		vertical-align: top;
+		border-radius: 50%;
+		background-color: transparent;
+	}	
+	
+	.content .context-text-events{
+		padding-bottom: 10px;
+	}
+	
+	.content .context-text-events .context-block  a:hover{
+		background-color: #f0f0f0;
+	}
+	
+	body .hashedit-config .form-group label{
+		display: inline-block;
+		width: 80px;
+		text-transform: uppercase;
+		font-weight: normal;
+		color: #888;
+		font-size: 11px;
+	}
+	
+	
+	body .hashedit-config input{
+		width: 150px;
+		background-color: #fff !important;
+		border-radius: 0 !important;
+		padding: 0 5px !important;
+		height: 30px !important;
+		line-height: 30px !important;
+		border: 1px solid #ddd;
+		border-radius: 0 !important;
+		outline: none !important;
+	}
+	
+	body .hashedit-config select{
+		width: 150px;
+	}
+	
+	body .hashedit-config textarea{
+		height: 75px;
+		line-height: 20px;
+		padding-top: 5px;	
+	}
+	
+	body .hashedit-config .context-block{
+		padding: 10px 5px 0 5px;
+	}
+
+	body .hashedit-config .form-group .image-picker{
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		width: 35px;
+		height: 30px;
+		text-align: center;
+		line-height: 30px;
+		border: 1px solid #ddd;
+		background-color: #f8f8f8;
+		border-left: 1px solid #f8f8f8;
+		outline: none;
+	}
+
+	body .hashedit-config .form-group .image-picker i{
+		color: #777;
+	}
+
