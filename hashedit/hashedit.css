@@ -3,6 +3,11 @@ body[hashedit]{
 	padding-right: 250px;
 }
 
+
+[hashedit-sortable]{
+	min-height: 50px;
+}
+
 .hashedit-sortable{
 	border-bottom: 0;
 }
@@ -24,15 +29,31 @@ body[hashedit]{
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: rgba(255,153,0,1);
+	background-color: rgba(255,153,0,0.75);
 	width: 15px;
 	height: 15px;
+	text-align: center;
+	line-height: 15px;
+	transition: all 0.25s ease;
+	border-radius: 50%;
+}
+
+.hashedit-move span i{
+	color: #fff;
+	font-size: 13px;
+	opacity: 0;
 	transition: all 0.25s ease;
 }
 
 .hashedit-move:hover span{
 	width: 35px;
 	height: 35px;
+	line-height: 35px;
+	background-color: rgba(255,153,0,1);
+}
+
+.hashedit-move:hover span i{
+	opacity: 1;
 }
 
 .hashedit-highlight{
@@ -108,9 +129,9 @@ body .hashedit-config{
 	right: 0;
 	height: 100%;
 	width: 250px;
-	background-color: rgba(255,255,255,.95);
 	margin: 0;
 	padding: 0;
+	background-color: #fff;
 	box-shadow: -1px 2px 3px rgba(119,119,119,0.4);
 	color: #888;
 	overflow: scroll;
@@ -157,12 +178,21 @@ body .hashedit-config{
 	}
 	
 	/* toggles context menu */
-	body .hashedit-config .config{
-		display: none;
+	body .hashedit-config .config, 
+	body .hashedit-config .link{
+		position: absolute;
+		top: 0;
+		right: -325px;
+		transition: all 0.25s ease;
+		border-left: 1px solid #ddd;
+		height: 100%;
+		width: 250px;
+		background-color: #fff;
 	}
 	
-	body .hashedit-config .config.active{
-		display: block;
+	body .hashedit-config .config[visible], 
+	body .hashedit-config .link[visible]{
+		right: 0;
 	}
 	
 	body .hashedit-config .context-text-events .context-block a{
@@ -179,13 +209,14 @@ body .hashedit-config{
 		vertical-align: top;
 		border-radius: 50%;
 		background-color: transparent;
+		cursor: pointer;
 	}	
 	
-	.content .context-text-events{
+	body .hashedit-config .context-text-events{
 		padding-bottom: 10px;
 	}
 	
-	.content .context-text-events .context-block  a:hover{
+	body .hashedit-config .context-text-events .context-block  a:hover{
 		background-color: #f0f0f0;
 	}
 	
