@@ -25,30 +25,26 @@ body[hashedit]{
 	height: 50px;
 }
 
-.hashedit-move span{
-	position: absolute;
-	top: 0;
-	right: 0;
-	background-color: rgba(255,153,0,0.75);
-	width: 15px;
-	height: 15px;
-	text-align: center;
-	line-height: 15px;
-	transition: all 0.25s ease;
-	border-radius: 50%;
-	color: #fff;
-}
-
-.hashedit-move span svg{
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	fill: currentColor;
-	width: 15px;
-	height: 15px;
-	opacity: 0;
-	transition: all 0.25s ease;
-}
+	.hashedit-move span{
+		position: absolute;
+		top: 0;
+		right: 0;
+		background-color: rgba(255,153,0,0.75);
+		width: 15px;
+		height: 15px;
+		text-align: center;
+		line-height: 15px;
+		transition: all 0.25s ease;
+		color: #fff;
+	}
+	
+	.hashedit-move span svg{
+		fill: currentColor;
+		width: 50%;
+		margin: 0 auto;
+		opacity: 0;
+		transition: all 0.25s ease;
+	}
 
 .hashedit-move:hover span{
 	width: 35px;
@@ -131,6 +127,8 @@ body [contentEditable=true] a{
 	
 	.hashedit-menu .hashedit-save svg{
 		fill: currentColor;
+		width: 60%;
+		margin: 0 auto;
 	}
 
 	.hashedit-menu a{
@@ -148,8 +146,8 @@ body [contentEditable=true] a{
 	
 		.hashedit-menu a svg{
 			display: block;
-			margin: auto;
-			width: 40%;
+			margin: 0 auto;
+			width: 50%;
 			fill: currentColor;
 		}
 	
@@ -211,10 +209,14 @@ body .hashedit-config{
 		text-transform: none;
 		margin-left: 15px; 
 		text-transform: uppercase;
+		cursor: pointer;
+		color: #888;
 	}
 	
-	body .hashedit-config h2 i{
-		color: #888;
+	body .hashedit-config h2 svg{
+		fill: currentColor;
+		width: 18px;
+		display: none;
 	}
 	
 	/* toggles context menu */
@@ -252,10 +254,15 @@ body .hashedit-config{
 		color: #555;
 		font-size: 13px;
 		vertical-align: top;
-		border-radius: 50%;
 		background-color: transparent;
 		cursor: pointer;
-	}	
+	}
+	
+		body .hashedit-config .context-text-events .context-block a svg{
+			fill: currentColor;
+			width: 50%;
+			margin: 0 auto;
+		}	
 	
 	body .hashedit-config .context-text-events{
 		padding-bottom: 10px;

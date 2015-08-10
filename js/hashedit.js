@@ -225,7 +225,7 @@ var hashedit = {
 		// create a menu
 		var menu = document.createElement('menu');
 		menu.setAttribute('class', 'hashedit-menu');
-		menu.innerHTML = '<img class="hashedit-menu-logo" src="' + path + 'logo.png"><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
+		menu.innerHTML = '<button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
 		
 		// append menu
 		document.body.appendChild(menu);
