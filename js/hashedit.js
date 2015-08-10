@@ -13,11 +13,14 @@ var hashedit = {
 	currNode: null,
 	currConfig: null,
 	
+	// function to save
+	save: null,
+	
 	// handles text selection
 	selection: null,
 	
 	// configurations
-	elementMenu: '<span class="hashedit-move"><span><i class="fa fa-arrows"></i></span></span>',
+	elementMenu: '<span class="hashedit-move"><span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span></span>',
 	
 	// stores a mirror of the DOM
 	mirror: null,
@@ -78,7 +81,7 @@ var hashedit = {
 				localStorage.clear();
 				
 				// set the HTML in session
-				localStorage.setItem(key, doc.body.innerHTML);
+				localStorage.setItem(key, doc.documentElement.innerHTML);
 				
 				// rewrite the URL
 				window.location.href = window.location.href;
@@ -152,7 +155,7 @@ var hashedit = {
 			// create a handle
 			var span = document.createElement('span');
 			span.setAttribute('class', 'hashedit-move');
-			span.innerHTML = '<span><i class="fa fa-arrows"></i></span>';
+			span.innerHTML = '<span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span>';
 			
 			// append the handle to the wrapper
 			div.appendChild(span);
@@ -222,7 +225,7 @@ var hashedit = {
 		// create a menu
 		var menu = document.createElement('menu');
 		menu.setAttribute('class', 'hashedit-menu');
-		menu.innerHTML = '<img class="hashedit-menu-logo" src="' + path + 'logo.png"><button class="hashedit-save"><i class="fa fa-cloud-upload"></i></button>';
+		menu.innerHTML = '<img class="hashedit-menu-logo" src="' + path + 'logo.png"><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
 		
 		// append menu
 		document.body.appendChild(menu);
@@ -230,6 +233,10 @@ var hashedit = {
 		// create click event
 		document.querySelector('.hashedit-menu .hashedit-save').addEventListener('click', function(){
 			var html = hashedit.retrieveHTML();
+			
+			if(hashedit.save){
+				hashedit.save(html);
+			}
 		});
 		
 	},
@@ -358,15 +365,22 @@ var hashedit = {
 			// delegate CLICK, FOCUS event
 			['click', 'focus'].forEach(function(e){
 		    	arr[x].addEventListener(e, function(e){
-			    	
+		    	
+		    		if(e.target.nodeName == 'A'){
+			    		hashedit.showLinkDialog();
+		    		}
+		    		
 			    	if(e.target.hasAttribute('contentEditable')){
 			    	
 			    		// set current node
 			    		hashedit.currNode = e.target;
 			    		
+			    		// hide link
+			    		var link = document.querySelector('.hashedit-config .link');
+					    link.removeAttribute('visible');
+			    		
 			    		// get .config
 			    		var form = document.querySelector('.hashedit-config .config');
-				    	
 				    	form.setAttribute('visible', '');
 				    		
 				    	// clear form fields
@@ -420,7 +434,7 @@ var hashedit = {
 			    		
 						var ref = el.getAttribute('data-ref');
 			    		var html = el.innerHTML;
-												
+			    								
 						// set the mirror HTML
 						hashedit.setMirrorHTML(ref, html);
 						
@@ -545,6 +559,24 @@ var hashedit = {
 								hashedit.currNode.setAttribute('style', style);
 							}
 						}
+						
+						if(model.indexOf('link.') != -1){
+							var parts = model.split('.');
+							
+							// converts camelcase to hyphens, sets attribute
+							if(parts.length > 1){
+							
+								// get property
+								attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+								
+								// set attribute
+								hashedit.currLink.setAttribute(attr, value);
+								
+								// fire event
+								hashedit.currNode.dispatchEvent(new Event('input', { 'bubbles': true }));
+								
+							}
+						}
 					
 					}
 					
@@ -606,13 +638,21 @@ var hashedit = {
 							return false;
 			    		}
 			    		else if(action == 'hashedit.text.link'){
-				    		// show the link dialog
-				    		var form = document.querySelector('.hashedit-config .link');
-					    	
-					    	form.setAttribute('visible', '');
+			    			
+			    			// add link html
+			    			var text = hashedit.getSelectedText();
+							var html = '<a>'+text+'</a>';
+							
+							document.execCommand("insertHTML", false, html);
+			    		
+							// shows/manages the link dialog
+							hashedit.showLinkDialog();
+							
 							return false;
 			    		}
 			    		else if(action == 'hashedit.text.code'){
+			    		
+			    			// create code html
 				    		var text = hashedit.getSelectedText();
 							var html = '<code>'+text+'</code>';
 							
@@ -693,11 +733,45 @@ var hashedit = {
 	},
 	
 	/**
+	 * Sets up the link dialog
+	 */
+	showLinkDialog: function(){
+	
+		// get selected link
+		hashedit.currLink = hashedit.getLinkFromSelection();
+		
+		// populate link values
+		if(hashedit.currLink != null){
+		
+			// get  attributes
+			var id = hashedit.currLink.getAttribute('id');
+			var cssClass = hashedit.currLink.getAttribute('class');
+			var href = hashedit.currLink.getAttribute('href');
+			var target = hashedit.currLink.getAttribute('target');
+			var title = hashedit.currLink.getAttribute('title');
+		
+			// show the link dialog
+			var link = document.querySelector('.hashedit-config .link');
+	    	link.setAttribute('visible', '');
+	    	
+	    	// sets start values
+	    	document.getElementById('hashedit-link-id').value = id;
+	    	document.getElementById('hashedit-link-cssclass').value = cssClass;
+	    	document.getElementById('hashedit-link-href').value = href;
+	    	document.getElementById('hashedit-link-target').value = target;
+	    	document.getElementById('hashedit-link-title').value = title;
+			
+		}
+		
+	},
+	
+	
+	/**
 	 * Executes a function by its name and applies arguments
 	 * @param {String} functionName
 	 * @param {String} context
 	 */
-	executeFunctionByName:function(functionName, context /*, args */) {
+	executeFunctionByName: function(functionName, context /*, args */) {
 	
 		var args = [].slice.call(arguments).splice(2);
 		var namespaces = functionName.split(".");
@@ -884,10 +958,7 @@ var hashedit = {
 	 */
 	retrieveHTML: function(){
 		
-		var html = hashedit.mirror.documentElement.innerHTML;
-		
-		console.log(html);
-		
+		var html = hashedit.mirror.documentElement.outerHTML;
 		return html;
 		
 	},
@@ -996,6 +1067,10 @@ var hashedit = {
 		hashedit.createMenu(config.path);
 		hashedit.loadHTML(config.path);
 		hashedit.setupTextEvents();
+		
+		if(config.save != null){
+			hashedit.save = config.save;
+		}
 		
 	}
 	

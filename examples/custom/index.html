@@ -28,23 +28,17 @@
 	<link type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.css" rel="stylesheet">
     
 	<!-- css -->
-    <link type="text/css" href="css/libs.min.css?t=1436554188" rel="stylesheet">
-	<link type="text/css" href="css/respond.min.css?t=1436554188" rel="stylesheet">
+    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="css/respond.min.css" rel="stylesheet">
 
   </head>
 
   <!-- entry point for site -->
   <body class="home show-cart show-languages">
 
-		<respond-cart></respond-cart>
-		<respond-search></respond-search> 
-
 		<header role="banner">
 		
 			<nav class="navbar navbar-default" role="navigation">
-		      
-		      <respond-search-toggle></respond-search-toggle>
-		      <respond-cart-toggle></respond-cart-toggle>
 		      
 			  <div class="navbar-header">
 			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -78,7 +72,22 @@
         			</p>
         		</div>
 				<div class="col col-md-6">
-					<respond-slideshow slideshowid="slideshow-1" indicators="true" arrows="true" interval="200000" wrap="true" pauseonhover="true" transition="slide" position="default"><div><img src="http://dev.respondcms.com/sites/test/files/energy-sample-1.png" title="" class="" data-headline="" data-caption="" data-button="" data-link="" data-location="local"></div><div><img src="http://dev.respondcms.com/sites/test/files/energy-sample-2.jpg" title="" class="" data-headline="" data-caption="" data-button="" data-link="" data-location="local"></div></respond-slideshow>
+					<div data-ride="carousel" class="carousel slide style-scope respond-slideshow" data-interval="200000" data-wrap="true" id="carousel-slideshow-1" data-pause="hover">
+						<ol id="indicatorsList" class="carousel-indicators style-scope respond-slideshow" visible=""><li data-target="#carousel-slideshow-1" data-slide-to="0" class=" active style-scope respond-slideshow"></li><li data-target="#carousel-slideshow-1" data-slide-to="1" class="style-scope respond-slideshow"></li></ol>
+						
+						
+						<div id="slidesList" class="carousel-inner style-scope respond-slideshow" role="listbox"><div class="item  active style-scope respond-slideshow"><img src="http://dev.respondcms.com/sites/test/files/energy-sample-1.png" class="style-scope respond-slideshow"><div class="container style-scope respond-slideshow"></div></div><div class="item style-scope respond-slideshow"><img src="http://dev.respondcms.com/sites/test/files/energy-sample-2.jpg" class="style-scope respond-slideshow"><div class="container style-scope respond-slideshow"></div></div></div>
+						
+						
+						<a class="left carousel-control style-scope respond-slideshow" role="button" data-slide="prev" href="#carousel-slideshow-1" visible="">
+							<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope respond-slideshow"><g class="style-scope respond-slideshow"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" class="style-scope respond-slideshow"></path></g></svg>
+						</a>
+						<a class="right carousel-control style-scope respond-slideshow" role="button" data-slide="next" href="#carousel-slideshow-1" visible="">
+							<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope respond-slideshow"><g class="style-scope respond-slideshow"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" class="style-scope respond-slideshow"></path></g></svg>
+						</a>
+						
+						
+					</div>
 			    </div>
 			</div>
 			<div id="block-2" class="block row"><div  class="col col-md-9"><h3 id="h3-1" data-i18n="552d1c9579528.h3-1">Who are we?</h3><p id="p-3" data-i18n="552d1c9579528.p-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis mollis arcu, eget posuere libero faucibus sit amet. Cras pharetra pellentesque augue, id vestibulum nisi pharetra et. Morbi in dapibus leo. Vivamus vehicula risus vel eros
@@ -127,29 +136,34 @@
 <!-- #edit -->
 <script>function write(){html=localStorage.getItem(key),document.body.innerHTML=html}if(-1!=window.location.href.indexOf("#edit")){var key=window.location.href;null!=localStorage.getItem(key)&&write()}</script>
 
-<!-- js -->
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="js/respond.site.js"></script>
-
-<!-- web components -->
-<script src="components/lib/webcomponentsjs/webcomponents-lite.min.js"></script>
-<link rel="import" href="components/respond-build.html">
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 
 <!-- hashedit -->
-<link type="text/css" href="../../hashedit/hashedit.css" rel="stylesheet">
-<script src="../../hashedit/hashedit.libs.min.js"></script>
-<script src="../../hashedit/hashedit.js"></script>
-<script src="../../hashedit/hashedit.plugins.js"></script>
+<link type="text/css" href="../../css/hashedit.css" rel="stylesheet">
+<script src="../../js/hashedit.libs.min.js"></script>
+<script src="../../js/hashedit.js"></script>
+<script src="../../js/hashedit.plugins.js"></script>
 
 <script>
+	
 	// initialize hashedit
 	if(window.location.href.indexOf('#edit') != -1){
-	
-		hashedit.setup({
+		
+    	// setup hashedit
+    	hashedit.setup({
 			url: 'index.html',
-			path: '../../hashedit/',
-			sortable: ['.col']
+			path: '../../',
+			sortable: ['.col'],
+			save: function(html){
+			
+				// clear localStorage
+				localStorage.clear();
+			
+				console.log(html);
+			
+			}
 		});
 		
 	}

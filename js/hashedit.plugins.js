@@ -43,7 +43,7 @@ hashedit.menu = [
 		"action":	"hashedit.blockquote",
 		"selector":	"blockquote",
 		"title":	"Blockquote",
-		"display":	"<i class='fa fa-quote-right'></i>"
+		"display":	"<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' fit='' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>"
 	}
 ];
 
