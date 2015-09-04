@@ -1,9 +1,3 @@
-body[hashedit]{
-	padding-left: 50px;
-	padding-right: 250px;
-}
-
-
 [hashedit-sortable]{
 	min-height: 50px;
 }
@@ -164,18 +158,28 @@ body .hashedit-config{
 	position: fixed;
 	z-index: 1000;
 	top: 0;
-	right: 0;
+	right: -325px;
+	transition: all 0.25s ease;
+	border-left: 1px solid #ddd;
 	height: 100%;
 	width: 250px;
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
 	box-shadow: -1px 2px 3px rgba(119,119,119,0.4);
-	color: #888;
+	
+	background-color: #fff;
 	overflow: scroll;
-	font-family: 'Helvetica', 'Arial', 'sans-serif';
 }
 
+	body .hashedit-config[visible]{
+		right: 0;
+	}
+
+	body #hashedit-link-settings{
+		z-index: 1002;
+	}
+	
 	body .hashedit-config label, body .hashedit-config input, body .hashedit-config select, body .hashedit-config h2, body .hashedit-config a, body .hashedit-config small{
 		font-family: 'Helvetica', 'Arial', 'sans-serif';	
 	}
@@ -219,28 +223,6 @@ body .hashedit-config{
 		display: none;
 	}
 	
-	/* toggles context menu */
-	body .hashedit-config .config, 
-	body .hashedit-config .link{
-		position: absolute;
-		top: 0;
-		right: -325px;
-		transition: all 0.25s ease;
-		border-left: 1px solid #ddd;
-		height: 100%;
-		width: 250px;
-		background-color: #fff;
-		z-index: 1;
-	}
-	
-	body .hashedit-config .link{
-		z-index: 2;
-	}
-	
-	body .hashedit-config .config[visible], 
-	body .hashedit-config .link[visible]{
-		right: 0;
-	}
 	
 	body .hashedit-config .context-text-events .context-block a{
 		display: inline-block;

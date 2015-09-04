@@ -287,13 +287,7 @@ var hashedit = {
 	 * Load html from html/* into the aside
 	 */
 	loadHTML: function(path){
-	
-		// create aside
-		var aside = document.createElement('aside');
-		aside.setAttribute('class', 'hashedit-config');
-		
-		document.body.appendChild(aside);
-	
+
 		// fetch the config
 		fetch(path + 'html/config.html')
 		  .then(function(response) {
@@ -301,10 +295,11 @@ var hashedit = {
 		  }).then(function(text) { 
 		  
 		  	var div = document.createElement('div');
-		  	div.setAttribute('class', 'config');
+		  	div.setAttribute('id', 'hashedit-element-settings');
+		  	div.setAttribute('class', 'hashedit-config');
 		  	div.innerHTML = text;
 		  	
-		  	document.querySelector('.hashedit-config').appendChild(div);
+		  	document.querySelector('body').appendChild(div);
 		  	
 			hashedit.setupConfigEvents();
 		  });
@@ -316,10 +311,11 @@ var hashedit = {
 		  }).then(function(text) { 
 		  
 		  	var div = document.createElement('div');
-		  	div.setAttribute('class', 'link');
+		  	div.setAttribute('id', 'hashedit-link-settings');
+		  	div.setAttribute('class', 'hashedit-config');
 		  	div.innerHTML = text;
 		  	
-		  	document.querySelector('.hashedit-config').appendChild(div);
+		  	document.querySelector('body').appendChild(div);
 		  	
 			hashedit.setupConfigEvents();
 		  });
@@ -375,12 +371,12 @@ var hashedit = {
 			    		// set current node
 			    		hashedit.currNode = e.target;
 			    		
-			    		// hide link
-			    		var link = document.querySelector('.hashedit-config .link');
+			    		// hide #hashedit-link
+			    		var link = document.querySelector('#hashedit-link-settings');
 					    link.removeAttribute('visible');
 			    		
-			    		// get .config
-			    		var form = document.querySelector('.hashedit-config .config');
+			    		// get #hashedit-config
+			    		var form = document.querySelector('#hashedit-element-settings');
 				    	form.setAttribute('visible', '');
 				    		
 				    	// clear form fields
@@ -751,7 +747,7 @@ var hashedit = {
 			var title = hashedit.currLink.getAttribute('title');
 		
 			// show the link dialog
-			var link = document.querySelector('.hashedit-config .link');
+			var link = document.querySelector('#hashedit-link-settings');
 	    	link.setAttribute('visible', '');
 	    	
 	    	// sets start values
