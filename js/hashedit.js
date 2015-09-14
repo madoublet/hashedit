@@ -225,7 +225,7 @@ var hashedit = {
 		// create a menu
 		var menu = document.createElement('menu');
 		menu.setAttribute('class', 'hashedit-menu');
-		menu.innerHTML = '<button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
+		menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" class="style-scope iron-icon"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
 		
 		// append menu
 		document.body.appendChild(menu);
@@ -289,19 +289,20 @@ var hashedit = {
 	loadHTML: function(path){
 
 		// fetch the config
-		fetch(path + 'html/config.html')
+		fetch(path + 'html/element.html')
 		  .then(function(response) {
 		    return response.text();
 		  }).then(function(text) { 
 		  
 		  	var div = document.createElement('div');
 		  	div.setAttribute('id', 'hashedit-element-settings');
-		  	div.setAttribute('class', 'hashedit-config');
+		  	div.setAttribute('class', 'hashedit-config hashedit-element-config');
 		  	div.innerHTML = text;
 		  	
 		  	document.querySelector('body').appendChild(div);
 		  	
 			hashedit.setupConfigEvents();
+			hashedit.setupTextEvents();
 		  });
 
 		// fetch the config
@@ -588,8 +589,10 @@ var hashedit = {
 	 * Setup text events (e.g. bold, italic, etc)
 	 */
 	setupTextEvents: function(){
-	
+		
 		var arr = document.querySelectorAll('.hashedit-config');
+		
+		console.log(arr.length);
 		
 		for(var x = 0; x < arr.length; x++){
 			
@@ -600,7 +603,7 @@ var hashedit = {
 			    	
 			    	var el = e.target;
 			    	
-			    	if(el.nodeName == 'I'){
+			    	if(el.nodeName == 'SVG'){
 				    	el = el.parentNode;
 			    	}
 			    	
@@ -1062,7 +1065,6 @@ var hashedit = {
 		hashedit.setupMenu(config.path);
 		hashedit.createMenu(config.path);
 		hashedit.loadHTML(config.path);
-		hashedit.setupTextEvents();
 		
 		if(config.save != null){
 			hashedit.save = config.save;
