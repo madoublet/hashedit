@@ -1,4 +1,4 @@
-body[hashedit]{
+body[hashedit-active]{
 	margin-top: 50px;
 }
 
@@ -34,6 +34,7 @@ body[hashedit]{
 		line-height: 15px;
 		transition: all 0.25s ease;
 		color: #fff;
+		border-radius: 50%;
 	}
 	
 	.hashedit-move span svg{
@@ -102,7 +103,13 @@ body [contentEditable=true] a{
 	padding: 0 0 0 50px;
 	color: #888;
 	border-bottom: 1px solid #DDD;
+	overflow-x: scroll;
 }
+
+	.hashedit-menu .hashedit-menu-body{
+		width: 2000px;
+		z-index: 1;
+	}
 
 	.hashedit-menu .hashedit-menu-logo{
 		width: 30px;
@@ -122,6 +129,7 @@ body [contentEditable=true] a{
 		outline: none;
 		font-size: 20px;
 		color: #fff;
+		z-index: 2;
 	}
 	
 		.hashedit-menu .hashedit-save svg{
@@ -143,6 +151,7 @@ body [contentEditable=true] a{
 		outline: none;
 		font-size: 20px;
 		color: #fff;
+		z-index: 2;
 	}
 	
 		.hashedit-menu .hashedit-more svg{
@@ -153,7 +162,7 @@ body [contentEditable=true] a{
 
 	.hashedit-menu a{
 		position: relative;
-		display: inline-block;
+		float: left;
 		cursor: pointer;
 		width: 50px;
 		height: 49px;
@@ -208,7 +217,7 @@ body [contentEditable=true] a{
 body .hashedit-config{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
 	position: fixed;
-	z-index: 1001;
+	z-index: 1000;
 	top: -1px;
 	left: 0;
 	height: 50px;
@@ -218,17 +227,46 @@ body .hashedit-config{
 	padding: 0;
 	color: #888;
 	border-bottom: 1px solid #DDD;
-	overflow: scroll;
+	overflow-x: scroll;
 	transition: all 0.25s ease;
 }
+
+	body .hashedit-config .hashedit-context-body{
+		width: 2000px;
+	}
+	
+	body #hashedit-link-settings{
+		z-index: 1001;
+	}
+	
+	body #hashedit-image-settings{
+		z-index: 1001;
+	}
+
 
 	body .hashedit-config[visible]{
 		top: 50px;
 	}
 	
+	body .hashedit-config label{
+		height: 50px;
+		line-height: 50px;
+		color: #888;
+		font-size: 11px;
+		text-transform: uppercase;
+		border-right: 1px solid #ddd;
+		padding: 0 10px;
+		font-weight: normal;
+		background-color: #f8f8f8;
+	}
+	
+	body .hashedit-config a, body .hashedit-config label, body .hashedit-config input, body .hashedit-config select{
+		float: left;
+	}
+	
 	body .hashedit-config a{
 		position: relative;
-		display: inline-block;
+		float: left;
 		cursor: pointer;
 		width: 50px;
 		height: 49px;
@@ -261,7 +299,7 @@ body .hashedit-config{
 		}
 		
 		body .hashedit-config select{
-			font-size: 15px;
+			font-size: 13px;
 			box-shadow: none;
 			background: none;
 			outline: none;
@@ -270,9 +308,12 @@ body .hashedit-config{
 			border-radius: 0;
 			padding: 5px 10px;
 			height: 50px;
+			min-width: 50px;
 		    background-color: transparent;
 		    -webkit-appearance: none;
 			-webkit-border-radius: 0px;
+			border-right: 1px solid #ddd;
+			text-align: center;
 		}
 	
 	body .hashedit-config a:hover, body .hashedit-config a:hover{

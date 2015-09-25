@@ -103,10 +103,10 @@ var hashedit = {
 	setActive: function(){
 	
 		// set hashedit on body		
-		document.querySelector('body').setAttribute('hashedit', '');
+		document.querySelector('body').setAttribute('hashedit-active', '');
 		
 		// setup [contentEditable=true]
-		var els = document.querySelectorAll('p, h1, h2, h3, h4, h5, li, td, th, blockquote');
+		var els = document.querySelectorAll('[hashedit] p, [hashedit] h1, [hashedit] h2, [hashedit] h3, [hashedit] h4, [hashedit] h5,[hashedit] li, [hashedit] td, [hashedit] th, [hashedit] blockquote');
 		
 		for(var x=0; x < els.length; x++){
 			
@@ -225,17 +225,17 @@ var hashedit = {
 		// create a menu
 		var menu = document.createElement('menu');
 		menu.setAttribute('class', 'hashedit-menu');
-		menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" class="style-scope iron-icon"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button>';
+		menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" class="style-scope iron-icon"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button><div class="hashedit-menu-body"></div>';
 		
 		// append menu
 		document.body.appendChild(menu);
 		
 		// create click event
 		document.querySelector('.hashedit-menu .hashedit-save').addEventListener('click', function(){
-			var html = hashedit.retrieveHTML();
+			var arr = hashedit.retrieveUpdateArray();
 			
 			if(hashedit.save){
-				hashedit.save(html);
+				hashedit.save(arr);
 			}
 		});
 		
@@ -247,7 +247,7 @@ var hashedit = {
 	setupDraggable: function(){
 	
 		// setup sortable on the menu
-		var el = document.querySelector('.hashedit-menu');
+		var el = document.querySelector('.hashedit-menu-body');
 		
 		var sortable = new Sortable(el, {
 		    group: {
@@ -320,6 +320,22 @@ var hashedit = {
 		  	
 			hashedit.setupConfigEvents();
 		  });
+		
+		// fetch the config
+		fetch(path + 'html/image.html')
+		  .then(function(response) {
+		    return response.text();
+		  }).then(function(text) { 
+		  
+		  	var div = document.createElement('div');
+		  	div.setAttribute('id', 'hashedit-image-settings');
+		  	div.setAttribute('class', 'hashedit-config');
+		  	div.innerHTML = text;
+		  	
+		  	document.querySelector('body').appendChild(div);
+		  	
+			hashedit.setupConfigEvents();
+		  });
 		 
 	},
 	
@@ -340,7 +356,7 @@ var hashedit = {
 			a.innerHTML = item.display;
 			
 			// append hte child to the menu
-			document.querySelector('.hashedit-menu').appendChild(a);
+			document.querySelector('.hashedit-menu-body').appendChild(a);
 			
 		}
 		
@@ -367,10 +383,19 @@ var hashedit = {
 			    		hashedit.showLinkDialog();
 		    		}
 		    		
+		    		if(e.target.nodeName == 'IMG'){
+			    		hashedit.currImage = e.target;
+			    		hashedit.showImageDialog();
+		    		}
+		    		
 			    	if(e.target.hasAttribute('contentEditable')){
 			    	
 			    		// set current node
 			    		hashedit.currNode = e.target;
+			    		
+			    		// hide #hashedit-image
+			    		var link = document.querySelector('#hashedit-image-settings');
+					    link.removeAttribute('visible');
 			    		
 			    		// hide #hashedit-link
 			    		var link = document.querySelector('#hashedit-link-settings');
@@ -429,11 +454,83 @@ var hashedit = {
 			    	
 			    		var el = e.target;
 			    		
-						var ref = el.getAttribute('data-ref');
-			    		var html = el.innerHTML;
-			    								
-						// set the mirror HTML
-						hashedit.setMirrorHTML(ref, html);
+			    		while(el !== null){
+				    		if(el.hasAttribute('data-ref')){
+								var ref = el.getAttribute('data-ref');
+					    		var html = el.innerHTML;
+					    								
+								// set the mirror HTML
+								hashedit.setMirrorHTML(ref, html);
+								
+								// set to null
+								el = null;
+							}
+							else{
+								el = el.parentNode;
+							}
+						}
+						
+				    }
+			    		
+			    	
+			    });
+				    
+			});
+			
+			// delegate INPUT event
+			['keydown'].forEach(function(e){
+		    	arr[x].addEventListener(e, function(e){
+			    	
+			    	if(e.target.hasAttribute('contentEditable')){
+			    	
+			    		var el = e.target;
+			    	
+			    		// ENTER key
+			    		if(e.keyCode === 13){
+				    		
+				    		if(el.nodeName == 'LI'){
+				    			
+				    			// create LI
+				    			var li = document.createElement('li');
+				    			li.setAttribute('contentEditable', true);
+				    			
+				    			// append LI
+				    			el.parentNode.appendChild(li);
+				    			
+				    			el.parentNode.lastChild.focus();
+				    			
+				    			e.preventDefault();
+				    			e.stopPropagation();
+				    			
+				    		}
+				    		
+			    		}
+			    		
+			    		// DELETE key
+			    		if(e.keyCode === 8){
+				    		
+				    		if(el.nodeName == 'LI'){
+				    			
+				    			if(el.innerHTML == ''){
+				    			
+				    				console.log(el.previousSibling);
+					    			
+					    			if(el.previousSibling !== null){
+					    			
+					    				var parent = el.parentNode;
+					    			
+					    				el.remove();
+					    				
+					    				parent.lastChild.focus();
+					    			}
+					    			
+					    			e.preventDefault();
+									e.stopPropagation();	
+				    			}
+				    			
+				    		}
+				    		
+			    		}
 						
 				    }
 			    		
@@ -507,6 +604,8 @@ var hashedit = {
 			}
 			
 		}
+		
+		return newNode;
 	
 	},
 	
@@ -568,6 +667,24 @@ var hashedit = {
 								
 								// set attribute
 								hashedit.currLink.setAttribute(attr, value);
+								
+								// fire event
+								hashedit.currNode.dispatchEvent(new Event('input', { 'bubbles': true }));
+								
+							}
+						}
+						
+						if(model.indexOf('image.') != -1){
+							var parts = model.split('.');
+							
+							// converts camelcase to hyphens, sets attribute
+							if(parts.length > 1){
+							
+								// get property
+								attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+								
+								// set attribute
+								hashedit.currImage.setAttribute(attr, value);
 								
 								// fire event
 								hashedit.currNode.dispatchEvent(new Event('input', { 'bubbles': true }));
@@ -643,7 +760,7 @@ var hashedit = {
 							var html = '<a>'+text+'</a>';
 							
 							document.execCommand("insertHTML", false, html);
-			    		
+						
 							// shows/manages the link dialog
 							hashedit.showLinkDialog();
 							
@@ -743,11 +860,11 @@ var hashedit = {
 		if(hashedit.currLink != null){
 		
 			// get  attributes
-			var id = hashedit.currLink.getAttribute('id');
-			var cssClass = hashedit.currLink.getAttribute('class');
-			var href = hashedit.currLink.getAttribute('href');
-			var target = hashedit.currLink.getAttribute('target');
-			var title = hashedit.currLink.getAttribute('title');
+			var id = hashedit.currLink.getAttribute('id') || '';
+			var cssClass = hashedit.currLink.getAttribute('class') || '';
+			var href = hashedit.currLink.getAttribute('href') || '';
+			var target = hashedit.currLink.getAttribute('target') || '';
+			var title = hashedit.currLink.getAttribute('title') || '';
 		
 			// show the link dialog
 			var link = document.querySelector('#hashedit-link-settings');
@@ -759,6 +876,35 @@ var hashedit = {
 	    	document.getElementById('hashedit-link-href').value = href;
 	    	document.getElementById('hashedit-link-target').value = target;
 	    	document.getElementById('hashedit-link-title').value = title;
+			
+		}
+		
+	},
+	
+	/**
+	 * Sets up the images dialog
+	 */
+	showImageDialog: function(){
+	
+
+		// populate link values
+		if(hashedit.currImage != null){
+		
+			// get  attributes
+			var id = hashedit.currImage.getAttribute('id') || '';
+			var cssClass = hashedit.currImage.getAttribute('class') || '';
+			var src = hashedit.currImage.getAttribute('src') || '';
+			var title = hashedit.currImage.getAttribute('title') || '';
+		
+			// show the link dialog
+			var link = document.querySelector('#hashedit-image-settings');
+	    	link.setAttribute('visible', '');
+	    	
+	    	// sets start values
+	    	document.getElementById('hashedit-image-id').value = id;
+	    	document.getElementById('hashedit-image-cssclass').value = cssClass;
+	    	document.getElementById('hashedit-image-src').value = src;
+	    	document.getElementById('hashedit-image-title').value = title;
 			
 		}
 		
@@ -957,8 +1103,24 @@ var hashedit = {
 	 */
 	retrieveHTML: function(){
 		
-		var html = hashedit.mirror.documentElement.outerHTML;
-		return html;
+		return hashedit.mirror.documentElement.outerHTML;
+		
+	},
+	
+	/**
+	 * Retrieve changes
+	 */
+	retrieveUpdateArray: function(){
+		
+		var els = hashedit.mirror.documentElement.querySelectorAll('[hashedit]');
+		var data = [];
+		
+		for(var x=0; x<els.length; x++){
+			var el = {'selector':els[x].getAttribute('hashedit-selector'), 'html':els[x].innerHTML}
+			data.push(el);
+		}
+		
+		return data;
 		
 	},
 	
