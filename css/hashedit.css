@@ -89,6 +89,31 @@ body [contentEditable=true] a{
 	cursor: pointer;
 }
 
+/* login */
+.hashedit-login{
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+	position: fixed;
+	z-index: 1003;
+	top: 0;
+	left: 0;
+	height: 50px;
+	width: 100%;
+	background-color: #fff;
+	margin: 0;
+	padding: 0 0 0 50px;
+	color: #888;
+	border-bottom: 1px solid #DDD;
+	overflow-x: scroll;
+	text-align: center;
+}
+
+	.hashedit-login a{
+		display: inline-block;
+		height: 50px;
+		line-height: 50px;
+		text-transform: uppercase;
+	}
+
 /* menu */
 .hashedit-menu{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';

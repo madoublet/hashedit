@@ -12,10 +12,7 @@ var hashedit = {
 	// pointers to selected elements
 	currNode: null,
 	currConfig: null,
-	
-	// function to save
-	save: null,
-	
+
 	// handles text selection
 	selection: null,
 	
@@ -28,10 +25,15 @@ var hashedit = {
 	// count of new element
 	newElementCount: 0,
 	
+	// API urls
+  authUrl: '/api/auth',
+  saveUrl: '/api/pages/save',
+  retrieveUrl: '/api/pages/retrieve',
+	
 	/**
 	 * Retrieve HTML
 	 */
-	init: function(url){
+	init: function(){
 	
 		// get HTML
 		var html = '';
@@ -51,7 +53,7 @@ var hashedit = {
 		else{ // we need to create the annotated [data-ref] html and send it to session storage
 		
 			// fetch the html
-			fetch(url)
+			fetch(hashedit.retrieveUrl, {credentials: 'include'})
 			  .then(function(response) {
 			    return response.text();
 			  }).then(function(text) { 
@@ -218,6 +220,21 @@ var hashedit = {
 	},
 	
 	/**
+	 * Create the auth
+	 */
+	showAuth: function(path){
+	
+  		// create a login
+  		var login = document.createElement('nav');
+  		login.setAttribute('class', 'hashedit-login');
+  		login.innerHTML = 'You need to signin to begin editing. <a href="/auth/google">Sign In with Google</a>';
+  		
+  		// append menu
+  		document.body.appendChild(login);
+		
+	},
+	
+	/**
 	 * Create the menu
 	 */
 	setupMenu: function(path){
@@ -232,11 +249,32 @@ var hashedit = {
 		
 		// create click event
 		document.querySelector('.hashedit-menu .hashedit-save').addEventListener('click', function(){
-			var arr = hashedit.retrieveUpdateArray();
+			var data = hashedit.retrieveUpdateArray();
 			
-			if(hashedit.save){
-				hashedit.save(arr);
-			}
+			if(hashedit.saveUrl){
+			
+  			// construct an HTTP request
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', hashedit.saveUrl, true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      
+        // send the collected data as JSON
+        xhr.send(JSON.stringify(data));
+      
+        xhr.onloadend = function () {
+          // done
+          localStorage.clear();
+          
+          // redirect without #edit
+          var url = hashedit.replaceAll(window.location.href, '#edit', '');
+          
+          // redirect to the URL
+          window.location.href = url;
+          
+        };
+      }
+			
+			
 		});
 		
 	},
@@ -1219,19 +1257,32 @@ var hashedit = {
 	 * @param {Array} config.sortable
 	 */
 	setup: function(config){
-	
-		hashedit.init(config.url);
-		hashedit.setActive();
-		hashedit.setupSortable(config.sortable);
-		hashedit.setupContentEditableEvents();
-		hashedit.setupMenu(config.path);
-		hashedit.createMenu(config.path);
-		hashedit.loadHTML(config.path);
+
+	  // check auth
+		fetch(hashedit.authUrl, {credentials: 'include'})
+		  .then(function(response) {
 		
-		if(config.save != null){
-			hashedit.save = config.save;
-		}
-		
+		    if(response.status !== 200){ 
+		    
+		      // show authorization
+          hashedit.showAuth();
+		    
+		    }
+		    else{
+		    
+  		    // init hashedit
+  		    hashedit.init();
+      		hashedit.setActive();
+      		hashedit.setupSortable(config.sortable);
+      		hashedit.setupContentEditableEvents();
+      		hashedit.setupMenu(config.path);
+      		hashedit.createMenu(config.path);
+      		hashedit.loadHTML(config.path);
+      		
+    		}
+    		
+		  });
+	  
 	}
 	
 }
