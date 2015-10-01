@@ -1,0 +1,21 @@
+{
+  "name": "hashedit",
+  "version": "0.0.1",
+  "homepage": "https://github.com/madoublet/hashedit",
+  "authors": [
+    "Matthew Smith <matt@matthewsmith.com>"
+  ],
+  "description": "Hashedit is an editor for static HTML.",
+  "main": "js/hashedit.js",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
