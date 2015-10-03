@@ -1,1 +1,0 @@
-body .toggle {display:block;float:right;width:65px;height:65px;line-height:65px;text-align:center;color:#888;cursor:pointer;border-left:1px solid #f0f0f0;}body .toggle:hover {color:#555;}body .toggle.active {color:#4ECDC4 !important;}html[dir=rtl] body .toggle {float:left;border-left:none;border-right:1px solid #f0f0f0;}

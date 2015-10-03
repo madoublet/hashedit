@@ -9,6 +9,9 @@ var hashedit = {
     // set debug messages
     debug: true,
     
+    // set demo mode
+    demo: false,
+    
     // pointers to selected elements
     currNode: null,
     currConfig: null,
@@ -316,30 +319,45 @@ var hashedit = {
         
         // create click event
         document.querySelector('.hashedit-menu .hashedit-save').addEventListener('click', function(){
-            var data = hashedit.retrieveUpdateArray();
             
-            if(hashedit.saveUrl){
+            if(hashedit.demo == true){
+              
+              // alert
+              alert('Cannot save in demo mode :)');
+              
+              // clear localStorage
+              localStorage.clear();
+              
+            }
+            else{
             
-            // construct an HTTP request
-        var xhr = new XMLHttpRequest();
-        xhr.open('post', hashedit.saveUrl, true);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      
-        // send the collected data as JSON
-        xhr.send(JSON.stringify(data));
-      
-        xhr.onloadend = function () {
-          // done
-          localStorage.clear();
-          
-          // redirect without #edit
-          var url = hashedit.replaceAll(window.location.href, '#edit', '');
-          
-          // redirect to the URL
-          window.location.href = url;
-          
-        };
-      }
+              var data = hashedit.retrieveUpdateArray();
+              
+              if(hashedit.saveUrl){
+              
+                // construct an HTTP request
+                var xhr = new XMLHttpRequest();
+                xhr.open('post', hashedit.saveUrl, true);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+              
+                // send the collected data as JSON
+                xhr.send(JSON.stringify(data));
+              
+                xhr.onloadend = function () {
+                  // done
+                  localStorage.clear();
+                  
+                  // redirect without #edit
+                  var url = hashedit.replaceAll(window.location.href, '#edit', '');
+                  
+                  // redirect to the URL
+                  window.location.href = url;
+                  
+                };
+              
+              }
+              
+            }
             
             
         });
@@ -1330,17 +1348,10 @@ var hashedit = {
      */
     setup: function(config){
 
-      // check auth
-        fetch(hashedit.authUrl, {credentials: 'include'})
-          .then(function(response) {
+        // check auth
+        if(config.demo == true){
         
-            if(response.status !== 200){ 
-            
-              // show authorization
-          hashedit.showAuth();
-            
-            }
-            else{
+            hashedit.demo = true;
             
             // init hashedit
             hashedit.init();
@@ -1351,9 +1362,32 @@ var hashedit = {
             hashedit.createMenu(config.path);
             hashedit.loadHTML(config.path);
             
-            }
+        }
+        else{
+            fetch(hashedit.authUrl, {credentials: 'include'})
+              .then(function(response) {
             
-          });
+                if(response.status !== 200){ 
+                
+                  // show authorization
+                  hashedit.showAuth();
+                
+                }
+                else{
+                
+                  // init hashedit
+                  hashedit.init();
+                  hashedit.setActive();
+                  hashedit.setupSortable(config.sortable);
+                  hashedit.setupContentEditableEvents();
+                  hashedit.setupMenu(config.path);
+                  hashedit.createMenu(config.path);
+                  hashedit.loadHTML(config.path);
+                
+                }
+                
+              });
+        }
       
     }
     
