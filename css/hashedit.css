@@ -1,5 +1,5 @@
 body[hashedit-active]{
-	margin-top: 50px;
+	padding-top: 50px !important;
 }
 
 [hashedit-sortable]{
@@ -12,6 +12,14 @@ body[hashedit-active]{
 
 .hashedit-element{
 	position: relative;
+}
+
+.hashedit-element [contentEditable=true]{
+    min-height: 25px;
+}
+
+[hashedit] a, [hashedit] img{
+  cursor: pointer;
 }
 
 .hashedit-move{
@@ -114,6 +122,65 @@ body [contentEditable=true] a{
 		text-transform: uppercase;
 	}
 
+/* drawer */
+.hashedit-drawer{
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+	position: fixed;
+	z-index: 1002;
+	top: 50px;
+	left: -250px;
+	height: calc(100% - 50px);
+	width: 250px;
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+	color: #888;
+	border-right: 1px solid #DDD;
+	overflow-x: scroll;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+	transition: all 0.2s ease;
+}
+
+    .hashedit-drawer[visible]{
+        left: 0;
+    }
+    
+    .hashedit-drawer a{
+        text-decoration: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 0.95em;
+        color: #555;
+    }
+    
+    .hashedit-drawer ul{
+        margin: 0;
+        padding: 0;
+    }
+    
+    .hashedit-drawer li{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid #DDD;
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        color: #aaa;
+        cursor: pointer
+    }
+    
+    .hashedit-drawer li:hover, .hashedit-element-drawer li:hover{
+		background-color: #f8f8f8;
+	}
+    
+    .hashedit-drawer svg{
+        fill: currentColor;
+		height: 20px;
+		display: inline-block;
+		margin: 0 15px -4px 15px;
+    }
+
 /* menu */
 .hashedit-menu{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
@@ -129,6 +196,7 @@ body [contentEditable=true] a{
 	color: #888;
 	border-bottom: 1px solid #DDD;
 	overflow-x: scroll;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
 }
 
 	.hashedit-menu .hashedit-menu-body{
@@ -150,6 +218,7 @@ body [contentEditable=true] a{
 		color: #fff;
 		width: 50px;
 		height: 50px;
+		line-height: 50px;
 		border: 0;
 		outline: none;
 		font-size: 20px;
@@ -160,7 +229,7 @@ body [contentEditable=true] a{
 		.hashedit-menu .hashedit-save svg{
 			fill: currentColor;
 			width: 60%;
-			margin: 0 auto;
+			margin: 10px auto 0 auto;
 		}
 	
 	/* menu */
@@ -182,7 +251,7 @@ body [contentEditable=true] a{
 		.hashedit-menu .hashedit-more svg{
 			fill: currentColor;
 			width: 70% !important;
-			margin: 0 auto;
+			margin: 8px auto 0 auto;
 		}
 
 	.hashedit-menu a{
@@ -197,6 +266,7 @@ body [contentEditable=true] a{
 		font-size: 13px;
 		border-right: 1px solid #DDD;
 		vertical-align: top;
+        text-decoration: none;
 	}
 	
 		.hashedit-menu a svg{
@@ -205,35 +275,7 @@ body [contentEditable=true] a{
 			width: 40%;
 			fill: currentColor;
 		}
-		
-		.hashedit-element-menu input[type=text], .hashedit-element-menu input[type=color]{
-			vertical-align: top;
-			height: 50px;
-			outline: none;
-			line-height: 50px;
-			border: 0;
-			margin: 0 !important;
-			padding: 0 0 0 5px !important;
-			border-right: 1px solid #ddd;
-			background-color: transparent;
-			max-width: 125px;
-		}
-		
-		.hashedit-element-menu select{
-			font-size: 15px;
-			box-shadow: none;
-			background: none;
-			outline: none;
-			border: none;
-			border: none;
-			border-radius: 0;
-			padding: 5px 10px;
-			height: 50px;
-		    background-color: transparent;
-		    -webkit-appearance: none;
-			-webkit-border-radius: 0px;
-		}
-	
+			
 	.hashedit-menu a:hover, .hashedit-element-menu a:hover{
 		background-color: #f8f8f8;
 	}
@@ -242,18 +284,18 @@ body [contentEditable=true] a{
 body .hashedit-config{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
 	position: fixed;
-	z-index: 1000;
-	top: -1px;
+	z-index: 1003;
+	top: -51px;
 	left: 0;
 	height: 50px;
-	width: 100%;
-	background-color: #f0f0f0;
-	margin: 0;
+	width: calc(100% - 100px);
+	background-color: #fff;
+	margin: 0 50px 0 50px;
 	padding: 0;
 	color: #888;
 	border-bottom: 1px solid #DDD;
 	overflow-x: scroll;
-	transition: all 0.25s ease;
+	transition: all 0.2s ease;
 }
 
 	body .hashedit-config .hashedit-context-body{
@@ -261,28 +303,28 @@ body .hashedit-config{
 	}
 	
 	body #hashedit-link-settings{
-		z-index: 1001;
+		z-index: 1004;
 	}
 	
 	body #hashedit-image-settings{
-		z-index: 1001;
+		z-index: 1005;
 	}
 
 
 	body .hashedit-config[visible]{
-		top: 50px;
+		top: 0;
 	}
 	
 	body .hashedit-config label{
 		height: 50px;
 		line-height: 50px;
-		color: #888;
+		color: #555;
 		font-size: 11px;
 		text-transform: uppercase;
 		border-right: 1px solid #ddd;
 		padding: 0 10px;
 		font-weight: normal;
-		background-color: #f8f8f8;
+		background-color: #DBE6EC;
 	}
 	
 	body .hashedit-config a, body .hashedit-config label, body .hashedit-config input, body .hashedit-config select{
@@ -310,18 +352,33 @@ body .hashedit-config{
 			fill: currentColor;
 		}
 		
-		body .hashedit-config input[type=text], body .hashedit-config input[type=color]{
+		body .hashedit-config input[type=text]{
+			vertical-align: top;
+			height: 50px;
+			outline: none;
+			line-height: 50px;
+			border: 0;
+			margin: 0;
+			padding: 0 0 0 15px !important;
+			border-right: 1px solid #ddd;
+			background-color: transparent;
+			max-width: 125px;
+			color: #111;
+		}
+		
+		body .hashedit-config input[type=color]{
 			vertical-align: top;
 			height: 50px;
 			outline: none;
 			line-height: 50px;
 			border: 0;
 			margin: 0 !important;
-			padding: 0 0 0 5px !important;
+			padding: 10px !important;
 			border-right: 1px solid #ddd;
 			background-color: transparent;
-			max-width: 125px;
+			width: 50px;
 		}
+
 		
 		body .hashedit-config select{
 			font-size: 13px;
@@ -331,7 +388,7 @@ body .hashedit-config{
 			border: none;
 			border: none;
 			border-radius: 0;
-			padding: 5px 10px;
+			padding: 5px 5px 5px 15px;
 			height: 50px;
 			min-width: 50px;
 		    background-color: transparent;
@@ -344,6 +401,75 @@ body .hashedit-config{
 	body .hashedit-config a:hover, body .hashedit-config a:hover{
 		background-color: #f8f8f8;
 	}
+	
+	
+body .hashedit-modal{
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+	position: fixed;
+	left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+	z-index: 1003;
+	width: 400px;
+	background-color: #fff;
+	margin: 0;
+	padding: 25px;
+	color: #888;
+	border-bottom: 1px solid #DDD;
+	overflow-x: scroll;
+	display: none;
+	opacity: 0;
+	transition: all 0.2s ease;
+	border: 1px solid #ddd;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .25);
+}
+
+    body .hashedit-modal[visible]{
+        display: block;
+        opacity: 1;
+    }
+    
+    body .hashedit-modal label{
+        font-weight: normal;
+        display: block;
+        margin: 0;
+        padding: 0 0 5px 0;
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+    
+    body .hashedit-modal input{
+        width: 350px;
+        margin-bottom: 15px;
+        padding: 10px;
+        color: #555;
+    }
+    
+    body .hashedit-modal h2{
+        font-size: 25px;
+        color: #345A6F;
+        margin: 0 0 25px 0;
+        padding: 0;
+        
+    }
+    
+    body .hashedit-modal .actions{
+        margin: 10px 0 15px 0;
+        padding: 0;
+        text-align: right;
+    }
+    
+    body .hashedit-modal .actions a{
+        margin-left: 15px;
+        text-transform: uppercase;
+        font-size: 13px;
+        cursor: pointer;
+        
+    }
+    
+    body .hashedit-modal .actions a.primary{
+        font-weight: bold;    
+    }
 
 	
 

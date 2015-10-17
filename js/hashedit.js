@@ -98,6 +98,8 @@ var hashedit = {
     // API urls
     authUrl: '/api/auth',
     saveUrl: '/api/pages/save',
+    addPageURL: '/api/pages/add',
+    pageSettingsURL: '/api/pages/settings',
     retrieveUrl: '/api/pages/retrieve',
     
     /**
@@ -305,6 +307,62 @@ var hashedit = {
     },
     
     /**
+     * Create the drawer
+     */
+    setupDrawer: function(path){
+    
+        // create a menu
+        var drawer = document.createElement('nav');
+        drawer.setAttribute('class', 'hashedit-drawer');
+        drawer.innerHTML = '<ul><li hashedit-add-page><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path></g></svg><a>Add Page</a></li><li hashedit-page-settings><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g></svg><a>Page Settings</a></li></ul>';
+        
+        // append menu
+        document.body.appendChild(drawer);
+        
+        // show add page
+        document.querySelector('[hashedit-add-page]').addEventListener('click', function(){
+            
+            // hide drawer
+            var drawer = document.querySelector('.hashedit-drawer');
+            drawer.removeAttribute('visible');
+            
+            // init url
+            document.getElementById('hashedit-page-url').value = '';
+            
+            // show modal
+            document.getElementById('hashedit-add-page').setAttribute('visible', '');
+            
+        });
+        
+        // show settings
+        document.querySelector('[hashedit-page-settings]').addEventListener('click', function(){
+            
+            // hide drawer
+            var drawer = document.querySelector('.hashedit-drawer');
+            drawer.removeAttribute('visible');
+            
+            // get description
+            var desc = '';
+            var meta = document.querySelector('meta[name="description"]');
+            
+            if(meta != null){
+                desc = meta.getAttribute('content');
+            }
+            
+            // set title and description
+            document.getElementById('hashedit-page-title').value = document.title;
+            document.getElementById('hashedit-page-desc').value = desc;
+            
+            console.log(document.getElementById('hashedit-page-settings'));
+            
+            // show modal
+            document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
+        });
+        
+    },
+    
+    
+    /**
      * Create the menu
      */
     setupMenu: function(path){
@@ -312,13 +370,27 @@ var hashedit = {
         // create a menu
         var menu = document.createElement('menu');
         menu.setAttribute('class', 'hashedit-menu');
-        menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" class="style-scope iron-icon"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g></svg></button><div class="hashedit-menu-body"></div>';
+        menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" class="style-scope iron-icon"></path></g></svg></button><div class="hashedit-menu-body"></div>';
         
         // append menu
         document.body.appendChild(menu);
         
-        // create click event
-        document.querySelector('.hashedit-menu .hashedit-save').addEventListener('click', function(){
+        // toggle drawer
+        document.querySelector('.hashedit-more').addEventListener('click', function(){
+            
+            var drawer = document.querySelector('.hashedit-drawer');
+            
+            if(drawer.hasAttribute('visible')){
+                drawer.removeAttribute('visible');
+            }
+            else{
+                drawer.setAttribute('visible', '');
+            }
+            
+        });
+        
+        // save
+        document.querySelector('.hashedit-save').addEventListener('click', function(){
             
             if(hashedit.demo == true){
               
@@ -415,54 +487,24 @@ var hashedit = {
      * Load html from html/* into the aside
      */
     loadHTML: function(path){
-
+        
         // fetch the config
-        fetch(path + 'html/element.html')
+        fetch(path + 'html/modals.html')
           .then(function(response) {
             return response.text();
           }).then(function(text) { 
           
-            var div = document.createElement('div');
-            div.setAttribute('id', 'hashedit-element-settings');
-            div.setAttribute('class', 'hashedit-config hashedit-element-config');
-            div.innerHTML = text;
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = text;
             
-            document.querySelector('body').appendChild(div);
+            for(var x=0; x<wrapper.childNodes.length; x++){
+                document.querySelector('body').appendChild(wrapper.childNodes[x]);
+            }
             
             hashedit.setupConfigEvents();
             hashedit.setupTextEvents();
-          });
-
-        // fetch the config
-        fetch(path + 'html/link.html')
-          .then(function(response) {
-            return response.text();
-          }).then(function(text) { 
-          
-            var div = document.createElement('div');
-            div.setAttribute('id', 'hashedit-link-settings');
-            div.setAttribute('class', 'hashedit-config');
-            div.innerHTML = text;
+            hashedit.setupModalEvents();
             
-            document.querySelector('body').appendChild(div);
-            
-            hashedit.setupConfigEvents();
-          });
-        
-        // fetch the config
-        fetch(path + 'html/image.html')
-          .then(function(response) {
-            return response.text();
-          }).then(function(text) { 
-          
-            var div = document.createElement('div');
-            div.setAttribute('id', 'hashedit-image-settings');
-            div.setAttribute('class', 'hashedit-config');
-            div.innerHTML = text;
-            
-            document.querySelector('body').appendChild(div);
-            
-            hashedit.setupConfigEvents();
           });
          
     },
@@ -499,7 +541,7 @@ var hashedit = {
     setupContentEditableEvents: function(){
         
         // get contentEditable elements
-        var arr = document.querySelectorAll('[hashedit]');
+        var arr = document.querySelectorAll('body');
         
         for(var x=0; x<arr.length; x++){
         
@@ -508,18 +550,54 @@ var hashedit = {
                 arr[x].addEventListener(e, function(e){
                 
                     if(e.target.nodeName == 'A'){
-                        hashedit.showLinkDialog();
+                        
+                        // hide .hashedit-config, .hashedit-modal
+                        var edits = document.querySelectorAll('[hashedit]');
+                        
+                        // determines whether the element is a configuration
+                        var isEditable = false;
+                        
+                        for(x=0; x<edits.length; x++){
+                            
+                            if(edits[x].contains(e.target) == true){
+                              isEditable = true;
+                            }
+                            
+                        }
+                        
+                        if(isEditable){
+                            hashedit.showLinkDialog();
+                        }
                     }
-                    
-                    if(e.target.nodeName == 'IMG'){
+                    else if(e.target.nodeName == 'IMG'){
                         hashedit.currImage = e.target;
-                        hashedit.showImageDialog();
+                        
+                        // hide .hashedit-config, .hashedit-modal
+                        var edits = document.querySelectorAll('[hashedit]');
+                        
+                        // determines whether the element is a configuration
+                        var isEditable = false;
+                        
+                        for(x=0; x<edits.length; x++){
+                            
+                            if(edits[x].contains(e.target) == true){
+                              isEditable = true;
+                            }
+                            
+                        }
+                        
+                        if(isEditable){
+                            hashedit.showImageDialog();
+                        }
                     }
-                    
-                    if(e.target.hasAttribute('contentEditable')){
+                    else if(e.target.hasAttribute('contentEditable')){
                     
                         // set current node
                         hashedit.currNode = e.target;
+                        
+                        // hide drawer
+                        var drawer = document.querySelector('.hashedit-drawer');
+                        drawer.removeAttribute('visible');
                         
                         // hide #hashedit-image
                         var link = document.querySelector('#hashedit-image-settings');
@@ -560,7 +638,7 @@ var hashedit = {
                             }
                             
                             // set value
-                            var input = form.querySelector('[data-model="node.' + key + '"]');
+                            var input = document.querySelector('[data-model="node.' + key + '"]');
                             
                             if(input != null){
                                 input.value = value;
@@ -569,11 +647,36 @@ var hashedit = {
                         }
                         
                     }
+                    else{
+                        // hide .hashedit-config, .hashedit-modal
+                        var configs = document.querySelectorAll('.hashedit-config, .hashedit-modal, .hashedit-menu, .hashedit-drawer');
+                        
+                        // determines whether the element is a configuration
+                        var isConfig = false;
+                        
+                        for(x=0; x<configs.length; x++){
+                            
+                            if(configs[x].contains(e.target) == true){
+                              isConfig = true;
+                            }
+                            
+                        }
+                        
+                        // hide if not in config
+                        if(isConfig == false){
+                          
+                          for(x=0; x<configs.length; x++){
+                            configs[x].removeAttribute('visible');
+                          }
+                          
+                        }
+                    }
                         
                 });
                     
             });
-                
+            
+            
             // delegate INPUT event
             ['input'].forEach(function(e){
                 arr[x].addEventListener(e, function(e){
@@ -738,11 +841,53 @@ var hashedit = {
     },
     
     /**
+     * Setup modal events
+     */
+    setupModalEvents: function(){
+    
+        // handle page creation
+        document.querySelector('[hashedit-add-page-create]').addEventListener('click', function(){
+            
+            // get url
+            var url = document.getElementById('hashedit-page-url').value;
+            
+            // set params
+            var params = {
+              'url': url
+            }
+            
+            if(hashedit.addPageURL){
+              
+              // construct an HTTP request
+              var xhr = new XMLHttpRequest();
+              xhr.open('post', hashedit.addPageURL, true);
+              xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            
+              // send the collected data as JSON
+              xhr.send(JSON.stringify(params));
+            
+              xhr.onloadend = function () {
+                
+                // hide modal
+                document.getElementById('hashedit-add-page').removeAttribute('visible');
+                
+                // log success
+                console.log('success');
+                
+              };
+            
+            }
+            
+        });
+    },
+    
+    /**
      * Setup configuration events
      */
     setupConfigEvents: function(){
         
-        var arr = document.querySelectorAll('.hashedit-config');
+        // setup config events
+        var arr = document.querySelectorAll('.hashedit-config, .hashedit-modal');
         
         for(var x = 0; x < arr.length; x++){
             
@@ -752,6 +897,17 @@ var hashedit = {
                 arr[x].addEventListener(e, function(e){
                     
                     var el = e.target;
+                    
+                    if(el.hasAttribute('hashedit-cancel-modal')){
+                        
+                        // hide .hashedit-config, .hashedit-modal
+                        var configs = document.querySelectorAll('.hashedit-modal');
+                 
+                        for(x=0; x<configs.length; x++){
+                            configs[x].removeAttribute('visible');
+                        }
+                          
+                    }
                     
                     // look for [data-model]
                     if(el.hasAttribute('data-model')){
@@ -786,6 +942,8 @@ var hashedit = {
                         
                         if(model.indexOf('link.') != -1){
                             var parts = model.split('.');
+                            
+                            console.log(parts);
                             
                             // converts camelcase to hyphens, sets attribute
                             if(parts.length > 1){
@@ -836,8 +994,6 @@ var hashedit = {
     setupTextEvents: function(){
         
         var arr = document.querySelectorAll('.hashedit-config');
-        
-        console.log(arr.length);
         
         for(var x = 0; x < arr.length; x++){
             
@@ -904,7 +1060,7 @@ var hashedit = {
                             return false;
                         }
                         else if(action == 'hashedit.text.alignLeft'){
-                            var input = document.querySelector('.hashedit-config [data-model="node.class"]');
+                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
                             var value = input.value;
@@ -923,7 +1079,7 @@ var hashedit = {
                             return false;
                         }
                         else if(action == 'hashedit.text.alignRight'){
-                            var input = document.querySelector('.hashedit-config [data-model="node.class"]');
+                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
                             var value = input.value;
@@ -942,7 +1098,7 @@ var hashedit = {
                             return false;
                         }
                         else if(action == 'hashedit.text.alignCenter'){
-                            var input = document.querySelector('.hashedit-config [data-model="node.class"]');
+                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
                             var value = input.value;
@@ -973,6 +1129,12 @@ var hashedit = {
             });
             
         }
+        
+        document.querySelector('[hashedit-element-details]').addEventListener('click', function(){
+            
+            // show modal
+            document.getElementById('hashedit-element-details').setAttribute('visible', '');
+        });
         
     },
     
@@ -1359,6 +1521,7 @@ var hashedit = {
             hashedit.setupSortable(config.sortable);
             hashedit.setupContentEditableEvents();
             hashedit.setupMenu(config.path);
+            hashedit.setupDrawer();
             hashedit.createMenu(config.path);
             hashedit.loadHTML(config.path);
             
@@ -1381,6 +1544,7 @@ var hashedit = {
                   hashedit.setupSortable(config.sortable);
                   hashedit.setupContentEditableEvents();
                   hashedit.setupMenu(config.path);
+                  hashedit.setupDrawer();
                   hashedit.createMenu(config.path);
                   hashedit.loadHTML(config.path);
                 
