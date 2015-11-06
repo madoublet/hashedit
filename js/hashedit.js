@@ -1,9 +1,9 @@
 /**
  * Hashedit (#edit) is a simple, web-based editor for static HTML sites. Learn more at hashedit.io. Download from Github at github.com/madoublet/hashedit
  * @author: Matthew Smith
- */ 
+ */
 "use strict";
- 
+
 var hashedit = {
 
     // set debug messages
@@ -13,79 +13,241 @@ var hashedit = {
     demo: false,
     
     // pointers to selected elements
-    currNode: null,
-    currConfig: null,
+    current: {
+        node: null,
+        container: null,
+        element: null,
+        image: null
+    },
 
     // handles text selection
     selection: null,
     
     // configurations
-    elementMenu: '<span class="hashedit-move"><span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span></span>',
+    elementMenu: '<span class="hashedit-move"><span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span></span><span class="hashedit-properties"><span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet"><g><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g></svg></span></span><span class="hashedit-remove"><span><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" width="100%" height="100%"><g class="style-scope iron-icon"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg></span></span>',
+   
+    framework: 'bootstrap',
+    
+    // framework defaults
+    frameworkDefaults: {
+        'bootstrap': {
+            'table': 'table',
+            'image': 'img-responsive',
+            'code': ''
+        } 
+    },
     
     // define the menu
     menu: [
         {
-            "action":	"hashedit.h1",
-            "selector":	"h1",
-            "title":	"H1 Headline",
-            "display":	"H1",
-            "html":     "<h1></h1>"
+            action: "hashedit.h1",
+            selector: "h1",
+            title:  "H1 Headline",
+            display:  "H1",
+            html:     "<h1>Start Typing...</h1>"
         },
         {
-            "action":	"hashedit.h2",
-            "selector":	"h2",
-            "title":	"H2 Headline",
-            "display":	"H2",
-            "html":     "<h2></h2>"
+            action: "hashedit.h2",
+            selector: "h2",
+            title:  "H2 Headline",
+            display:  "H2",
+            html:     "<h2>Start Typing...</h2>"
         },
         {
-            "action":	"hashedit.h3",
-            "selector":	"h3",
-            "title":	"H3 Headline",
-            "display":	"H3",
-            "html":     "<h3></h3>"
+            action: "hashedit.h3",
+            selector: "h3",
+            title:  "H3 Headline",
+            display:  "H3",
+            html:     "<h3>Start Typing...</h3>"
         },
         {
-            "action":	"hashedit.h4",
-            "selector":	"h4",
-            "title":	"H4 Headline",
-            "display":	"H4",
-            "html":     "<h4></h4>"
+            action: "hashedit.h4",
+            selector: "h4",
+            title:  "H4 Headline",
+            display:  "H4",
+            html:     "<h4>Start Typing...</h4>"
         },
         {
-            "action":	"hashedit.h5",
-            "selector":	"h5",
-            "title":	"H5 Headline",
-            "display":	"H5",
-            "html":     "<h5></h5>"
+            action: "hashedit.h5",
+            selector: "h5",
+            title:  "H5 Headline",
+            display:  "H5",
+            html:     "<h5>Start Typing...</h5>"
         },
         {
-            "action":	"hashedit.p",
-            "selector":	"p",
-            "title":	"Paragraph",
-            "display":	"P",
-            "html":     "<p></p>"
+            action: "hashedit.p",
+            selector: "p",
+            title:  "Paragraph",
+            display:  "P",
+            html:     "<p>Start Typing...</p>"
         },
         {
-            "action":	"hashedit.blockquote",
-            "selector":	"blockquote",
-            "title":	"Blockquote",
-            "display":	"<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
-            "html":     "<blockquote></blockquote>"
+            action: "hashedit.blockquote",
+            selector: "blockquote",
+            title:  "Blockquote",
+            display:  "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
+            html:     "<blockquote></blockquote>"
         },
         {
-            "action": "hashedit.ul",
-            "selector": "ul",
-            "title": "Unordered List",
-            "display": "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12.17c-.74 0-1.33.6-1.33 1.33s.6 1.33 1.33 1.33 1.33-.6 1.33-1.33-.59-1.33-1.33-1.33zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z'></path></g></svg>",
-            "html": "<ul><li></li></ul>"
+            action: "hashedit.ul",
+            selector: "ul",
+            title: "Unordered List",
+            display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12.17c-.74 0-1.33.6-1.33 1.33s.6 1.33 1.33 1.33 1.33-.6 1.33-1.33-.59-1.33-1.33-1.33zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z'></path></g></svg>",
+            html: "<ul><li></li></ul>"
         },
         {
-            "action": "hashedit.ol",
-            "selector": "ol",
-            "title": "Ordered List",
-            "display": "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
-            "html": "<ol><li></li></ol>"
+            action: "hashedit.ol",
+            selector: "ol",
+            title: "Ordered List",
+            display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
+            html: "<ol><li></li></ol>"
+        },
+        {
+            action: "hashedit.image",
+            selector: "img",
+            title: "Image",
+            display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
+            html: '<img src="images/bridge.png" class="{{framework.image}}">',
+            configure: function(){
+              hashedit.showImageDialog();
+            }
+        },
+        {
+            action: "hashedit.table",
+            selector: "table",
+            title: "Table",
+            display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
+            html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
+            configure: function(){
+              document.querySelector('#hashedit-table-settings').setAttribute('visible', '');
+            },
+            change: function(attr, newValue, oldValue){
+            
+              var x, y, columns, curr_columns, toBeAdded, table, trs, th, tr, td, tbody;
+              
+              if(newValue != oldValue){
+                
+                if(attr == 'columns'){
+                
+                  var columns = newValue;
+                  var curr_columns = oldValue;
+                
+                  if(columns > curr_columns){ // add columns
+	            
+                    toBeAdded = columns - curr_columns;
+                    
+                    table = hashedit.current.node;
+                    trs = hashedit.current.node.getElementsByTagName('tr');
+                    
+                    // walk through table
+                    for(var x=0; x<trs.length; x++){
+                    
+                      // add columns
+                      for(y=0; y<toBeAdded; y++){
+                        if(trs[x].parentNode.nodeName=='THEAD'){
+                          
+                          th = document.createElement('th');
+                          th.setAttribute('contentEditable', 'true');
+                          th.innerHTML = 'New Header';
+                          
+                          trs[x].appendChild(th);
+                        }
+                        else{
+                          td = document.createElement('td');
+                          td.setAttribute('contentEditable', 'true');
+                          td.innerHTML = 'Content';
+                          
+                          trs[x].appendChild(td);
+                        }
+                      }
+                    }
+                    
+                  }
+                  
+                  else if(columns < curr_columns){ // remove columns
+                    
+                    var toBeRemoved = curr_columns - columns;
+                    
+                    table = hashedit.current.node;
+                    trs = hashedit.current.node.getElementsByTagName('tr');
+                   
+                    // walk through table
+                    for(x=0; x<trs.length; x++){
+                    
+                      // remove columns
+                      for(y=0; y<toBeRemoved; y++){
+                        if(trs[x].parentNode.nodeName=='THEAD'){
+                          trs[x].querySelector('th:last-child').remove();
+                        }
+                        else{
+                          trs[x].querySelector('td:last-child').remove();
+                        }
+                      }
+                    }
+                    
+                  }
+                                        
+                }
+                else if(attr == 'rows'){
+                
+                  var rows = newValue;
+                  var curr_rows = oldValue;
+                  table = hashedit.current.node;
+                  columns = table.querySelectorAll('thead tr:first-child th').length;
+                  
+                  console.log('rows, new=' + rows + ', old=' + curr_rows + ', columns=' + columns);
+                  
+                  if(rows > curr_rows){ // add rows
+	            
+                    var toBeAdded = rows - curr_rows;
+                    
+                    console.log('rows, tobeadded=' + toBeAdded);
+                    
+                    // add rows
+                    for(y=0; y<toBeAdded; y++){
+                      tr = document.createElement('tr');
+                    
+                      for(x=0; x<columns; x++){
+                        td = document.createElement('td');
+                        td.setAttribute('contentEditable', 'true');
+                        td.innerHTML = 'Content';
+                        tr.appendChild(td);
+                      }
+                      
+                      console.log(tbody);
+                    
+                      tbody = table.getElementsByTagName('tbody')[0];
+                      tbody.appendChild(tr);  
+                    }
+                    
+                  }
+                  else if(rows < curr_rows){ // remove columns
+                    
+                    var toBeRemoved = curr_rows - rows;
+                    
+                    // remove rows
+                    for(y=0; y<toBeRemoved; y++){
+                      tr = table.querySelector('tbody tr:last-child');
+                      
+                      if(tr != null){
+                        tr.remove();
+                      }
+                    }
+                    
+                  }
+                  
+                }
+                
+              }
+              
+            }
+        },
+        {
+            action: "hashedit.code",
+            selector: "pre",
+            title: "Code",
+            display:"<svg viewBox='0 0 24 24'  height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'></path></g></svg>",
+            html: "<pre>Start adding code</pre>"
         }
     ],
     
@@ -101,24 +263,32 @@ var hashedit = {
     addPageURL: '/api/pages/add',
     pageSettingsURL: '/api/pages/settings',
     retrieveUrl: '/api/pages/retrieve',
+    uploadUrl: '/api/images/add',
+    imagesListUrl: '/api/images/list',
+    
+    // loading indicators
+    imagesListLoaded: false,
     
     /**
      * Retrieve HTML
      */
     init: function(){
     
+        var x, html, parser, key, doc, els, el;
+    
         // get HTML
-        var html = '';
+        html = '';
+        parser = null;
         
         // set id
-        var key = window.location.href;
+        key = window.location.href;
     
         // retrieve the ref HTML from session storage
         if(localStorage.getItem(key) != null){
             html = localStorage.getItem(key);
             
             // start parser
-            var parser = new DOMParser();
+            parser = new DOMParser();
             
             hashedit.mirror = parser.parseFromString(html, 'text/html');
         }
@@ -130,24 +300,24 @@ var hashedit = {
                 return response.text();
               }).then(function(text) { 
               
-                 // start parser
-                var parser = new DOMParser();
+                // start parser
+                parser = new DOMParser();
                 
                 // create the mirror
-                var doc = parser.parseFromString(text, 'text/html');
+                doc = parser.parseFromString(text, 'text/html');
             
                 // remove the first script tag (e.g. #edit load script)
-                var els = doc.getElementsByTagName('script');
+                els = doc.getElementsByTagName('script');
                 
                 // remove this script
-                var el = els[0];
+                el = els[0];
                 el.parentNode.removeChild(el);
                 
                 // get all elements
-                var els = doc.getElementsByTagName('*');
+                els = doc.getElementsByTagName('*');
                 
                 // add [data-ref] attributes to all DOM elements
-                for(var x=0; x<els.length; x++){
+                for(x=0; x<els.length; x++){
                     els[x].setAttribute('data-ref', x);
                 }
                 
@@ -176,13 +346,15 @@ var hashedit = {
      */
     setActive: function(){
     
+        var x, els;
+    
         // set hashedit on body     
         document.querySelector('body').setAttribute('hashedit-active', '');
         
         // setup [contentEditable=true]
-        var els = document.querySelectorAll('[hashedit] p, [hashedit] h1, [hashedit] h2, [hashedit] h3, [hashedit] h4, [hashedit] h5,[hashedit] li, [hashedit] td, [hashedit] th, [hashedit] blockquote');
+        els = document.querySelectorAll('[hashedit] p, [hashedit] h1, [hashedit] h2, [hashedit] h3, [hashedit] h4, [hashedit] h5,[hashedit] li, [hashedit] td, [hashedit] th, [hashedit] blockquote, [hashedit] pre');
         
-        for(var x=0; x < els.length; x++){
+        for(x=0; x < els.length; x++){
             
             // add attribute
             els[x].setAttribute('contentEditable', 'true');
@@ -197,17 +369,19 @@ var hashedit = {
      */
     setupSortable: function(sortable){
     
+        var x, y, els, div, span, el, sortable, item, ref, nextRef, parentRef;
+    
         // walk through sortable clases
-        for(var x=0; x<sortable.length; x++){
+        for(x=0; x<sortable.length; x++){
         
             // setup sortable classes
-            var els = document.querySelectorAll('[hashedit] ' + sortable[x]);
+            els = document.querySelectorAll('[hashedit] ' + sortable[x]);
             
             // set [data-hashedit-sortable=true]
-            for(var x=0; x < els.length; x++){
+            for(y=0; y < els.length; y++){
                 
                 // add attribute
-                els[x].setAttribute('hashedit-sortable', '');
+                els[y].setAttribute('hashedit-sortable', '');
                 
             }
             
@@ -217,34 +391,50 @@ var hashedit = {
         var els = document.querySelectorAll('[hashedit-sortable] > *');
         
         // wrap editable items
-        for(var y = 0; y < els.length; y++){
+        for(y = 0; y < els.length; y++){
             
             // create element
-            var div = document.createElement('div');
+            div = document.createElement('div');
             div.setAttribute('class', 'hashedit-element');
             
             // wrap element in div
             div.wrap(els[y]);
             
             // create a handle
-            var span = document.createElement('span');
+            span = document.createElement('span');
             span.setAttribute('class', 'hashedit-move');
             span.innerHTML = '<span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span>';
             
             // append the handle to the wrapper
             div.appendChild(span);
             
+            span = document.createElement('span');
+            span.setAttribute('class', 'hashedit-properties');
+            span.innerHTML = '<span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet"><g><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g></svg></span>';
+            
+            // append the handle to the wrapper
+            div.appendChild(span);
+            
+             span = document.createElement('span');
+            span.setAttribute('class', 'hashedit-remove');
+            span.innerHTML = '<span><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" width="100%" height="100%"><g class="style-scope iron-icon"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg></span>';
+            
+            // append the handle to the wrapper
+            div.appendChild(span);
+            
+            
+            
         }
         
         // get all sortable elements
-        var els = document.querySelectorAll('[hashedit] [hashedit-sortable]');
+        els = document.querySelectorAll('[hashedit] [hashedit-sortable]');
     
         // walk through elements
-        for(var x=0; x<els.length; x++){
+        for(x=0; x<els.length; x++){
         
-            var el = els[x];
+            el = els[x];
         
-            var sortable = new Sortable(el, {
+            sortable = new Sortable(el, {
                 group: "hashedit-sortable",  // or { name: "...", pull: [true, false, clone], put: [true, false, array] }
                 sort: true,  // sorting inside list
                 delay: 0, // time in milliseconds to define when the sorting should start
@@ -262,20 +452,20 @@ var hashedit = {
                 onEnd: function (evt) {
                 
                     // get item
-                    var item = evt.item;
+                    item = evt.item;
                     
-                    var ref = item.querySelector(':first-child').getAttribute('data-ref');
+                    ref = item.querySelector(':first-child').getAttribute('data-ref');
                 
                     // get reference of nextSibling or parent
                     if(ref != undefined){
                     
                         if(item.nextSibling){
-                            var nextRef = item.nextSibling.querySelector(':first-child').getAttribute('data-ref');
+                            nextRef = item.nextSibling.querySelector(':first-child').getAttribute('data-ref');
                             
                             hashedit.moveMirrorElement(ref, nextRef, 'before');
                         }
                         else if(item.parentNode){
-                            var parentRef = item.parentNode.getAttribute('data-ref');
+                            parentRef = item.parentNode.getAttribute('data-ref');
                             
                             hashedit.moveMirrorElement(ref, parentRef, 'append');
                         }
@@ -311,8 +501,10 @@ var hashedit = {
      */
     setupDrawer: function(path){
     
+        var drawer, desc, meta;
+    
         // create a menu
-        var drawer = document.createElement('nav');
+        drawer = document.createElement('nav');
         drawer.setAttribute('class', 'hashedit-drawer');
         drawer.innerHTML = '<ul><li hashedit-add-page><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path></g></svg><a>Add Page</a></li><li hashedit-page-settings><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g></svg><a>Page Settings</a></li></ul>';
         
@@ -323,7 +515,7 @@ var hashedit = {
         document.querySelector('[hashedit-add-page]').addEventListener('click', function(){
             
             // hide drawer
-            var drawer = document.querySelector('.hashedit-drawer');
+            drawer = document.querySelector('.hashedit-drawer');
             drawer.removeAttribute('visible');
             
             // init url
@@ -338,12 +530,12 @@ var hashedit = {
         document.querySelector('[hashedit-page-settings]').addEventListener('click', function(){
             
             // hide drawer
-            var drawer = document.querySelector('.hashedit-drawer');
+            drawer = document.querySelector('.hashedit-drawer');
             drawer.removeAttribute('visible');
             
             // get description
-            var desc = '';
-            var meta = document.querySelector('meta[name="description"]');
+            desc = '';
+            meta = document.querySelector('meta[name="description"]');
             
             if(meta != null){
                 desc = meta.getAttribute('content');
@@ -367,8 +559,10 @@ var hashedit = {
      */
     setupMenu: function(path){
     
+        var menu, drawer, data, xhr, url;
+    
         // create a menu
-        var menu = document.createElement('menu');
+        menu = document.createElement('menu');
         menu.setAttribute('class', 'hashedit-menu');
         menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" class="style-scope iron-icon"></path></g></svg></button><div class="hashedit-menu-body"></div>';
         
@@ -378,7 +572,7 @@ var hashedit = {
         // toggle drawer
         document.querySelector('.hashedit-more').addEventListener('click', function(){
             
-            var drawer = document.querySelector('.hashedit-drawer');
+            drawer = document.querySelector('.hashedit-drawer');
             
             if(drawer.hasAttribute('visible')){
                 drawer.removeAttribute('visible');
@@ -403,12 +597,12 @@ var hashedit = {
             }
             else{
             
-              var data = hashedit.retrieveUpdateArray();
+              data = hashedit.retrieveUpdateArray();
               
               if(hashedit.saveUrl){
               
                 // construct an HTTP request
-                var xhr = new XMLHttpRequest();
+                xhr = new XMLHttpRequest();
                 xhr.open('post', hashedit.saveUrl, true);
                 xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
               
@@ -416,11 +610,12 @@ var hashedit = {
                 xhr.send(JSON.stringify(data));
               
                 xhr.onloadend = function () {
+                
                   // done
                   localStorage.clear();
                   
                   // redirect without #edit
-                  var url = hashedit.replaceAll(window.location.href, '#edit', '');
+                  url = hashedit.replaceAll(window.location.href, '#edit', '');
                   
                   // redirect to the URL
                   window.location.href = url;
@@ -441,10 +636,12 @@ var hashedit = {
      */
     setupDraggable: function(){
     
+        var x, el, sortable, item, action;
+    
         // setup sortable on the menu
-        var el = document.querySelector('.hashedit-menu-body');
+        el = document.querySelector('.hashedit-menu-body');
         
-        var sortable = new Sortable(el, {
+        sortable = new Sortable(el, {
             group: {
                 name: 'hashedit-sortable',
                 pull: 'clone',
@@ -465,15 +662,21 @@ var hashedit = {
             onEnd: function (evt) {
             
                 // get item
-                var item = evt.item;
+                item = evt.item;
                 
                 // get action
-                var action = item.getAttribute('data-action');
+                action = item.getAttribute('data-action');
                 
                 // append html associated with action
-                for(var x=0; x<hashedit.menu.length; x++){
+                for(x=0; x<hashedit.menu.length; x++){
                     if(hashedit.menu[x].action == action){
-                        hashedit.append(hashedit.menu[x].html);
+                        var html = hashedit.menu[x].html;
+                        html = hashedit.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
+                        html = hashedit.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
+                        html = hashedit.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
+                    
+                    
+                        hashedit.append(html);
                     }
                 }
                 
@@ -484,9 +687,11 @@ var hashedit = {
     },
     
     /**
-     * Load html from html/* into the aside
+     * Load html
      */
     loadHTML: function(path){
+    
+        var x, wrapper;
         
         // fetch the config
         fetch(path + 'html/modals.html')
@@ -494,13 +699,25 @@ var hashedit = {
             return response.text();
           }).then(function(text) { 
           
-            var wrapper = document.createElement('div');
+            wrapper = document.createElement('div');
             wrapper.innerHTML = text;
             
-            for(var x=0; x<wrapper.childNodes.length; x++){
+            for(x=0; x<wrapper.childNodes.length; x++){
                 document.querySelector('body').appendChild(wrapper.childNodes[x]);
             }
             
+            // init menu
+            for(x=0; x < hashedit.menu.length; x++){
+            
+                // initialize
+                if(hashedit.menu[x].init){
+                    hashedit.menu[x].init();
+                }
+                
+            }
+            
+            
+            // setup events
             hashedit.setupConfigEvents();
             hashedit.setupTextEvents();
             hashedit.setupModalEvents();
@@ -513,19 +730,21 @@ var hashedit = {
      * Create menu
      */
     createMenu: function(path){
+        
+        var x, item, a;
     
         // walk through plugins
-        for(var x=0; x < hashedit.menu.length; x++){
+        for(x=0; x < hashedit.menu.length; x++){
         
-            var item = hashedit.menu[x];
+            item = hashedit.menu[x];
             
             // create a menu item
-            var a = document.createElement('a');
+            a = document.createElement('a');
             a.setAttribute('title', item.title);
             a.setAttribute('data-action', item.action);
             a.innerHTML = item.display;
             
-            // append hte child to the menu
+            // append the child to the menu
             document.querySelector('.hashedit-menu-body').appendChild(a);
             
         }
@@ -536,26 +755,175 @@ var hashedit = {
     },
     
     /**
+     * Shows the text options
+     */
+    showTextOptions: function(element){
+    
+      var x, drawer, link, form, fields, attrs, key, value;
+      
+      // set current element, container, and node
+      hashedit.current.element = element;
+      hashedit.current.container = hashedit.findParentBySelector(element, '.hashedit-element');
+      hashedit.current.node = hashedit.current.container.firstChild;
+      
+      // hide drawer
+      drawer = document.querySelector('.hashedit-drawer');
+      drawer.removeAttribute('visible');
+      
+      // hide #hashedit-image
+      link = document.querySelector('#hashedit-image-settings');
+      link.removeAttribute('visible');
+      
+      // hide #hashedit-link
+      link = document.querySelector('#hashedit-link-settings');
+      link.removeAttribute('visible');
+      
+      // get #hashedit-config
+      form = document.querySelector('#hashedit-text-settings');
+      form.setAttribute('visible', '');
+          
+      // clear form fields
+      fields = document.querySelectorAll('[data-model]');
+      
+      for(x=0; x<fields.length; x++){
+          if(fields[x].nodeType == 'SELECT'){
+              fields[x].selectedIndex = 0;
+          }
+          else{
+              fields[x].value = '';
+          }
+      }
+      
+      hashedit.bind();
+      
+    },
+    
+    /**
+     * Binds data from the current element
+     */
+    bind: function(){
+    
+      var attrs, x, y, key, value, inputs;
+      
+      // get attributes
+      attrs = hashedit.current.node.attributes;
+      
+      for(x=0; x<attrs.length; x++){
+          
+          // get key and value
+          key = attrs[x].nodeName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+          value = attrs[x].nodeValue;
+          
+          // if is numeric
+          if(!isNaN(parseFloat(value)) && isFinite(value)){
+              value = parseFloat(value);
+          }
+          
+          // set value
+          inputs = document.querySelectorAll('[data-model="node.' + key + '"]');
+          
+          for(y=0; y<inputs.length; y++){
+            inputs[y].value = value;
+          }
+          
+      }
+      
+    },
+    
+    /**
      * Setup contentEditable events for the editor
      */
     setupContentEditableEvents: function(){
         
-        // get contentEditable elements
-        var arr = document.querySelectorAll('body');
+        var x, y, arr, edits, isEditable, configs, isConfig, el, ref, html, parent, li, parent, els, showProperties, isDefault, removeElement, element;
         
-        for(var x=0; x<arr.length; x++){
+        // get contentEditable elements
+        arr = document.querySelectorAll('body');
+        
+        for(x=0; x<arr.length; x++){
         
             // delegate CLICK, FOCUS event
             ['click', 'focus'].forEach(function(e){
                 arr[x].addEventListener(e, function(e){
                 
-                    if(e.target.nodeName == 'A'){
+                    // determine if the event occurred within a hashedit-lement
+                    parent = hashedit.findParentBySelector(e.target, '.hashedit-element');
+                    element = null;
+                    
+                    if(parent != null){
+                        element = parent.firstChild;
+                    }
+                    
+                    // remove all current elements
+                    els = document.querySelectorAll('[current-hashedit-element]');
+                    
+                    for(y=0; y<els.length; y++){
+                      els[y].removeAttribute('current-hashedit-element');
+                    }
+                    
+                    // set current element
+                    if(parent){
+                      parent.setAttribute('current-hashedit-element', 'true');
+                    }
+                    
+                    // check for properties
+                    showProperties = false;
+                    
+                    if(hashedit.findParentBySelector(e.target, '.hashedit-properties') != null){
+                        showProperties = true;
+                    }
+                    
+                    // remove element
+                    removeElement = false;
+                    
+                    if(hashedit.findParentBySelector(e.target, '.hashedit-remove') != null){
+                        removeElement = true;
+                    }
+                    
+                    if(removeElement == true){
+                        parent.remove();
+                        
+                        var ref = element.getAttribute('data-ref');
+                         
+                        // remove the mirror element
+                        if(ref != null){
+                            hashedit.removeMirrorElement(ref);
+                        }
+                    }
+                    else if(showProperties == true){
+                    
+                        hashedit.current.node = element;
+                    
+                        // bind
+                        hashedit.bind();
+                        
+                        // #todo
+                        isDefault = true;
+                        
+                        // see if the element matches a plugin selector
+                        for(x=0; x<hashedit.menu.length; x++){
+                          
+                          if(parent.firstChild.matches(hashedit.menu[x].selector)){
+                            if(hashedit.menu[x].configure){
+                                isDefault = false;
+                                hashedit.menu[x].configure();
+                            }
+                            
+                          }
+                          
+                        }
+                    
+                        if(isDefault == true){
+                          document.getElementById('hashedit-element-settings').setAttribute('visible', 'true');
+                        }
+                    }
+                    else if(e.target.nodeName == 'A'){
                         
                         // hide .hashedit-config, .hashedit-modal
-                        var edits = document.querySelectorAll('[hashedit]');
+                        edits = document.querySelectorAll('[hashedit]');
                         
                         // determines whether the element is a configuration
-                        var isEditable = false;
+                        isEditable = false;
                         
                         for(x=0; x<edits.length; x++){
                             
@@ -570,13 +938,13 @@ var hashedit = {
                         }
                     }
                     else if(e.target.nodeName == 'IMG'){
-                        hashedit.currImage = e.target;
+                        hashedit.current.node = e.target;
                         
                         // hide .hashedit-config, .hashedit-modal
-                        var edits = document.querySelectorAll('[hashedit]');
+                        edits = document.querySelectorAll('[hashedit]');
                         
                         // determines whether the element is a configuration
-                        var isEditable = false;
+                        isEditable = false;
                         
                         for(x=0; x<edits.length; x++){
                             
@@ -592,67 +960,25 @@ var hashedit = {
                     }
                     else if(e.target.hasAttribute('contentEditable')){
                     
-                        // set current node
-                        hashedit.currNode = e.target;
+                       // shows the text options
+                       hashedit.showTextOptions(e.target);
                         
-                        // hide drawer
-                        var drawer = document.querySelector('.hashedit-drawer');
-                        drawer.removeAttribute('visible');
+                    }
+                    else if(e.target.parentNode.hasAttribute('contentEditable') && e.target.parentNode){
+                    
+                       // shows the text options
+                       hashedit.showTextOptions(e.target);
                         
-                        // hide #hashedit-image
-                        var link = document.querySelector('#hashedit-image-settings');
-                        link.removeAttribute('visible');
-                        
-                        // hide #hashedit-link
-                        var link = document.querySelector('#hashedit-link-settings');
-                        link.removeAttribute('visible');
-                        
-                        // get #hashedit-config
-                        var form = document.querySelector('#hashedit-element-settings');
-                        form.setAttribute('visible', '');
-                            
-                        // clear form fields
-                        var fields = document.querySelectorAll('[data-model]');
-                        
-                        for(var x=0; x<fields.length; x++){
-                            if(fields[x].nodeType == 'SELECT'){
-                                fields[x].selectedIndex = 0;
-                            }
-                            else{
-                                fields[x].value = '';
-                            }
-                        }
-                        
-                        // get attributes
-                        var attrs = hashedit.currNode.attributes;
-                        
-                        for(var x=0; x<attrs.length; x++){
-                            
-                            // get key and value
-                            var key = attrs[x].nodeName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-                            var value = attrs[x].nodeValue;
-                            
-                            // if is numeric
-                            if(!isNaN(parseFloat(value)) && isFinite(value)){
-                                value = parseFloat(value);
-                            }
-                            
-                            // set value
-                            var input = document.querySelector('[data-model="node.' + key + '"]');
-                            
-                            if(input != null){
-                                input.value = value;
-                            }
-                            
-                        }
-                        
+                    }
+                    else if(e.target.className == 'dz-hidden-input'){
+                      // do nothing
                     }
                     else{
                         // hide .hashedit-config, .hashedit-modal
-                        var configs = document.querySelectorAll('.hashedit-config, .hashedit-modal, .hashedit-menu, .hashedit-drawer');
+                        configs = document.querySelectorAll('.hashedit-config, .hashedit-modal, .hashedit-menu, .hashedit-drawer');
                         
                         // determines whether the element is a configuration
-                        var isConfig = false;
+                        isConfig = false;
                         
                         for(x=0; x<configs.length; x++){
                             
@@ -683,12 +1009,12 @@ var hashedit = {
                     
                     if(e.target.hasAttribute('contentEditable')){
                     
-                        var el = e.target;
+                        el = e.target;
                         
                         while(el !== null){
                             if(el.hasAttribute('data-ref')){
-                                var ref = el.getAttribute('data-ref');
-                                var html = el.innerHTML;
+                                ref = el.getAttribute('data-ref');
+                                html = el.innerHTML;
                                                         
                                 // set the mirror HTML
                                 hashedit.setMirrorHTML(ref, html);
@@ -714,7 +1040,7 @@ var hashedit = {
                     
                     if(e.target.hasAttribute('contentEditable')){
                     
-                        var el = e.target;
+                        el = e.target;
                     
                         // ENTER key
                         if(e.keyCode === 13){
@@ -722,7 +1048,7 @@ var hashedit = {
                             if(el.nodeName == 'LI'){
                                 
                                 // create LI
-                                var li = document.createElement('li');
+                                li = document.createElement('li');
                                 li.setAttribute('contentEditable', true);
                                 
                                 // append LI
@@ -748,7 +1074,7 @@ var hashedit = {
                                     
                                     if(el.previousSibling !== null){
                                     
-                                        var parent = el.parentNode;
+                                        parent = el.parentNode;
                                     
                                         el.remove();
                                         
@@ -775,17 +1101,32 @@ var hashedit = {
     },
     
     /**
+     * Selects element contents
+     */
+    selectElementContents(el) {
+        var range, sel;
+    
+        range = document.createRange();
+        range.selectNodeContents(el);
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    },
+
+    /**
      * Appends items to the editor
      */
     append: function(html){ 
     
+        var x, newNode, node, firstChild, ref, nextRef, parentRef;
+    
         // create a new node
-        var newNode = document.createElement('div');
+        newNode = document.createElement('div');
         newNode.setAttribute('class', 'hashedit-element');
         newNode.innerHTML = html + hashedit.elementMenu;
-    
+        
         // get existing node        
-        var node = document.querySelector('[hashedit-sortable] [data-action]');
+        node = document.querySelector('[hashedit-sortable] [data-action]');
     
         // if dragged placeholder exists
         if(node != null){
@@ -794,27 +1135,33 @@ var hashedit = {
             node.parentNode.replaceChild(newNode, node);
             
             // set editable
-            var editable = newNode.querySelectorAll('p, h1, h2, h3, h4, h5, li, td, th, blockquote');
+            var editable = newNode.querySelectorAll('p, h1, h2, h3, h4, h5, li, td, th, blockquote, pre');
             
-            for(var x=0; x<editable.length; x++){
+            for(x=0; x<editable.length; x++){
                 editable[x].setAttribute('contentEditable', 'true');
             }
             
             // focus on first element
             if(editable.length > 0){
                 editable[0].focus();
+                
+                // show edit options for the text
+                hashedit.showTextOptions(editable[0]);
+                
+                // select editable contents, #ref: http://bit.ly/1jxd8er
+                hashedit.selectElementContents(editable[0]);
             }
             
             // increment the new element count
             hashedit.newElementCount = hashedit.newElementCount + 1;
             
             // get first child of new node
-            var firstChild = newNode.querySelector(':first-child');
+            firstChild = newNode.querySelector(':first-child');
             
             if(firstChild != null){
                 
                 // create ref
-                var ref = 'new-' + hashedit.newElementCount;
+                ref = 'new-' + hashedit.newElementCount;
                 
                 // set ref
                 firstChild.setAttribute('data-ref', ref);
@@ -823,13 +1170,13 @@ var hashedit = {
             // create new node in mirror            
             if(newNode.nextSibling){
             
-                var nextRef = newNode.nextSibling.querySelector(':first-child').getAttribute('data-ref');
+                nextRef = newNode.nextSibling.querySelector(':first-child').getAttribute('data-ref');
                 hashedit.insertMirrorElement(ref, nextRef, 'before', html);
             
             }
             else if(newNode.parentNode){
             
-                var parentRef = newNode.parentNode.getAttribute('data-ref');
+                parentRef = newNode.parentNode.getAttribute('data-ref');
                 hashedit.insertMirrorElement(ref, parentRef, 'append', html);
                 
             }
@@ -845,21 +1192,134 @@ var hashedit = {
      */
     setupModalEvents: function(){
     
+        var x, dz, arr, card, list, item, url, params, xhr, value, el;
+    
+        // create the dropzone
+        dz = new Dropzone("#hashedit-dropzone", { url: hashedit.uploadUrl});
+        
+        dz.on("complete", function(file) {
+          dz.removeFile(file);
+        });
+        
+        dz.on("success", function(file, response) {
+        
+          var value = 'images/' + file.name;
+        
+          // set value
+          el = document.getElementById('hashedit-image-src');
+          el.value = value;
+          
+          // add item to list
+          list = document.getElementById('images-list');
+          
+          item = document.createElement('div');
+          item.setAttribute('class', 'hashedit-list-item');
+          item.innerHTML = 'images/' + value;
+          item.setAttribute('data-value', 'images/' + value);
+          
+          list.appendChild(item);
+          
+          // fire input event
+          el.dispatchEvent(new Event('input', { 'bubbles': true }));
+          
+          // flip card
+          card = document.getElementById('hashedit-image-settings');
+          card.removeAttribute('hashedit-card-flipped');
+          
+        });
+        
+       
+        // handle click on images list
+        var list = document.getElementById('images-list');
+        
+        ['click'].forEach(function(e){
+            list.addEventListener(e, function(e){
+         
+                if(e.target.hasAttribute('data-value') == true){
+                  value = e.target.getAttribute('data-value');
+                  
+                  // set value
+                  el = document.getElementById('hashedit-image-src');
+                  el.value = value;
+                  
+                  // fire input event
+                  el.dispatchEvent(new Event('input', { 'bubbles': true }));
+                  
+                  // flip card
+                  card = document.getElementById('hashedit-image-settings');
+                  card.removeAttribute('hashedit-card-flipped');
+                }
+                
+            });
+        });
+        
+        // setup config events
+        arr = document.querySelectorAll('.toggle-select-image');
+        
+        for(x = 0; x < arr.length; x++){
+            
+            // delegate on .hashedit-config
+            ['click'].forEach(function(e){
+            
+                arr[x].addEventListener(e, function(e){
+                
+                  // flip the card
+                  card = document.querySelector('#hashedit-image-settings');
+            
+                  if(card.hasAttribute('hashedit-card-flipped')){
+                    card.removeAttribute('hashedit-card-flipped');
+                  }
+                  else{
+                    card.setAttribute('hashedit-card-flipped', 'true');
+                  }
+                  
+                  if(hashedit.imagesListLoaded === false){
+                  
+                    // load the images
+                    fetch(hashedit.imagesListUrl, {credentials: 'include'})
+                      .then(function(response) {
+                        return response.json()
+                      }).then(function(json) {
+                        
+                        list = document.getElementById('images-list');
+                        list.innerHTML = '';
+                        
+                        for(x=0; x<json.length; x++){
+                          item = document.createElement('div');
+                          item.setAttribute('class', 'hashedit-list-item');
+                          item.innerHTML = 'images/' + json[x];
+                          item.setAttribute('data-value', 'images/' + json[x]);
+                          
+                          list.appendChild(item);
+                        }
+                        
+                        hashedit.imagesListLoaded = true;
+                        
+                      }).catch(function(ex) {
+                        console.log('parsing failed', ex);
+                      });
+                  }
+              
+              });
+            
+            });
+        }
+        
         // handle page creation
         document.querySelector('[hashedit-add-page-create]').addEventListener('click', function(){
             
             // get url
-            var url = document.getElementById('hashedit-page-url').value;
+            url = document.getElementById('hashedit-page-url').value;
             
             // set params
-            var params = {
+            params = {
               'url': url
             }
             
             if(hashedit.addPageURL){
               
               // construct an HTTP request
-              var xhr = new XMLHttpRequest();
+              xhr = new XMLHttpRequest();
               xhr.open('post', hashedit.addPageURL, true);
               xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
             
@@ -886,22 +1346,24 @@ var hashedit = {
      */
     setupConfigEvents: function(){
         
-        // setup config events
-        var arr = document.querySelectorAll('.hashedit-config, .hashedit-modal');
+        var x, arr, el, configs, ref, model, value, attr, parts, style;
         
-        for(var x = 0; x < arr.length; x++){
+        // setup config events
+        arr = document.querySelectorAll('.hashedit-config, .hashedit-modal');
+        
+        for(x = 0; x < arr.length; x++){
             
             // delegate on .hashedit-config
             ['propertychange', 'change', 'click', 'keyup', 'input', 'paste'].forEach(function(e){
             
                 arr[x].addEventListener(e, function(e){
                     
-                    var el = e.target;
+                    el = e.target;
                     
                     if(el.hasAttribute('hashedit-cancel-modal')){
                         
                         // hide .hashedit-config, .hashedit-modal
-                        var configs = document.querySelectorAll('.hashedit-modal');
+                        configs = document.querySelectorAll('.hashedit-modal');
                  
                         for(x=0; x<configs.length; x++){
                             configs[x].removeAttribute('visible');
@@ -912,15 +1374,17 @@ var hashedit = {
                     // look for [data-model]
                     if(el.hasAttribute('data-model')){
                     
-                        var ref = hashedit.currNode.getAttribute('data-ref');
-                        var model = el.getAttribute('data-model');
-                        var value = '';
-                        var attr = '';
+                        if(hashedit.current.node != null){
+                          ref = hashedit.current.node.getAttribute('data-ref');
+                        }
+                        model = el.getAttribute('data-model');
+                        value = '';
+                        attr = '';
                         
                         value = el.value;
                         
                         if(model.indexOf('node.') != -1){
-                            var parts = model.split('.');
+                            parts = model.split('.');
                             
                             // converts camelcase to hyphens, sets attribute
                             if(parts.length > 1){
@@ -928,22 +1392,38 @@ var hashedit = {
                                 // get property
                                 attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
                                 
+                                // get currentValue
+                                var old = hashedit.current.node.getAttribute(attr);
+                                
                                 // set attribute
-                                hashedit.currNode.setAttribute(attr, value);
+                                hashedit.current.node.setAttribute(attr, value);
                                 
                                 // set mirror attribute
                                 hashedit.setMirrorAttribute(ref, attr, value);
                                 
-                                var style = hashedit.createTextStyle(hashedit.currNode);
+                                // create text style
+                                style = hashedit.createTextStyle(hashedit.current.node);
                                 
-                                hashedit.currNode.setAttribute('style', style);
+                                hashedit.current.node.setAttribute('style', style);
+                                
+                                // call change event
+                                for(x=0; x<hashedit.menu.length; x++){
+                          
+                                  if(hashedit.current.node.matches(hashedit.menu[x].selector)){
+                                    if(hashedit.menu[x].configure){
+                                        hashedit.menu[x].change(attr, value, old);
+                                    }
+                                    
+                                  }
+                                  
+                                }
+                                
+                                
                             }
                         }
-                        
+                     
                         if(model.indexOf('link.') != -1){
-                            var parts = model.split('.');
-                            
-                            console.log(parts);
+                            parts = model.split('.');
                             
                             // converts camelcase to hyphens, sets attribute
                             if(parts.length > 1){
@@ -955,7 +1435,7 @@ var hashedit = {
                                 hashedit.currLink.setAttribute(attr, value);
                                 
                                 // fire event
-                                hashedit.currNode.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                hashedit.current.node.dispatchEvent(new Event('input', { 'bubbles': true }));
                                 
                             }
                         }
@@ -969,11 +1449,17 @@ var hashedit = {
                                 // get property
                                 attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
                                 
+                                // get ref from image
+                                var ref = hashedit.current.node.getAttribute('data-ref');
+                                
                                 // set attribute
-                                hashedit.currImage.setAttribute(attr, value);
+                                hashedit.current.node.setAttribute(attr, value);
+                                hashedit.setMirrorAttribute(ref, attr, value);
                                 
                                 // fire event
-                                hashedit.currNode.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                if(hashedit.current.node != null){
+                                  hashedit.current.node.dispatchEvent(new Event('input', { 'bubbles': true }));
+                                }
                                 
                             }
                         }
@@ -993,16 +1479,18 @@ var hashedit = {
      */
     setupTextEvents: function(){
         
-        var arr = document.querySelectorAll('.hashedit-config');
+        var x, arr, el, action, text, html, input, value;
         
-        for(var x = 0; x < arr.length; x++){
+        arr = document.querySelectorAll('.hashedit-config');
+        
+        for(x = 0; x < arr.length; x++){
             
             // delegate on .hashedit-config
             ['mousedown', 'touchstart'].forEach(function(e){
             
                 arr[x].addEventListener(e, function(e){
                     
-                    var el = e.target;
+                    el = e.target;
                     
                     if(el.nodeName == 'SVG'){
                         el = el.parentNode;
@@ -1011,7 +1499,7 @@ var hashedit = {
                     // look for [data-model]
                     if(el.hasAttribute('data-action')){
                     
-                        var action = el.getAttribute('data-action');
+                        action = el.getAttribute('data-action');
                                     
                         if(action == 'hashedit.text.bold'){
                             document.execCommand("Bold", false, null);
@@ -1040,8 +1528,8 @@ var hashedit = {
                         else if(action == 'hashedit.text.link'){
                             
                             // add link html
-                            var text = hashedit.getSelectedText();
-                            var html = '<a>'+text+'</a>';
+                            text = hashedit.getSelectedText();
+                            html = '<a>'+text+'</a>';
                             
                             document.execCommand("insertHTML", false, html);
                         
@@ -1053,17 +1541,17 @@ var hashedit = {
                         else if(action == 'hashedit.text.code'){
                         
                             // create code html
-                            var text = hashedit.getSelectedText();
-                            var html = '<code>'+text+'</code>';
+                            text = hashedit.getSelectedText();
+                            html = '<code>'+text+'</code>';
                             
                             document.execCommand("insertHTML", false, html);
                             return false;
                         }
                         else if(action == 'hashedit.text.alignLeft'){
-                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
+                            input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
-                            var value = input.value;
+                            value = input.value;
                             
                             value = hashedit.replaceAll(value, 'text-center', '');
                             value = hashedit.replaceAll(value, 'text-left', '');
@@ -1079,10 +1567,10 @@ var hashedit = {
                             return false;
                         }
                         else if(action == 'hashedit.text.alignRight'){
-                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
+                            input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
-                            var value = input.value;
+                            value = input.value;
                             
                             value = hashedit.replaceAll(value, 'text-center', '');
                             value = hashedit.replaceAll(value, 'text-left', '');
@@ -1098,10 +1586,10 @@ var hashedit = {
                             return false;
                         }
                         else if(action == 'hashedit.text.alignCenter'){
-                            var input = document.querySelector('.hashedit-modal [data-model="node.class"]');
+                            input = document.querySelector('.hashedit-modal [data-model="node.class"]');
             
                             // clear existing alignments
-                            var value = input.value;
+                            value = input.value;
                             
                             value = hashedit.replaceAll(value, 'text-center', '');
                             value = hashedit.replaceAll(value, 'text-left', '');
@@ -1130,18 +1618,14 @@ var hashedit = {
             
         }
         
-        document.querySelector('[hashedit-element-details]').addEventListener('click', function(){
-            
-            // show modal
-            document.getElementById('hashedit-element-details').setAttribute('visible', '');
-        });
-        
     },
     
     /**
      * Sets up the link dialog
      */
     showLinkDialog: function(){
+    
+        var id, cssClass, href, target, title, link;
     
         // get selected link
         hashedit.currLink = hashedit.getLinkFromSelection();
@@ -1150,14 +1634,14 @@ var hashedit = {
         if(hashedit.currLink != null){
         
             // get  attributes
-            var id = hashedit.currLink.getAttribute('id') || '';
-            var cssClass = hashedit.currLink.getAttribute('class') || '';
-            var href = hashedit.currLink.getAttribute('href') || '';
-            var target = hashedit.currLink.getAttribute('target') || '';
-            var title = hashedit.currLink.getAttribute('title') || '';
+            id = hashedit.currLink.getAttribute('id') || '';
+            cssClass = hashedit.currLink.getAttribute('class') || '';
+            href = hashedit.currLink.getAttribute('href') || '';
+            target = hashedit.currLink.getAttribute('target') || '';
+            title = hashedit.currLink.getAttribute('title') || '';
         
             // show the link dialog
-            var link = document.querySelector('#hashedit-link-settings');
+            link = document.querySelector('#hashedit-link-settings');
             link.setAttribute('visible', '');
             
             // sets start values
@@ -1176,25 +1660,26 @@ var hashedit = {
      */
     showImageDialog: function(){
     
-
+        var id, cssClass, src, target, link;
+    
         // populate link values
-        if(hashedit.currImage != null){
+        if(hashedit.current.node != null){
         
             // get  attributes
-            var id = hashedit.currImage.getAttribute('id') || '';
-            var cssClass = hashedit.currImage.getAttribute('class') || '';
-            var src = hashedit.currImage.getAttribute('src') || '';
-            var title = hashedit.currImage.getAttribute('title') || '';
+            id = hashedit.current.node.getAttribute('id') || '';
+            cssClass = hashedit.current.node.getAttribute('class') || '';
+            src = hashedit.current.node.getAttribute('src') || '';
+            target = hashedit.current.node.getAttribute('target') || '';
         
             // show the link dialog
-            var link = document.querySelector('#hashedit-image-settings');
+            link = document.querySelector('#hashedit-image-settings');
             link.setAttribute('visible', '');
             
             // sets start values
             document.getElementById('hashedit-image-id').value = id;
             document.getElementById('hashedit-image-cssclass').value = cssClass;
             document.getElementById('hashedit-image-src').value = src;
-            document.getElementById('hashedit-image-title').value = title;
+            document.getElementById('hashedit-image-target').value = target;
             
         }
         
@@ -1207,12 +1692,14 @@ var hashedit = {
      * @param {String} context
      */
     executeFunctionByName: function(functionName, context /*, args */) {
+      
+        var i, args, namespaces, func;
     
-        var args = [].slice.call(arguments).splice(2);
-        var namespaces = functionName.split(".");
+        args = [].slice.call(arguments).splice(2);
+        namespaces = functionName.split(".");
         
-        var func = namespaces.pop();
-        for(var i = 0; i < namespaces.length; i++) {
+        func = namespaces.pop();
+        for(i = 0; i < namespaces.length; i++) {
             context = context[namespaces[i]];
         }
         
@@ -1237,11 +1724,14 @@ var hashedit = {
      * Saves text selection
      */
     saveSelection:function(){
+    
+        var ranges, i;
+    
         if (window.getSelection) {
             sel = window.getSelection();
             if (sel.getRangeAt && sel.rangeCount) {
-                var ranges = [];
-                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                ranges = [];
+                for (i = 0, len = sel.rangeCount; i < len; ++i) {
                     ranges.push(sel.getRangeAt(i));
                 }
                 return ranges;
@@ -1257,13 +1747,15 @@ var hashedit = {
      */
     getLinkFromSelection:function() {
         
-        var parent = null;
+        var parent, selection, range, div, links;
+        
+        parent = null;
         
         if(document.selection){
             parent = document.selection.createRange().parentElement();
         }
         else{
-            var selection = window.getSelection();
+            selection = window.getSelection();
             if(selection.rangeCount > 0){
                 parent = selection.getRangeAt(0).startContainer.parentNode;
             }
@@ -1276,13 +1768,13 @@ var hashedit = {
         }
         
         if (window.getSelection) {
-            var selection = window.getSelection();
+            selection = window.getSelection();
             
             if(selection.rangeCount > 0) {
-                var range = selection.getRangeAt(0);
-                var div = document.createElement('DIV');
+                range = selection.getRangeAt(0);
+                div = document.createElement('DIV');
                 div.appendChild(range.cloneContents());
-                var links = div.getElementsByTagName("A");
+                links = div.getElementsByTagName("A");
                 
                 if(links.length > 0){
                     return links[0];
@@ -1322,9 +1814,11 @@ var hashedit = {
      * @param {String} stringToReplace - String to replacr
      */
     replaceAll:function(src, stringToFind, stringToReplace){
-        var temp = src;
     
-        var index = temp.indexOf(stringToFind);
+        var temp, index;
+    
+        temp = src;
+        index = temp.indexOf(stringToFind);
         
         while(index != -1){
             temp = temp.replace(stringToFind,stringToReplace);
@@ -1339,17 +1833,19 @@ var hashedit = {
      * @param {HTMLElement} node
      */
     createTextStyle: function(node){
+    
+        var style, textColor, textSize, textShadowColor, textShadowHorizontal, textShadowVertical, textShadowBlur;
         
         // get current node
-        var style = '';
+        style = '';
         
         // build a style attribute for (text-color, text-size, text-shadow-color, text-shadow-vertical, text-shadow-horizontal, text-shadow-blur)
-        var textColor = node.getAttribute('text-color') || '';
-        var textSize = node.getAttribute('text-size') || '';
-        var textShadowColor = node.getAttribute('text-shadow-color') || '';
-        var textShadowHorizontal = node.getAttribute('text-shadow-horizontal') || '';
-        var textShadowVertical = node.getAttribute('text-shadow-horizontal') || '';
-        var textShadowBlur = node.getAttribute('text-shadow-blur') || '';
+        textColor = node.getAttribute('text-color') || '';
+        textSize = node.getAttribute('text-size') || '';
+        textShadowColor = node.getAttribute('text-shadow-color') || '';
+        textShadowHorizontal = node.getAttribute('text-shadow-horizontal') || '';
+        textShadowVertical = node.getAttribute('text-shadow-horizontal') || '';
+        textShadowBlur = node.getAttribute('text-shadow-blur') || '';
         
         if(textColor != ''){
             style += 'color:' + textColor + ';';
@@ -1376,10 +1872,14 @@ var hashedit = {
      * @param {String} name
      */
     getQueryStringByName:function(name){
+    
+        var regexS, regex, results;
+      
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(window.location.href);
+        regexS = "[\\?&]" + name + "=([^&#]*)";
+        regex = new RegExp(regexS);
+        results = regex.exec(window.location.href);
+        
         if(results == null){
             return '';
         }
@@ -1401,12 +1901,22 @@ var hashedit = {
      * Retrieve changes
      */
     retrieveUpdateArray: function(){
+    
+        var x, y, data, els, el, refs;
         
-        var els = hashedit.mirror.documentElement.querySelectorAll('[hashedit]');
-        var data = [];
+        els = hashedit.mirror.documentElement.querySelectorAll('[hashedit]');
+        data = [];
         
-        for(var x=0; x<els.length; x++){
-            var el = {'selector':els[x].getAttribute('hashedit-selector'), 'html':els[x].innerHTML}
+        for(x=0; x<els.length; x++){
+     
+            // remove refs
+            refs = els[x].querySelectorAll('[data-ref]');
+            
+            for(y=0; y<refs.length; y++){
+              refs[y].removeAttribute('data-ref');
+            }
+            
+            el = {'selector':els[x].getAttribute('hashedit-selector'), 'html': els[x].innerHTML}
             data.push(el);
         }
         
@@ -1415,11 +1925,25 @@ var hashedit = {
     },
     
     /**
+     * Removes the mirror element
+     */
+    removeMirrorElement: function(ref){
+    
+        var node;
+    
+        node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
+        node.remove();
+        
+    },
+    
+    /**
      * Update the mirror HTML based on an edit
      */
     setMirrorHTML: function(ref, html){
     
-        var node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
+        var node;
+    
+        node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
         node.innerHTML = html;
         
     },
@@ -1432,7 +1956,9 @@ var hashedit = {
      */
     setMirrorAttribute: function(ref, attr, value){
         
-        var node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
+        var node;
+    
+        node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
         node.setAttribute(attr, value);
         
     },
@@ -1445,24 +1971,28 @@ var hashedit = {
      */
     moveMirrorElement: function(ref, toRef, method){
     
+        console.log('ref=' + ref + ' toRef=' + toRef + ' method=' + method);
+    
+        var node, to, parent;
+    
         if(hashedit.debug == true){
             console.log('[hashedit.moveMirrorElement] ref=' + ref + ' toref=' + toRef + ' method=' + method);
         }
     
-        var node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
-        var to = hashedit.mirror.querySelector('[data-ref="' + toRef + '"]');
+        node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
+        to = hashedit.mirror.querySelector('[data-ref="' + toRef + '"]');
         
         // setup parentNode
         if(to != null){
         
-            var parent = to.parentNode;
+            parent = to.parentNode;
             
             // insert into DOM
             if(method == 'before'){
                 parent.insertBefore(node, to);
             }
             else if(method == 'append'){
-                parent.appendChild(node);
+                to.appendChild(node);
             }
         
         }
@@ -1478,21 +2008,23 @@ var hashedit = {
      */
     insertMirrorElement: function(ref, toRef, method, html){
     
+        var div, node, to, parent;
+    
         if(hashedit.debug == true){
             console.log('[hashedit.insertMirrorElement] ref=' + ref + ' toref=' + toRef + ' method=' + method);
         }
         
         // create a div to wrap the new node
-        var div = document.createElement('div');
+        div = document.createElement('div');
         div.innerHTML = html;
         
         // get the new node and add the ref
-        var node = div.firstChild;
+        node = div.firstChild;
         node.setAttribute('data-ref', ref);
     
         // get the to element
-        var to = hashedit.mirror.querySelector('[data-ref="' + toRef + '"]');
-        var parent = to.parentNode;
+        to = hashedit.mirror.querySelector('[data-ref="' + toRef + '"]');
+        parent = to.parentNode;
         
         // insert into DOM
         if(method == 'before'){
@@ -1553,24 +2085,51 @@ var hashedit = {
               });
         }
       
+    },
+    
+    /**
+     * Helper for findParentBySelecotr
+     * @param {Array} config.sortable
+     */
+    collectionHas: function(a, b) { //helper function (see below)
+        for(var i = 0, len = a.length; i < len; i ++) {
+            if(a[i] == b) return true;
+        }
+        return false;
+    },
+    
+    /**
+     * Find the parent by a selector ref: http://stackoverflow.com/questions/14234560/javascript-how-to-get-parent-element-by-selector
+     * @param {Array} config.sortable
+     */
+    findParentBySelector: function(elm, selector) {
+        var all = document.querySelectorAll(selector);
+        var cur = elm.parentNode;
+        while(cur && !hashedit.collectionHas(all, cur)) { //keep going up until you find a match
+            cur = cur.parentNode; //go up
+        }
+        return cur; //will return null if not found
     }
     
 }
 
 // Wrap an HTMLElement around each element in an HTMLElement array.
 HTMLElement.prototype.wrap = function(elms) {
+    
+    var i, child, el, parent, sibling;
+
     // Convert `elms` to an array, if necessary.
     if (!elms.length) elms = [elms];
     
     // Loops backwards to prevent having to clone the wrapper on the
     // first element (see `child` below).
-    for (var i = elms.length - 1; i >= 0; i--) {
-        var child = (i > 0) ? this.cloneNode(true) : this;
-        var el    = elms[i];
+    for(i = elms.length - 1; i >= 0; i--){
+        child = (i > 0) ? this.cloneNode(true) : this;
+        el = elms[i];
         
         // Cache the current parent and sibling.
-        var parent  = el.parentNode;
-        var sibling = el.nextSibling;
+        parent  = el.parentNode;
+        sibling = el.nextSibling;
         
         // Wrap the element (is automatically removed from its current
         // parent).
@@ -1586,6 +2145,3 @@ HTMLElement.prototype.wrap = function(elms) {
         }
     }
 };
-
-/*! Sortable 1.2.1 - MIT | git://github.com/rubaxa/Sortable.git */
-!function(a){"use strict";"function"==typeof define&&define.amd?define(a):"undefined"!=typeof module&&"undefined"!=typeof module.exports?module.exports=a():"undefined"!=typeof Package?Sortable=a():window.Sortable=a()}(function(){"use strict";function a(a,b){this.el=a,this.options=b=s({},b),a[J]=this;var d={group:Math.random(),sort:!0,disabled:!1,store:null,handle:null,scroll:!0,scrollSensitivity:30,scrollSpeed:10,draggable:/[uo]l/i.test(a.nodeName)?"li":">*",ghostClass:"sortable-ghost",ignore:"a, img",filter:null,animation:0,setData:function(a,b){a.setData("Text",b.textContent)},dropBubble:!1,dragoverBubble:!1,dataIdAttr:"data-id",delay:0};for(var e in d)!(e in b)&&(b[e]=d[e]);var g=b.group;g&&"object"==typeof g||(g=b.group={name:g}),["pull","put"].forEach(function(a){a in g||(g[a]=!0)}),b.groups=" "+g.name+(g.put.join?" "+g.put.join(" "):"")+" ";for(var h in this)"_"===h.charAt(0)&&(this[h]=c(this,this[h]));f(a,"mousedown",this._onTapStart),f(a,"touchstart",this._onTapStart),f(a,"dragover",this),f(a,"dragenter",this),R.push(this._onDragOver),b.store&&this.sort(b.store.get(this))}function b(a){v&&v.state!==a&&(i(v,"display",a?"none":""),!a&&v.state&&w.insertBefore(v,t),v.state=a)}function c(a,b){var c=Q.call(arguments,2);return b.bind?b.bind.apply(b,[a].concat(c)):function(){return b.apply(a,c.concat(Q.call(arguments)))}}function d(a,b,c){if(a){c=c||L,b=b.split(".");var d=b.shift().toUpperCase(),e=new RegExp("\\s("+b.join("|")+")(?=\\s)","g");do if(">*"===d&&a.parentNode===c||(""===d||a.nodeName.toUpperCase()==d)&&(!b.length||((" "+a.className+" ").match(e)||[]).length==b.length))return a;while(a!==c&&(a=a.parentNode))}return null}function e(a){a.dataTransfer.dropEffect="move",a.preventDefault()}function f(a,b,c){a.addEventListener(b,c,!1)}function g(a,b,c){a.removeEventListener(b,c,!1)}function h(a,b,c){if(a)if(a.classList)a.classList[c?"add":"remove"](b);else{var d=(" "+a.className+" ").replace(I," ").replace(" "+b+" "," ");a.className=(d+(c?" "+b:"")).replace(I," ")}}function i(a,b,c){var d=a&&a.style;if(d){if(void 0===c)return L.defaultView&&L.defaultView.getComputedStyle?c=L.defaultView.getComputedStyle(a,""):a.currentStyle&&(c=a.currentStyle),void 0===b?c:c[b];b in d||(b="-webkit-"+b),d[b]=c+("string"==typeof c?"":"px")}}function j(a,b,c){if(a){var d=a.getElementsByTagName(b),e=0,f=d.length;if(c)for(;f>e;e++)c(d[e],e);return d}return[]}function k(a,b,c,d,e,f,g){var h=L.createEvent("Event"),i=(a||b[J]).options,j="on"+c.charAt(0).toUpperCase()+c.substr(1);h.initEvent(c,!0,!0),h.to=b,h.from=e||b,h.item=d||b,h.clone=v,h.oldIndex=f,h.newIndex=g,b.dispatchEvent(h),i[j]&&i[j].call(a,h)}function l(a,b,c,d,e,f){var g,h,i=a[J],j=i.options.onMove;return j&&(g=L.createEvent("Event"),g.initEvent("move",!0,!0),g.to=b,g.from=a,g.dragged=c,g.draggedRect=d,g.related=e||b,g.relatedRect=f||b.getBoundingClientRect(),h=j.call(i,g)),h}function m(a){a.draggable=!1}function n(){O=!1}function o(a,b){var c=a.lastElementChild,d=c.getBoundingClientRect();return b.clientY-(d.top+d.height)>5&&c}function p(a){for(var b=a.tagName+a.className+a.src+a.href+a.textContent,c=b.length,d=0;c--;)d+=b.charCodeAt(c);return d.toString(36)}function q(a){for(var b=0;a&&(a=a.previousElementSibling);)"TEMPLATE"!==a.nodeName.toUpperCase()&&b++;return b}function r(a,b){var c,d;return function(){void 0===c&&(c=arguments,d=this,setTimeout(function(){1===c.length?a.call(d,c[0]):a.apply(d,c),c=void 0},b))}}function s(a,b){if(a&&b)for(var c in b)b.hasOwnProperty(c)&&(a[c]=b[c]);return a}var t,u,v,w,x,y,z,A,B,C,D,E,F,G,H={},I=/\s+/g,J="Sortable"+(new Date).getTime(),K=window,L=K.document,M=K.parseInt,N=!!("draggable"in L.createElement("div")),O=!1,P=Math.abs,Q=[].slice,R=[],S=r(function(a,b,c){if(c&&b.scroll){var d,e,f,g,h=b.scrollSensitivity,i=b.scrollSpeed,j=a.clientX,k=a.clientY,l=window.innerWidth,m=window.innerHeight;if(z!==c&&(y=b.scroll,z=c,y===!0)){y=c;do if(y.offsetWidth<y.scrollWidth||y.offsetHeight<y.scrollHeight)break;while(y=y.parentNode)}y&&(d=y,e=y.getBoundingClientRect(),f=(P(e.right-j)<=h)-(P(e.left-j)<=h),g=(P(e.bottom-k)<=h)-(P(e.top-k)<=h)),f||g||(f=(h>=l-j)-(h>=j),g=(h>=m-k)-(h>=k),(f||g)&&(d=K)),(H.vx!==f||H.vy!==g||H.el!==d)&&(H.el=d,H.vx=f,H.vy=g,clearInterval(H.pid),d&&(H.pid=setInterval(function(){d===K?K.scrollTo(K.pageXOffset+f*i,K.pageYOffset+g*i):(g&&(d.scrollTop+=g*i),f&&(d.scrollLeft+=f*i))},24)))}},30);return a.prototype={constructor:a,_onTapStart:function(a){var b=this,c=this.el,e=this.options,f=a.type,g=a.touches&&a.touches[0],h=(g||a).target,i=h,j=e.filter;if(!("mousedown"===f&&0!==a.button||e.disabled)&&(h=d(h,e.draggable,c))){if(C=q(h),"function"==typeof j){if(j.call(this,a,h,this))return k(b,i,"filter",h,c,C),void a.preventDefault()}else if(j&&(j=j.split(",").some(function(a){return a=d(i,a.trim(),c),a?(k(b,a,"filter",h,c,C),!0):void 0})))return void a.preventDefault();(!e.handle||d(i,e.handle,c))&&this._prepareDragStart(a,g,h)}},_prepareDragStart:function(a,b,c){var d,e=this,g=e.el,h=e.options,i=g.ownerDocument;c&&!t&&c.parentNode===g&&(F=a,w=g,t=c,x=t.nextSibling,E=h.group,d=function(){e._disableDelayedDrag(),t.draggable=!0,h.ignore.split(",").forEach(function(a){j(t,a.trim(),m)}),e._triggerDragStart(b)},f(i,"mouseup",e._onDrop),f(i,"touchend",e._onDrop),f(i,"touchcancel",e._onDrop),h.delay?(f(i,"mousemove",e._disableDelayedDrag),f(i,"touchmove",e._disableDelayedDrag),e._dragStartTimer=setTimeout(d,h.delay)):d())},_disableDelayedDrag:function(){var a=this.el.ownerDocument;clearTimeout(this._dragStartTimer),g(a,"mousemove",this._disableDelayedDrag),g(a,"touchmove",this._disableDelayedDrag)},_triggerDragStart:function(a){a?(F={target:t,clientX:a.clientX,clientY:a.clientY},this._onDragStart(F,"touch")):N?(f(t,"dragend",this),f(w,"dragstart",this._onDragStart)):this._onDragStart(F,!0);try{L.selection?L.selection.empty():window.getSelection().removeAllRanges()}catch(b){}},_dragStarted:function(){w&&t&&(h(t,this.options.ghostClass,!0),a.active=this,k(this,w,"start",t,w,C))},_emulateDragOver:function(){if(G){i(u,"display","none");var a=L.elementFromPoint(G.clientX,G.clientY),b=a,c=" "+this.options.group.name,d=R.length;if(b)do{if(b[J]&&b[J].options.groups.indexOf(c)>-1){for(;d--;)R[d]({clientX:G.clientX,clientY:G.clientY,target:a,rootEl:b});break}a=b}while(b=b.parentNode);i(u,"display","")}},_onTouchMove:function(a){if(F){var b=a.touches?a.touches[0]:a,c=b.clientX-F.clientX,d=b.clientY-F.clientY,e=a.touches?"translate3d("+c+"px,"+d+"px,0)":"translate("+c+"px,"+d+"px)";G=b,i(u,"webkitTransform",e),i(u,"mozTransform",e),i(u,"msTransform",e),i(u,"transform",e),a.preventDefault()}},_onDragStart:function(a,b){var c=a.dataTransfer,d=this.options;if(this._offUpEvents(),"clone"==E.pull&&(v=t.cloneNode(!0),i(v,"display","none"),w.insertBefore(v,t)),b){var e,g=t.getBoundingClientRect(),h=i(t);u=t.cloneNode(!0),i(u,"top",g.top-M(h.marginTop,10)),i(u,"left",g.left-M(h.marginLeft,10)),i(u,"width",g.width),i(u,"height",g.height),i(u,"opacity","0.8"),i(u,"position","fixed"),i(u,"zIndex","100000"),w.appendChild(u),e=u.getBoundingClientRect(),i(u,"width",2*g.width-e.width),i(u,"height",2*g.height-e.height),"touch"===b?(f(L,"touchmove",this._onTouchMove),f(L,"touchend",this._onDrop),f(L,"touchcancel",this._onDrop)):(f(L,"mousemove",this._onTouchMove),f(L,"mouseup",this._onDrop)),this._loopId=setInterval(this._emulateDragOver,150)}else c&&(c.effectAllowed="move",d.setData&&d.setData.call(this,c,t)),f(L,"drop",this);setTimeout(this._dragStarted,0)},_onDragOver:function(a){var c,e,f,g=this.el,h=this.options,j=h.group,k=j.put,m=E===j,p=h.sort;if(void 0!==a.preventDefault&&(a.preventDefault(),!h.dragoverBubble&&a.stopPropagation()),E&&!h.disabled&&(m?p||(f=!w.contains(t)):E.pull&&k&&(E.name===j.name||k.indexOf&&~k.indexOf(E.name)))&&(void 0===a.rootEl||a.rootEl===this.el)){if(S(a,h,this.el),O)return;if(c=d(a.target,h.draggable,g),e=t.getBoundingClientRect(),f)return b(!0),void(v||x?w.insertBefore(t,v||x):p||w.appendChild(t));if(0===g.children.length||g.children[0]===u||g===a.target&&(c=o(g,a))){if(c){if(c.animated)return;r=c.getBoundingClientRect()}b(m),l(w,g,t,e,c,r)!==!1&&(g.appendChild(t),this._animate(e,t),c&&this._animate(r,c))}else if(c&&!c.animated&&c!==t&&void 0!==c.parentNode[J]){A!==c&&(A=c,B=i(c));var q,r=c.getBoundingClientRect(),s=r.right-r.left,y=r.bottom-r.top,z=/left|right|inline/.test(B.cssFloat+B.display),C=c.offsetWidth>t.offsetWidth,D=c.offsetHeight>t.offsetHeight,F=(z?(a.clientX-r.left)/s:(a.clientY-r.top)/y)>.5,G=c.nextElementSibling,H=l(w,g,t,e,c,r);H!==!1&&(O=!0,setTimeout(n,30),b(m),q=1===H||-1===H?1===H:z?c.previousElementSibling===t&&!C||F&&C:G!==t&&!D||F&&D,q&&!G?g.appendChild(t):c.parentNode.insertBefore(t,q?G:c),this._animate(e,t),this._animate(r,c))}}},_animate:function(a,b){var c=this.options.animation;if(c){var d=b.getBoundingClientRect();i(b,"transition","none"),i(b,"transform","translate3d("+(a.left-d.left)+"px,"+(a.top-d.top)+"px,0)"),b.offsetWidth,i(b,"transition","all "+c+"ms"),i(b,"transform","translate3d(0,0,0)"),clearTimeout(b.animated),b.animated=setTimeout(function(){i(b,"transition",""),i(b,"transform",""),b.animated=!1},c)}},_offUpEvents:function(){var a=this.el.ownerDocument;g(L,"touchmove",this._onTouchMove),g(a,"mouseup",this._onDrop),g(a,"touchend",this._onDrop),g(a,"touchcancel",this._onDrop)},_onDrop:function(b){var c=this.el,d=this.options;clearInterval(this._loopId),clearInterval(H.pid),clearTimeout(this._dragStartTimer),g(L,"drop",this),g(L,"mousemove",this._onTouchMove),g(c,"dragstart",this._onDragStart),this._offUpEvents(),b&&(b.preventDefault(),!d.dropBubble&&b.stopPropagation(),u&&u.parentNode.removeChild(u),t&&(g(t,"dragend",this),m(t),h(t,this.options.ghostClass,!1),w!==t.parentNode?(D=q(t),k(null,t.parentNode,"sort",t,w,C,D),k(this,w,"sort",t,w,C,D),k(null,t.parentNode,"add",t,w,C,D),k(this,w,"remove",t,w,C,D)):(v&&v.parentNode.removeChild(v),t.nextSibling!==x&&(D=q(t),k(this,w,"update",t,w,C,D),k(this,w,"sort",t,w,C,D))),a.active&&(k(this,w,"end",t,w,C,D),this.save())),w=t=u=x=v=y=z=F=G=A=B=E=a.active=null)},handleEvent:function(a){var b=a.type;"dragover"===b||"dragenter"===b?t&&(this._onDragOver(a),e(a)):("drop"===b||"dragend"===b)&&this._onDrop(a)},toArray:function(){for(var a,b=[],c=this.el.children,e=0,f=c.length,g=this.options;f>e;e++)a=c[e],d(a,g.draggable,this.el)&&b.push(a.getAttribute(g.dataIdAttr)||p(a));return b},sort:function(a){var b={},c=this.el;this.toArray().forEach(function(a,e){var f=c.children[e];d(f,this.options.draggable,c)&&(b[a]=f)},this),a.forEach(function(a){b[a]&&(c.removeChild(b[a]),c.appendChild(b[a]))})},save:function(){var a=this.options.store;a&&a.set(this)},closest:function(a,b){return d(a,b||this.options.draggable,this.el)},option:function(a,b){var c=this.options;return void 0===b?c[a]:void(c[a]=b)},destroy:function(){var a=this.el;a[J]=null,g(a,"mousedown",this._onTapStart),g(a,"touchstart",this._onTapStart),g(a,"dragover",this),g(a,"dragenter",this),Array.prototype.forEach.call(a.querySelectorAll("[draggable]"),function(a){a.removeAttribute("draggable")}),R.splice(R.indexOf(this._onDragOver),1),this._onDrop(),this.el=a=null}},a.utils={on:f,off:g,css:i,find:j,bind:c,is:function(a,b){return!!d(a,b,a)},extend:s,throttle:r,closest:d,toggleClass:h,index:q},a.version="1.2.1",a.create=function(b,c){return new a(b,c)},a});

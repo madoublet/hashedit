@@ -1,4 +1,4 @@
-<div id="hashedit-element-settings" class="hashedit-config hashedit-element-config">
+<div id="hashedit-text-settings" class="hashedit-config hashedit-element-config">
 
     <div class="hashedit-context-body">
     	
@@ -34,7 +34,7 @@
     		<option value="2.0em">+10</option>
     		<option value="2.5em">+15</option>
     		<option value="3.0em">+20</option>
-    	</select><a hashedit-element-details><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet"><g><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g></svg></a>
+    	</select>
     	
     	<!--
     	<label>Id</label><input name="id" type="text" maxlength="128"
@@ -119,34 +119,53 @@
 </div>
 <!-- /#hashedit-link-settings -->
 
-<div id="hashedit-image-settings" class="hashedit-modal">
+<div id="hashedit-image-settings" class="hashedit-modal hashedit-card">
     
-    <div class="hashedit-modal-body">
+    <div class="hashedit-card-front">
+
+      <h2>Image</h2>
+      
+      <label>ID</label>
+      <input id="hashedit-image-id" type="text" maxlength="128"
+      data-model="image.id" placeholder="id">
+      
+      <label>Class</label>
+      <input id="hashedit-image-cssclass" type="text" maxlength="128"
+      data-model="image.class" placeholder="class">
+      
+      <label>Source <a class="toggle-select-image">Upload or Select</a></label>
+      <input id="hashedit-image-src" type="text" maxlength="128"
+      data-model="image.src" placeholder="">
+      
+      
+      <label>Target</label>
+      <input id="hashedit-image-target" type="text" maxlength="128"
+      data-model="image.title" placeholder="">
+      
+      <div class="actions">
+        <a hashedit-cancel-modal class="primary">Done</a>
+      </div>
+  
+    </div>
+    <!-- /.hashedit-card-front -->
     
-        <h2>Image</h2>
+    <div class="hashedit-card-back">
     
-    	<label>ID</label>
-    	<input id="hashedit-image-id" type="text" maxlength="128"
-    		data-model="image.id" placeholder="id">
-    
-        <label>Class</label>
-        <input id="hashedit-image-cssclass" type="text" maxlength="128"
-    		data-model="image.class" placeholder="class">
-    
-        <label>Source</label>
-        <input id="hashedit-image-src" type="text" maxlength="128"
-    		data-model="image.src" placeholder="">
+      <h2>Select Image</h2>
+      
+      <form class="dropzone"
+        id="hashedit-dropzone"></form>
         
-        <label>Target</label>
-        <input id="hashedit-image-target" type="text" maxlength="128"
-    		data-model="image.title" placeholder="">
-    		
-        <div class="actions">
-            <a hashedit-cancel-modal class="primary">Done</a>
-        </div>
+      <div id="images-list" class="hashedit-list">
+        <div class="hashedit-list-item">Placeholder</div>
+      </div>
+      
+      <div class="actions">
+        <a class="primary toggle-select-image">Cancel</a>
+      </div>
     
     </div>
-    <!-- /.context-body -->
+    <!-- /.hashedit-card-back -->
     
 </div>
 <!-- /#hashedit-image-settings -->
@@ -194,11 +213,11 @@
 </div>
 <!-- /#hhashedit-add-page -->
 
-<div id="hashedit-element-details" class="hashedit-modal">
+<div id="hashedit-element-settings" class="hashedit-modal">
     
     <div class="hashedit-modal-body">
     
-        <h2>Element</h2>
+        <h2><span id="hashedit-element-details-type"></span> Element</h2>
     
     	<label>Id</label>
     	<input name="id" type="text" maxlength="128"
@@ -215,4 +234,56 @@
     <!-- /.context-body -->
     
 </div>
-<!-- /#hhashedit-add-page -->
+<!-- /#hashedit-element-settings -->
+
+<div id="hashedit-table-settings" class="hashedit-modal">
+    
+    <div class="hashedit-modal-body">
+    
+      <h2>Table</h2>
+    
+    	<label>Id</label>
+    	<input name="id" type="text" maxlength="128"
+    				data-model="node.id" placeholder="sample-id">
+      
+      <label>Class</label>
+      <input name="cssClass" type="text" maxlength="128"
+    				data-model="node.class" placeholder="sample-css-class">
+    				
+    	<label>Rows</label>
+    	<select name="rows"
+    				data-model="node.rows">
+    				<option value="1">1</option>
+    				<option value="2">2</option>
+    				<option value="3">3</option>
+    				<option value="4">4</option>
+    				<option value="5">5</option>
+    				<option value="6">6</option>
+    				<option value="7">7</option>
+    				<option value="8">8</option>
+    				<option value="9">9</option>	
+    				<option value="10">10</option></select>		
+    
+      <label>Columns</label>
+      <select name="columns"
+    				data-model="node.columns">
+    				<option value="1">1</option>
+    				<option value="2">2</option>
+    				<option value="3">3</option>
+    				<option value="4">4</option>
+    				<option value="5">5</option>
+    				<option value="6">6</option>
+    				<option value="7">7</option>
+    				<option value="8">8</option>
+    				<option value="9">9</option>	
+    				<option value="10">10</option></select>		
+    
+      <div class="actions">
+          <a hashedit-cancel-modal class="primary">Done</a>
+      </div>
+    
+    </div>
+    <!-- /.context-body -->
+    
+</div>
+<!-- /#hashedit-table-settings -->
