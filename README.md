@@ -101,8 +101,11 @@ gulp
 
 ### Acknowledgements 
 
-##### Sorting powered by Sortable
+##### Sorting by Sortable
 http://rubaxa.github.io/Sortable/
+
+##### File uploads by Dropzone
+http://www.dropzonejs.com/
 
 ##### Polymer Iron Iconset
 https://elements.polymer-project.org/elements/iron-icons?view=demo:demo/index.html
