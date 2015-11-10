@@ -17,14 +17,16 @@ https://github.com/madoublet/hashedit-spark
 ### Using Hashedit without Spark
 
 ##### 1. Install Hashedit
+
 ```
 bower install hashedit
 ```
 
 ##### 2. Add a reference to the CSS/JS
+
 ```
-<link type="text/css" href="/bower_components/hashedit/css/hashedit.css" rel="stylesheet">
-<script src="/bower_components/hashedit/js/hashedit.js"></script>
+<link type="text/css" href="/bower_components/hashedit/dist/hashedit-min.css" rel="stylesheet">
+<script src="/bower_components/hashedit/dist/hashedit-min.js"></script>
 ```
 
 ##### 3. Add the following JS snippet before any other script
@@ -71,6 +73,31 @@ window.onhashchange = function(){
 </script>
 ```
 
+### Building Hashedit
+
+1. Install dependencies (via Bower)
+
+```
+bower install Sortable
+bower install dropzone
+```
+
+2. Install gulp tools
+
+```
+npm install --global gulp
+npm install --save-dev gulp
+npm install --save-dev gulp-concat
+npm install --save-dev gulp-minify-css
+npm install --save-dev gulp-rename
+npm install --save-dev gulp-minify
+```
+
+3. Run Gulp
+
+```
+gulp
+```
 
 ### Acknowledgements 
 
