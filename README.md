@@ -75,14 +75,14 @@ window.onhashchange = function(){
 
 ### Building Hashedit
 
-1. Install dependencies (via Bower)
+##### 1. Install dependencies (via Bower)
 
 ```
 bower install Sortable
 bower install dropzone
 ```
 
-2. Install gulp tools
+##### 2. Install gulp tools
 
 ```
 npm install --global gulp
@@ -93,7 +93,7 @@ npm install --save-dev gulp-rename
 npm install --save-dev gulp-minify
 ```
 
-3. Run Gulp
+##### 3. Run Gulp
 
 ```
 gulp
