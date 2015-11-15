@@ -6,7 +6,7 @@ var minify = require('gulp-minify');
 
 // concat js
 gulp.task('js', function() {
-  return gulp.src(['bower_components/dropzone/dist/min/dropzone.min.js', 'bower_components/Sortable/Sortable.min.js', 'js/hashedit.js'])
+  return gulp.src(['bower_components/dropzone/dist/min/dropzone.min.js', 'bower_components/Sortable/Sortable.min.js', '/bower_components/fetch/fetch.js', 'js/hashedit.js'])
     .pipe(concat('hashedit.js'))
     .pipe(minify({
         exclude: ['tasks'],

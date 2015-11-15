@@ -6,6 +6,11 @@ body[hashedit-active]{
 	min-height: 50px;
 }
 
+[hashedit-sortable]:empty{
+  background-color: red;
+  min-height: 100px;
+}
+
 .hashedit-sortable{
 	border-bottom: 0;
 }
@@ -41,6 +46,7 @@ body[hashedit-active]{
 	width: 40px;
 	height: 40px;
 	display: none;
+	z-index: 10000;
 }
 
   [current-hashedit-element] .hashedit-move, [current-hashedit-element] .hashedit-properties, [current-hashedit-element] .hashedit-remove{
@@ -64,7 +70,7 @@ body[hashedit-active]{
 		transition: all 0.25s ease;
 		color: #fff;
 	}
-	
+
 	.hashedit-move span svg, .hashedit-properties span svg, .hashedit-remove span svg{
 		fill: currentColor;
 		width: 50%;
@@ -92,13 +98,13 @@ body[hashedit-active]{
 	right: 80px;
 	cursor: pointer;
 }
-  
+
 /* highlight */
 .hashedit-highlight{
 	background-color: rgba(255,153,0,0.75);
     min-height: 50px;
     display: block;
-} 
+}
 
 	a.hashedit-highlight{
 		color: #fff;
@@ -110,7 +116,7 @@ body[hashedit-active]{
 		margin: 10px 0;
 
 	}
-	
+
 		a.hashedit-highlight svg{
 			fill: currentColor;
 			display: block;
@@ -173,7 +179,7 @@ body [contentEditable=true] a{
     .hashedit-drawer[visible]{
         left: 0;
     }
-    
+
     .hashedit-drawer a{
         text-decoration: none;
         cursor: pointer;
@@ -181,12 +187,12 @@ body [contentEditable=true] a{
         font-size: 0.95em;
         color: #555;
     }
-    
+
     .hashedit-drawer ul{
         margin: 0;
         padding: 0;
     }
-    
+
     .hashedit-drawer li{
         list-style: none;
         margin: 0;
@@ -198,11 +204,11 @@ body [contentEditable=true] a{
         color: #aaa;
         cursor: pointer
     }
-    
+
     .hashedit-drawer li:hover, .hashedit-element-drawer li:hover{
 		background-color: #f8f8f8;
 	}
-    
+
     .hashedit-drawer svg{
         fill: currentColor;
 		height: 20px;
@@ -237,7 +243,7 @@ body [contentEditable=true] a{
 		width: 30px;
 		margin: 10px;
 	}
-	
+
 	/* save */
 	.hashedit-menu .hashedit-save{
 		position: fixed;
@@ -254,13 +260,13 @@ body [contentEditable=true] a{
 		color: #fff;
 		z-index: 2;
 	}
-	
+
 		.hashedit-menu .hashedit-save svg{
 			fill: currentColor;
 			width: 60%;
 			margin: 10px auto 0 auto;
 		}
-	
+
 	/* menu */
 	.hashedit-menu .hashedit-more{
 		position: fixed;
@@ -276,7 +282,7 @@ body [contentEditable=true] a{
 		color: #fff;
 		z-index: 2;
 	}
-	
+
 		.hashedit-menu .hashedit-more svg{
 			fill: currentColor;
 			width: 70% !important;
@@ -296,18 +302,18 @@ body [contentEditable=true] a{
 		vertical-align: top;
         text-decoration: none;
 	}
-	
+
 		.hashedit-menu a svg{
 			display: block;
 			margin: 0 auto;
 			width: 40%;
 			fill: currentColor;
 		}
-			
+
 	.hashedit-menu a:hover, .hashedit-element-menu a:hover{
 		background-color: #f8f8f8;
 	}
-	
+
 /* aside */
 body .hashedit-config{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
@@ -329,11 +335,11 @@ body .hashedit-config{
 	body .hashedit-config .hashedit-context-body{
 		width: 2000px;
 	}
-	
+
 	body #hashedit-link-settings{
 		z-index: 1004;
 	}
-	
+
 	body #hashedit-image-settings{
 		z-index: 1005;
 	}
@@ -342,7 +348,7 @@ body .hashedit-config{
 	body .hashedit-config[visible]{
 		top: 0;
 	}
-	
+
 	body .hashedit-config label{
 		height: 50px;
 		line-height: 50px;
@@ -354,11 +360,11 @@ body .hashedit-config{
 		font-weight: normal;
 		background-color: #DBE6EC;
 	}
-	
+
 	body .hashedit-config a, body .hashedit-config label, body .hashedit-config input, body .hashedit-config select{
 		float: left;
 	}
-	
+
 	body .hashedit-config a{
 		position: relative;
 		float: left;
@@ -371,14 +377,14 @@ body .hashedit-config{
 		font-size: 13px;
 		vertical-align: top;
 	}
-	
+
 		body .hashedit-config a svg{
 			display: block;
 			margin: 0 auto;
 			width: 40%;
 			fill: currentColor;
 		}
-		
+
 		body .hashedit-config input[type=text]{
 			vertical-align: top;
 			height: 50px;
@@ -391,7 +397,7 @@ body .hashedit-config{
 			max-width: 125px;
 			color: #111;
 		}
-		
+
 		body .hashedit-config input[type=color]{
 			vertical-align: top;
 			height: 50px;
@@ -404,7 +410,7 @@ body .hashedit-config{
 			width: 50px;
 		}
 
-		
+
 		body .hashedit-config select{
 			font-size: 13px;
 			box-shadow: none;
@@ -421,12 +427,12 @@ body .hashedit-config{
 			-webkit-border-radius: 0px;
 			text-align: center;
 		}
-	
+
 	body .hashedit-config a:hover, body .hashedit-config a:hover{
 		background-color: #f8f8f8;
 	}
-	
-	
+
+
 body .hashedit-modal{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
 	position: fixed;
@@ -452,7 +458,7 @@ body .hashedit-modal{
         display: block;
         opacity: 1;
     }
-    
+
     body .hashedit-modal label{
         font-weight: normal;
         display: block;
@@ -461,20 +467,20 @@ body .hashedit-modal{
         text-transform: uppercase;
         font-size: 13px;
     }
-    
+
     body .hashedit-modal label a{
       float: right;
       font-size: 11px;
       cursor: pointer;
     }
-    
+
     body .hashedit-modal input, body .hashedit-modal select{
         width: 350px;
         margin-bottom: 15px;
         padding: 10px;
         color: #555;
     }
-    
+
      body .hashedit-modal select{
 			font-size: 13px;
 			box-shadow: none;
@@ -491,15 +497,15 @@ body .hashedit-modal{
 			border: 1px solid #ddd;
 			text-align: center;
 		}
-    
+
     body .hashedit-modal h2{
         font-size: 25px;
         color: #345A6F;
         margin: 0 0 25px 0;
         padding: 0;
-        
+
     }
-    
+
     body .hashedit-modal .actions{
         position: absolute;
         bottom: 25px;
@@ -508,23 +514,27 @@ body .hashedit-modal{
         padding: 0;
         text-align: right;
     }
-    
+
     body .hashedit-modal .actions a{
         margin-left: 15px;
         text-transform: uppercase;
         font-size: 13px;
         cursor: pointer;
-        
+
     }
-    
+
     body .hashedit-modal .actions a.primary{
-        font-weight: bold;    
+        font-weight: bold;
     }
 
 /* hashedit-card */
 .hashedit-card{
-  height: 500px;  
+  height: 500px;
 }
+
+  #hashedit-link-settings.hashedit-card{
+    height: 550px;
+  }
 
 .hashedit-card-front,
 .hashedit-card-back{
@@ -560,7 +570,7 @@ body .hashedit-modal{
           transform: rotateY(0);
 }
 
-/* fix a flip bug */ 
+/* fix a flip bug */
 .hashedit-card .hashedit-card-back .hashedit-list{
   display: none;
 }
@@ -590,15 +600,19 @@ body .dropzone .dz-message{
   overflow: scroll;
 }
 
+  #hashedit-link-settings .hashedit-list{
+    max-height: 400px;
+  }
+
   .hashedit-list-item{
     padding: 20px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
   }
-  
+
   .hashedit-list-item:last-child{
     border-bottom: none;
   }
 
-	
+
 

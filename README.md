@@ -2,7 +2,7 @@
 
 ### What if you could append #edit to the end of a URL to edit it?
 
-Hashedit aims to make that notion a reality.  It is a framework agnostic WYSIWYG editor for static web sites.  Hashedit supports inline rich text editing; the creation and destruction of HTML blocks (and elements); editing of links and images; and drag-and-drop reordering powered by the fantastic Sortable Library.  Hashedit is built in plain JS with just the Sortable dependency.  
+Hashedit aims to make that notion a reality.  It is a framework agnostic WYSIWYG editor for static web sites.  Hashedit supports inline rich text editing; the creation and destruction of HTML blocks (and elements); editing of links and images; and drag-and-drop reordering powered by the fantastic Sortable Library.  Hashedit is built in plain JS with just the Sortable and Dropzone dependency.  
 
 ### Status
 
@@ -35,7 +35,7 @@ This script looks for the #edit in the URL and then writes the annotated (e.g. H
 
 ```
 <!-- #edit -->
-<script>function write(){html=localStorage.getItem(key),document.body.innerHTML=html}if(-1!=window.location.href.indexOf("#edit")){var key=window.location.href;null!=localStorage.getItem(key)&&write()}</script>
+<script>function write(){html=localStorage.getItem(key),document.body.innerHTML=html}if(-1!=window.location.href.indexOf("#edit")){var key=window.location.href;null!=localStorage.getItem(key)&&write()}window.onhashchange=function(){-1!=window.location.href.indexOf("#edit")&&location.reload()};</script>
 ```
 
 ##### 4. Specify which elements are editable
@@ -63,13 +63,6 @@ if(window.location.href.indexOf('#edit') != -1){
   });
 
 }
-
-// reload the page when hash changes to #edit
-window.onhashchange = function(){
-    if(window.location.href.indexOf('#edit') != -1){
-        location.reload();
-    }
-}
 </script>
 ```
 
@@ -80,6 +73,7 @@ window.onhashchange = function(){
 ```
 bower install Sortable
 bower install dropzone
+bower install fetch
 ```
 
 ##### 2. Install gulp tools
@@ -106,6 +100,9 @@ http://rubaxa.github.io/Sortable/
 
 ##### File uploads by Dropzone
 http://www.dropzonejs.com/
+
+##### Fetch Polyfill
+https://github.com/github/fetch
 
 ##### Polymer Iron Iconset
 https://elements.polymer-project.org/elements/iron-icons?view=demo:demo/index.html
