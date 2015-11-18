@@ -216,6 +216,44 @@ body [contentEditable=true] a{
 		margin: 0 15px -4px 15px;
     }
 
+/* toast */
+.hashedit-toast{
+	font-family: 'Helvetica', 'Arial', 'sans-serif';
+	position: fixed;
+	z-index: 1002;
+	top: 70px;
+	left: 50%;
+	width: 400px;
+	background-color: #fff;
+	margin: 0 auto;
+	margin-left: -200px;
+	text-align: center;
+	padding: 15px;
+	border-radius: 40px;
+	color: #FFF;
+	background-color: #345A6F;
+	border: 2px solid #fff;
+	text-transform: uppercase;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+	z-index: 100005;
+	visibility: hidden;
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+  .hashedit-toast[success]{
+    background-color: #88C425;
+  }
+  
+  .hashedit-toast[failure]{
+    background-color: #ED4747;
+  }
+
+  .hashedit-toast[active]{
+	  visibility: visible;
+	  opacity: 1;
+  }
+
 /* menu */
 .hashedit-menu{
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
@@ -337,11 +375,11 @@ body .hashedit-config{
 	}
 
 	body #hashedit-link-settings{
-		z-index: 1004;
+		z-index: 10004;
 	}
 
 	body #hashedit-image-settings{
-		z-index: 1005;
+		z-index: 10005;
 	}
 
 
@@ -439,7 +477,7 @@ body .hashedit-modal{
 	left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-	z-index: 1003;
+	z-index: 10001;
 	width: 400px;
 	background-color: #fff;
 	margin: 0;

@@ -566,12 +566,56 @@ var hashedit = (function () {
                 document.getElementById('hashedit-page-title').value = document.title;
                 document.getElementById('hashedit-page-desc').value = desc;
 
-                console.log(document.getElementById('hashedit-page-settings'));
-
                 // show modal
                 document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
             });
+            
 
+        },
+
+        /**
+         * Create the toast
+         */
+        setupToast: function() {
+        
+          var toast;
+          
+          toast = document.createElement('div');
+          toast.setAttribute('class', 'hashedit-toast');
+          toast.innerHTML = 'Sample Toast';
+          
+          // append toast
+          document.body.appendChild(toast);
+        
+        },
+        
+        /**
+         * Shows the toast
+         */
+        showToast: function(text, status) {
+        
+          var toast;
+          
+          toast = document.querySelector('.hashedit-toast');
+          toast.innerHTML = text;
+          toast.removeAttribute('success');
+          toast.removeAttribute('failure');
+          
+          toast.setAttribute('active', '');
+          
+          // add success/failure
+          if (status == 'success'){
+            toast.setAttribute('success', '');
+          }
+          else if (status == 'failure'){
+            toast.setAttribute('failure', '');
+          }
+          
+          // hide toast
+          setTimeout(function(){
+            toast.removeAttribute('active');
+          }, 2000);
+        
         },
 
 
@@ -1455,15 +1499,55 @@ var hashedit = (function () {
                             document.getElementById('hashedit-add-page').removeAttribute('visible');
 
                             // log success
-                            console.log('success');
+                            hashedit.showToast('Page added at ' + url, 'success');
 
                         };
 
                     }
                 }
                 else{
-                    alert('URL required'); // cleanup
+                    // show success
+                    hashedit.showToast('URL required', 'failure');
                 }
+
+            });
+            
+            // handle page creation
+            document.querySelector('[hashedit-apply-page-settings]').addEventListener('click', function() {
+
+                // get params
+                title = document.getElementById('hashedit-page-title').value;
+                description = document.getElementById('hashedit-page-desc').value;
+
+
+                // set params
+                params = {
+                    'title': title,
+                    'description': description
+                };
+
+                if (hashedit.pageSettingsURL) {
+
+                    // construct an HTTP request
+                    xhr = new XMLHttpRequest();
+                    xhr.open('post', hashedit.pageSettingsURL, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+                    // send the collected data as JSON
+                    xhr.send(JSON.stringify(params));
+
+                    xhr.onloadend = function() {
+                    
+                        // hide modal
+                        document.getElementById('hashedit-page-settings').removeAttribute('visible');
+
+                        // show success
+                        hashedit.showToast('Settings updated successfully!', 'success');
+
+                    };
+
+                }
+                
 
             });
         },
@@ -2179,6 +2263,7 @@ var hashedit = (function () {
                 hashedit.setupSortable(config.sortable);
                 hashedit.setupContentEditableEvents();
                 hashedit.setupMenu(config.path);
+                hashedit.setupToast();
                 hashedit.setupDrawer();
                 hashedit.createMenu(config.path);
                 hashedit.loadHTML(config.path);
@@ -2202,6 +2287,7 @@ var hashedit = (function () {
                             hashedit.setupSortable(config.sortable);
                             hashedit.setupContentEditableEvents();
                             hashedit.setupMenu(config.path);
+                            hashedit.setupToast();
                             hashedit.setupDrawer();
                             hashedit.createMenu(config.path);
                             hashedit.loadHTML(config.path);

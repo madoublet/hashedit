@@ -1,0 +1,26 @@
+{
+  "name": "hashedit",
+  "version": "0.0.1",
+  "description": "A visual editor for websites.",
+  "main": "js/hashedit.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madoublet/hashedit.git"
+  },
+  "keywords": [
+    "js",
+    "editor"
+  ],
+  "author": "Matthew Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madoublet/hashedit/issues"
+  },
+  "homepage": "https://github.com/madoublet/hashedit#readme"
+}
