@@ -517,7 +517,7 @@ body .hashedit-modal{
     body .hashedit-modal label{
         font-weight: normal;
         display: block;
-        margin: 0;
+        margin: 0 25px;
         padding: 0 0 5px 0;
         text-transform: uppercase;
         font-size: 13px;
@@ -531,7 +531,7 @@ body .hashedit-modal{
 
     body .hashedit-modal input, body .hashedit-modal select{
         width: 350px;
-        margin-bottom: 15px;
+        margin: 0 25px 15px 25px;
         padding: 10px;
         color: #555;
     }
@@ -556,7 +556,7 @@ body .hashedit-modal{
     body .hashedit-modal h2{
         font-size: 25px;
         color: #345A6F;
-        margin: 0 0 25px 0;
+        margin: 25px 0 25px 25px;
         padding: 0;
 
     }
@@ -598,7 +598,8 @@ body .hashedit-modal{
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 25px;
+  padding: 0;
+  margin: 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transition: -webkit-transform 0.3s;
