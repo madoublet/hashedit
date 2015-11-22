@@ -13,7 +13,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.1',
+        version: '0.3',
 
         // set debug messages
         debug: true,
@@ -573,7 +573,7 @@ var hashedit = (function () {
                 // show modal
                 document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
             });
-            
+
 
         },
 
@@ -581,32 +581,32 @@ var hashedit = (function () {
          * Create the toast
          */
         setupToast: function() {
-        
+
           var toast;
-          
+
           toast = document.createElement('div');
           toast.setAttribute('class', 'hashedit-toast');
           toast.innerHTML = 'Sample Toast';
-          
+
           // append toast
           document.body.appendChild(toast);
-        
+
         },
-        
+
         /**
          * Shows the toast
          */
         showToast: function(text, status) {
-        
+
           var toast;
-          
+
           toast = document.querySelector('.hashedit-toast');
           toast.innerHTML = text;
           toast.removeAttribute('success');
           toast.removeAttribute('failure');
-          
+
           toast.setAttribute('active', '');
-          
+
           // add success/failure
           if (status == 'success'){
             toast.setAttribute('success', '');
@@ -614,12 +614,12 @@ var hashedit = (function () {
           else if (status == 'failure'){
             toast.setAttribute('failure', '');
           }
-          
+
           // hide toast
           setTimeout(function(){
             toast.removeAttribute('active');
           }, 2000);
-        
+
         },
 
 
@@ -1515,7 +1515,7 @@ var hashedit = (function () {
                 }
 
             });
-            
+
             // handle page creation
             document.querySelector('[hashedit-apply-page-settings]').addEventListener('click', function() {
 
@@ -1541,7 +1541,7 @@ var hashedit = (function () {
                     xhr.send(JSON.stringify(params));
 
                     xhr.onloadend = function() {
-                    
+
                         // hide modal
                         document.getElementById('hashedit-page-settings').removeAttribute('visible');
 
@@ -1551,7 +1551,7 @@ var hashedit = (function () {
                     };
 
                 }
-                
+
 
             });
         },
