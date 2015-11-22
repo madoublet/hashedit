@@ -13,7 +13,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.3.1',
+        version: '0.3.2',
 
         // set debug messages
         debug: true,
@@ -657,7 +657,7 @@ var hashedit = (function () {
                 if (hashedit.demo === true) {
 
                     // alert
-                    alert('Cannot save in demo mode :)');
+                    hashedit.showToast('Cannot save in demo mode', 'failure');
 
                     // clear localStorage
                     localStorage.clear();
@@ -1457,41 +1457,98 @@ var hashedit = (function () {
             // handle page creation
             document.querySelector('[hashedit-add-page-create]').addEventListener('click', function() {
 
-                // get params
-                path = document.getElementById('hashedit-add-page-path').value;
-                url = document.getElementById('hashedit-add-page-url').value;
-                title = document.getElementById('hashedit-add-page-title').value;
-                description = document.getElementById('hashedit-add-page-desc').value;
+                if (hashedit.demo === true) {
 
-                // cleanup url
-                url = url.trim();
+                    hashedit.showToast('Cannot add page in demo mode', 'failure');
 
-                if(url !== ''){
+                } else {
+
+                    // get params
+                    path = document.getElementById('hashedit-add-page-path').value;
+                    url = document.getElementById('hashedit-add-page-url').value;
+                    title = document.getElementById('hashedit-add-page-title').value;
+                    description = document.getElementById('hashedit-add-page-desc').value;
+
                     // cleanup url
-                    url = hashedit.replaceAll(url, '.html', '');
-                    url = hashedit.replaceAll(url, '.htm', '');
-                    url = hashedit.replaceAll(url, '.', '-');
-                    url = hashedit.replaceAll(url, ' ', '-');
-                    url = hashedit.replaceAll(url, '/', '-');
+                    url = url.trim();
 
-                    // append path to url
-                    url = path + '/' + url + '.html';
+                    if(url !== ''){
+                        // cleanup url
+                        url = hashedit.replaceAll(url, '.html', '');
+                        url = hashedit.replaceAll(url, '.htm', '');
+                        url = hashedit.replaceAll(url, '.', '-');
+                        url = hashedit.replaceAll(url, ' ', '-');
+                        url = hashedit.replaceAll(url, '/', '-');
 
-                    // fix duplicates
-                    url = hashedit.replaceAll(url, '//', '/');
+                        // append path to url
+                        url = path + '/' + url + '.html';
+
+                        // fix duplicates
+                        url = hashedit.replaceAll(url, '//', '/');
+
+                        // set params
+                        params = {
+                            'url': url,
+                            'title': title,
+                            'description': description
+                        };
+
+                        if (hashedit.addPageURL) {
+
+                            // construct an HTTP request
+                            xhr = new XMLHttpRequest();
+                            xhr.open('post', hashedit.addPageURL, true);
+                            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+                            // send the collected data as JSON
+                            xhr.send(JSON.stringify(params));
+
+                            xhr.onloadend = function() {
+
+                                // hide modal
+                                document.getElementById('hashedit-add-page').removeAttribute('visible');
+
+                                // log success
+                                hashedit.showToast('Page added at ' + url, 'success');
+
+                            };
+
+                        }
+                    }
+                    else{
+                        // show success
+                        hashedit.showToast('URL required', 'failure');
+                    }
+                }
+
+            });
+
+            // handle page creation
+            document.querySelector('[hashedit-apply-page-settings]').addEventListener('click', function() {
+
+
+                if (hashedit.demo === true) {
+
+                    hashedit.showToast('Cannot save settings in demo mode', 'failure');
+
+                } else {
+
+                    // get params
+                    title = document.getElementById('hashedit-page-title').value;
+                    description = document.getElementById('hashedit-page-desc').value;
+
 
                     // set params
                     params = {
-                        'url': url,
                         'title': title,
                         'description': description
                     };
 
-                    if (hashedit.addPageURL) {
+                    if (hashedit.pageSettingsURL) {
 
                         // construct an HTTP request
                         xhr = new XMLHttpRequest();
-                        xhr.open('post', hashedit.addPageURL, true);
+                        xhr.open('post', hashedit.pageSettingsURL, true);
                         xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
                         // send the collected data as JSON
@@ -1500,56 +1557,14 @@ var hashedit = (function () {
                         xhr.onloadend = function() {
 
                             // hide modal
-                            document.getElementById('hashedit-add-page').removeAttribute('visible');
+                            document.getElementById('hashedit-page-settings').removeAttribute('visible');
 
-                            // log success
-                            hashedit.showToast('Page added at ' + url, 'success');
+                            // show success
+                            hashedit.showToast('Settings updated successfully!', 'success');
 
                         };
 
                     }
-                }
-                else{
-                    // show success
-                    hashedit.showToast('URL required', 'failure');
-                }
-
-            });
-
-            // handle page creation
-            document.querySelector('[hashedit-apply-page-settings]').addEventListener('click', function() {
-
-                // get params
-                title = document.getElementById('hashedit-page-title').value;
-                description = document.getElementById('hashedit-page-desc').value;
-
-
-                // set params
-                params = {
-                    'title': title,
-                    'description': description
-                };
-
-                if (hashedit.pageSettingsURL) {
-
-                    // construct an HTTP request
-                    xhr = new XMLHttpRequest();
-                    xhr.open('post', hashedit.pageSettingsURL, true);
-                    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-                    // send the collected data as JSON
-                    xhr.send(JSON.stringify(params));
-
-                    xhr.onloadend = function() {
-
-                        // hide modal
-                        document.getElementById('hashedit-page-settings').removeAttribute('visible');
-
-                        // show success
-                        hashedit.showToast('Settings updated successfully!', 'success');
-
-                    };
-
                 }
 
 
