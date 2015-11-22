@@ -244,7 +244,7 @@ body [contentEditable=true] a{
   .hashedit-toast[success]{
     background-color: #88C425;
   }
-  
+
   .hashedit-toast[failure]{
     background-color: #ED4747;
   }
@@ -287,10 +287,10 @@ body [contentEditable=true] a{
 		position: fixed;
 		top: 0;
 		right: 0;
-		background-color: #88C425;
-		color: #fff;
+		background-color: #fff;
+		color: #888 !important;
 		width: 50px;
-		height: 50px;
+		height: 49px;
 		line-height: 50px;
 		border: 0;
 		outline: none;
@@ -299,10 +299,16 @@ body [contentEditable=true] a{
 		z-index: 2;
 	}
 
+	    .hashedit-menu .hashedit-save:hover{
+		    background-color: #98C33E;
+            color: #fff !important;
+            height: 50px;
+	    }
+
 		.hashedit-menu .hashedit-save svg{
 			fill: currentColor;
-			width: 60%;
-			margin: 10px auto 0 auto;
+			width: 75%;
+			margin: 8px auto 0 auto;
 		}
 
 	/* menu */
@@ -310,16 +316,21 @@ body [contentEditable=true] a{
 		position: fixed;
 		top: 0;
 		left: 0;
-		background-color: #345A6F;
-		color: #fff;
 		width: 50px;
-		height: 50px;
+		height: 49px;
 		border: 0;
 		outline: none;
 		font-size: 20px;
-		color: #fff;
+		color: #888;
 		z-index: 2;
+		background-color: #fff;
 	}
+
+	    .hashedit-menu .hashedit-more:hover{
+		    background-color: #00ADE3;
+            color: #fff !important;
+            height: 50px;
+	    }
 
 		.hashedit-menu .hashedit-more svg{
 			fill: currentColor;
@@ -341,16 +352,18 @@ body [contentEditable=true] a{
         text-decoration: none;
 	}
 
+	    .hashedit-menu a:hover{
+		    background-color: #00ADE3 !important;
+            color: #fff !important;
+            height: 50px;
+	    }
+
 		.hashedit-menu a svg{
 			display: block;
 			margin: 0 auto;
 			width: 40%;
 			fill: currentColor;
 		}
-
-	.hashedit-menu a:hover, .hashedit-element-menu a:hover{
-		background-color: #f8f8f8;
-	}
 
 /* aside */
 body .hashedit-config{
@@ -491,6 +504,10 @@ body .hashedit-modal{
 	border: 1px solid #ddd;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, .25);
 }
+
+    body .hashedit-modal a, body .hashedit-modal a:visited{
+        color: #00ADE3
+    }
 
     body .hashedit-modal[visible]{
         display: block;
