@@ -503,6 +503,7 @@ body .hashedit-modal{
 	transition: all 0.2s ease;
 	border: 1px solid #ddd;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, .25);
+	box-sizing: border-box;
 }
 
     body .hashedit-modal a, body .hashedit-modal a:visited{
@@ -530,10 +531,11 @@ body .hashedit-modal{
     }
 
     body .hashedit-modal input, body .hashedit-modal select{
-        width: 350px;
-        margin-bottom: 15px;
+        margin: 0 0 15px 0;
         padding: 10px;
         color: #555;
+        box-sizing: border-box;
+        width: 100%;
     }
 
      body .hashedit-modal select{
@@ -544,6 +546,7 @@ body .hashedit-modal{
 			border: none;
 			border-radius: 0;
 			padding: 5px 5px 5px 15px;
+            margin: 0 0 15px 0;
 			height: 40px;
 			min-width: 50px;
 		    background-color: transparent;
@@ -594,11 +597,13 @@ body .hashedit-modal{
 .hashedit-card-front,
 .hashedit-card-back{
   position: absolute;
+  box-sizing: border-box;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   padding: 25px;
+  margin: 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transition: -webkit-transform 0.3s;
