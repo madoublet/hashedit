@@ -13,7 +13,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.3.2',
+        version: '0.3.3',
 
         // set debug messages
         debug: true,
