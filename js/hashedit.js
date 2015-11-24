@@ -9,7 +9,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.3.5',
+        version: '0.3.6',
 
         // set debug messages
         debug: true,
@@ -632,7 +632,7 @@ var hashedit = (function () {
             // create a menu
             menu = document.createElement('menu');
             menu.setAttribute('class', 'hashedit-menu');
-            menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" class="style-scope iron-icon"></path></g></svg></button><div class="hashedit-menu-body"></div>';
+            menu.innerHTML = '<button class="hashedit-more"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g></svg></button><button class="hashedit-save"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g></svg></button><div class="hashedit-menu-body"></div>';
 
             // append menu
             hashedit.current.container.appendChild(menu);
@@ -2290,7 +2290,6 @@ var hashedit = (function () {
 
             // append scoped stylesheet to container
             var style = document.createElement('style');
-            style.setAttribute('scoped', '');
             style.innerHTML = '@import url(' + hashedit.stylesheet + ')';
 
             hashedit.current.container.appendChild(style);

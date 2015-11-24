@@ -1,3 +1,7 @@
+.hashedit-container{
+    z-index: 5000px;
+}
+
 [hashedit-sortable]{
 	min-height: 50px;
 }
