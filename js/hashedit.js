@@ -45,6 +45,26 @@ var hashedit = (function () {
             }
         },
 
+        // define the drawer
+        drawer: {
+          page: [
+            {
+                text: 'Add Page',
+                attr: 'hashedit-add-page'
+            },
+            {
+                text: 'Page Settings',
+                attr: 'hashedit-page-settings'
+            }
+          ], 
+          app: [
+            {
+                text: 'Exit',
+                attr: 'hashedit-exit'
+            }
+          ]
+        },
+        
         // define the menu
         menu: [{
             action: "hashedit.h1",
@@ -346,7 +366,7 @@ var hashedit = (function () {
             document.querySelector('body').setAttribute('hashedit-active', '');
 
             // setup [contentEditable=true]
-            els = document.querySelectorAll('[hashedit] p, [hashedit] h1, [hashedit] h2, [hashedit] h3, [hashedit] h4, [hashedit] h5,[hashedit] li, [hashedit] td, [hashedit] th, [hashedit] blockquote, [hashedit] pre');
+            els = document.querySelectorAll('[hashedit] p, [hashedit] h1, [hashedit] h2, [hashedit] h3, [hashedit] h4, [hashedit] h5,[hashedit] li, [hashedit] td, [hashedit] th, [hashedit] blockquote, [hashedit] pre, [hashedit] label');
 
             for (x = 0; x < els.length; x += 1) {
 
@@ -494,12 +514,30 @@ var hashedit = (function () {
          */
         setupDrawer: function() {
 
-            var drawer, desc, meta, x, el, option;
+            var drawer, desc, meta, x, el, option, html;
 
             // create a menu
             drawer = document.createElement('nav');
             drawer.setAttribute('class', 'hashedit-drawer');
-            drawer.innerHTML = '<ul><li class="hashedit-drawer-title"><span>Page</span></li><li hashedit-add-page><a>Add Page</a></li><li hashedit-page-settings><a>Page Settings</a></li><li class="hashedit-drawer-title"><span>App</span></li><li hashedit-exit><a>Exit</a></li></ul>';
+
+            // setup drawer from hashedit.drawer
+            html = '<ul>';
+            
+            html += '<li class="hashedit-drawer-title"><span>Page</span></li>'
+
+            for(x= 0; x<hashedit.drawer.page.length; x++){
+              html += '<li ' + hashedit.drawer.page[x].attr + '><a>' + hashedit.drawer.page[x].text + '</a></li>';
+            }
+            
+            html += '<li class="hashedit-drawer-title"><span>App</span></li>'
+
+            for(x= 0; x<hashedit.drawer.app.length; x++){
+              html += '<li ' + hashedit.drawer.app[x].attr + '><a>' + hashedit.drawer.app[x].text + '</a></li>';
+            }
+
+            html += '</ul>';
+
+            drawer.innerHTML = html;
 
             // append menu
             hashedit.current.container.appendChild(drawer);
@@ -2266,12 +2304,22 @@ var hashedit = (function () {
             }
 
         },
+        
+        /**
+         * Setup the editor
+         * @param {Array} config.sortable
+         */
+        setup: function(config){
+            if(window.location.href.indexOf('#edit') != -1){
+                hashedit.setupEditor(config);
+            }
+        },
 
         /**
          * Setup the editor
          * @param {Array} config.sortable
          */
-        setup: function(config) {
+        setupEditor: function(config) {
 
             console.log('Hashedit version: ' + hashedit.version);
 
@@ -2334,6 +2382,10 @@ var hashedit = (function () {
                             hashedit.createMenu(config.path);
                             hashedit.loadHTML(config.path);
 
+                            // setup loaded event
+                            var event = new Event('hashedit.loaded');
+                            document.dispatchEvent(event);
+                            
                         }
 
                     });
@@ -2409,6 +2461,19 @@ var hashedit = (function () {
                     parent.appendChild(child);
                 }
             }
+        },
+        
+        /**
+         * Generates a uniqueid
+         */
+        guid: function() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+        
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         }
     };
 
