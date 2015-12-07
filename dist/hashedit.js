@@ -402,7 +402,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.3.6',
+        version: '0.3.7',
 
         // set debug messages
         debug: true,
@@ -449,7 +449,7 @@ var hashedit = (function () {
                 text: 'Page Settings',
                 attr: 'hashedit-page-settings'
             }
-          ], 
+          ],
           app: [
             {
                 text: 'Exit',
@@ -457,7 +457,7 @@ var hashedit = (function () {
             }
           ]
         },
-        
+
         // define the menu
         menu: [{
             action: "hashedit.h1",
@@ -915,13 +915,13 @@ var hashedit = (function () {
 
             // setup drawer from hashedit.drawer
             html = '<ul>';
-            
+
             html += '<li class="hashedit-drawer-title"><span>Page</span></li>'
 
             for(x= 0; x<hashedit.drawer.page.length; x++){
               html += '<li ' + hashedit.drawer.page[x].attr + '><a>' + hashedit.drawer.page[x].text + '</a></li>';
             }
-            
+
             html += '<li class="hashedit-drawer-title"><span>App</span></li>'
 
             for(x= 0; x<hashedit.drawer.app.length; x++){
@@ -2697,7 +2697,7 @@ var hashedit = (function () {
             }
 
         },
-        
+
         /**
          * Setup the editor
          * @param {Array} config.sortable
@@ -2778,7 +2778,7 @@ var hashedit = (function () {
                             // setup loaded event
                             var event = new Event('hashedit.loaded');
                             document.dispatchEvent(event);
-                            
+
                         }
 
                     });
@@ -2855,7 +2855,7 @@ var hashedit = (function () {
                 }
             }
         },
-        
+
         /**
          * Generates a uniqueid
          */
@@ -2865,7 +2865,7 @@ var hashedit = (function () {
                     .toString(16)
                     .substring(1);
             }
-        
+
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         }
     };
