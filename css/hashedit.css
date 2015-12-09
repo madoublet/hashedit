@@ -60,6 +60,10 @@
     border-radius: 50%;
 }
 
+    .hashedit-element:hover .hashedit-edit{
+        background-color: rgba(255,153,0,0.75);
+    }
+
     .hashedit-edit span{
 		position: absolute;
 		top: 7px;
@@ -84,8 +88,8 @@
 .hashedit-move, .hashedit-properties, .hashedit-remove{
 	cursor: move;
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 5px;
+	right: 5px;
 	width: 40px;
 	height: 40px;
 	visibility: hidden;
@@ -137,13 +141,13 @@
 
 /* properties icon */
 .hashedit-element[current-hashedit-element] .hashedit-properties{
-	right: 40px;
+	right: 45px;
 	cursor: pointer;
 }
 
 /* remove icon */
 .hashedit-element[current-hashedit-element] .hashedit-remove{
-	right: 80px;
+	right: 85px;
 	cursor: pointer;
 }
 
@@ -241,6 +245,7 @@ body [contentEditable=true] a{
     .hashedit-drawer ul{
         margin: 0;
         padding: 0;
+        border-bottom: 1px solid #ddd;
     }
 
     .hashedit-drawer li{
@@ -254,12 +259,20 @@ body [contentEditable=true] a{
     }
 
     .hashedit-drawer li.hashedit-drawer-title{
-        margin-top: 15px;
-        height: 30px;
-        line-height: 30px;
+        margin-top: 5px;
+        height: 40px;
+        line-height: 40px;
         color: #aaa;
         text-transform: uppercase;
-        font-size: 13px;
+        font-size: 12px;
+        border-top: 1px solid #ddd;
+    }
+
+    .hashedit-drawer li.hashedit-drawer-title:first-child{
+        border: none;
+    }
+
+    .hashedit-drawer .hashedit-drawer ul{
     }
 
     .hashedit-drawer li.hashedit-drawer-title span{
