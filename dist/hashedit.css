@@ -20,13 +20,13 @@
 	border: 1px solid transparent;
 }
 
-.hashedit-element:hover{
-  border: 1px solid rgba(255,153,0,0.25);
+.hashedit-element[current-hashedit-element]{
+    background-color: rgba(255,153,0,0.05);
+    border: 1px solid rgba(255,153,0,0.05);
 }
 
-.hashedit-element[current-hashedit-element]{
-  border: 1px solid rgba(255,153,0,0.25);
-  background-color: rgba(255,153,0,0.05);
+.hashedit-element:hover{
+    border: 1px solid rgba(255,153,0,0.25);
 }
 
 .hashedit-element [contentEditable=true]{
@@ -47,25 +47,62 @@
     box-sizing: border-box;
 }
 
+/* edit icon */
+.hashedit-edit{
+	cursor: move;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 35px;
+	height: 35px;
+	z-index: 10000;
+    background-color: rgba(1,1,1,0.05);
+    border-radius: 50%;
+}
+
+    .hashedit-edit span{
+		position: absolute;
+		top: 7px;
+		right: -1px;
+		width: 35px;
+		height: 35px;
+		text-align: center;
+		line-height: 15px;
+		transition: all 0.15s ease;
+		color: #fff;
+	}
+
+	.hashedit-edit span svg{
+		fill: currentColor;
+		width: 50%;
+		margin: 0 auto;
+		opacity: 1;
+		transition: all 0.25s ease;
+	}
+
 /* move icon */
 .hashedit-move, .hashedit-properties, .hashedit-remove{
 	cursor: move;
 	position: absolute;
-	top: -40px;
+	top: 0;
 	right: 0;
 	width: 40px;
 	height: 40px;
-	display: none;
+	visibility: hidden;
 	z-index: 10000;
+    transition: all 0.25s ease;
+    opacity: 0;
 }
 
-  [current-hashedit-element] .hashedit-move, [current-hashedit-element] .hashedit-properties, [current-hashedit-element] .hashedit-remove{
-    display: block;
+  .hashedit-element[current-hashedit-element] .hashedit-move, .hashedit-element[current-hashedit-element] .hashedit-properties, .hashedit-element[current-hashedit-element] .hashedit-remove{
+        visibility: visible;
+        top: -40px;
+        opacity: 1;
   }
 
-  .hashedit-element:hover .hashedit-move, .hashedit-element:hover .hashedit-properties, .hashedit-element:hover .hashedit-remove{
-    display: block;
-  }
+    .hashedit-element[current-hashedit-element] .hashedit-edit{
+        display: none;
+    }
 
 
 	.hashedit-move span, .hashedit-properties span, .hashedit-remove span{
@@ -73,12 +110,13 @@
 		top: 0;
 		right: -1px;
 		background-color: rgba(255,153,0,0.75);
-		width: 40px;
-		height: 40px;
+		width: 35px;
+		height: 35px;
 		text-align: center;
 		line-height: 15px;
 		transition: all 0.25s ease;
 		color: #fff;
+        border-radius: 50%;
 	}
 
 	.hashedit-move span svg, .hashedit-properties span svg, .hashedit-remove span svg{
@@ -98,13 +136,13 @@
 }
 
 /* properties icon */
-.hashedit-properties{
+.hashedit-element[current-hashedit-element] .hashedit-properties{
 	right: 40px;
 	cursor: pointer;
 }
 
 /* remove icon */
-.hashedit-remove{
+.hashedit-element[current-hashedit-element] .hashedit-remove{
 	right: 80px;
 	cursor: pointer;
 }
