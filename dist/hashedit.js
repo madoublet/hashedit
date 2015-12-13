@@ -402,7 +402,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.4.4',
+        version: '0.4.5',
 
         // set debug messages
         debug: true,
