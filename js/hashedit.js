@@ -9,7 +9,7 @@ var hashedit = (function () {
     return {
 
         // set version
-        version: '0.4.3',
+        version: '0.4.4',
 
         // set debug messages
         debug: true,
@@ -17,6 +17,10 @@ var hashedit = (function () {
         // set demo mode
         demo: false,
 
+        // path to hashedit library
+        path: '/node_modules/hashedit/',
+
+        // path to stylesheet
         stylesheet: '/node_modules/hashedit/dist/hashedit-min.css',
 
         // pointers to selected elements
@@ -41,6 +45,16 @@ var hashedit = (function () {
             'bootstrap': {
                 'table': 'table',
                 'image': 'img-responsive',
+                'code': ''
+            },
+            'foundation': {
+                'table': '',
+                'image': '',
+                'code': ''
+            },
+            'foundation': {
+                'table': 'mdl-data-table',
+                'image': '',
                 'code': ''
             }
         },
@@ -125,7 +139,7 @@ var hashedit = (function () {
             selector: "img",
             title: "Image",
             display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
-            html: '<img src="images/bridge.png" class="{{framework.image}}">',
+            html: '<img src="{{path}}images/placeholder.png" class="{{framework.image}}">',
             configure: function() {
                 hashedit.showImageDialog();
             }
@@ -481,9 +495,13 @@ var hashedit = (function () {
                         if (ref !== undefined) {
 
                             if (item.nextSibling) {
-                                nextRef = item.nextSibling.querySelector(':first-child').getAttribute('data-ref');
 
-                                hashedit.moveMirrorElement(ref, nextRef, 'before');
+                                if(item.nextSibling.querySelector){
+                                    nextRef = item.nextSibling.querySelector(':first-child').getAttribute('data-ref');
+
+                                    hashedit.moveMirrorElement(ref, nextRef, 'before');
+                                }
+
                             } else if (item.parentNode) {
                                 parentRef = item.parentNode.getAttribute('data-ref');
 
@@ -777,6 +795,7 @@ var hashedit = (function () {
                     for (x = 0; x < hashedit.menu.length; x += 1) {
                         if (hashedit.menu[x].action == action) {
                             html = hashedit.menu[x].html;
+                            html = hashedit.replaceAll(html, '{{path}}', hashedit.path);
                             html = hashedit.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
                             html = hashedit.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
                             html = hashedit.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
@@ -2329,6 +2348,11 @@ var hashedit = (function () {
         setupEditor: function(config) {
 
             console.log('Hashedit version: ' + hashedit.version);
+
+            // set path
+            if(config.path != null){
+                hashedit.path = config.path;
+            }
 
             // create container
             hashedit.current.container = document.createElement('div');
