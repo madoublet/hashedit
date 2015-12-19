@@ -198,7 +198,7 @@ body [contentEditable=true] a{
 	padding: 0 0 0 50px;
 	color: #888;
 	border-bottom: 1px solid #DDD;
-	overflow-x: scroll;
+	overflow-x: auto;
 	text-align: center;
 }
 
@@ -223,7 +223,7 @@ body [contentEditable=true] a{
 	padding: 0;
 	color: #888;
 	border-right: 1px solid #DDD;
-	overflow-x: scroll;
+	overflow-x: auto;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
 	transition: all 0.2s ease;
 }
@@ -342,9 +342,15 @@ body [contentEditable=true] a{
 	padding: 0 0 0 50px;
 	color: #888;
 	border-bottom: 1px solid #DDD;
-	overflow-x: scroll;
+	overflow-x: auto;
+	overflow-y: hidden;
+	-ms-overflow-style: none;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
 }
+
+    .hashedit-menu::-webkit-scrollbar {
+        display: none;
+    }
 
 	.hashedit-menu .hashedit-menu-body{
 		width: 2000px;
@@ -453,7 +459,7 @@ body .hashedit-config{
 	padding: 0;
 	color: #888;
 	border-bottom: 1px solid #DDD;
-	overflow-x: scroll;
+	overflow-x: auto;
 	transition: all 0.2s ease;
 }
 
@@ -572,7 +578,7 @@ body .hashedit-modal{
 	padding: 25px 25px 60px 25px;
 	color: #888;
 	border-bottom: 1px solid #DDD;
-	overflow-x: scroll;
+	overflow-x: auto;
 	display: none;
 	opacity: 0;
 	transition: all 0.2s ease;
@@ -732,7 +738,7 @@ body .dropzone .dz-message{
   padding: 0;
   border: 1px solid #ddd;
   max-height: 220px;
-  overflow: scroll;
+  overflow: auto;
 }
 
   .hashedit-card .hashedit-list{
@@ -751,6 +757,12 @@ body .dropzone .dz-message{
         color: #111;
         margin: 0 0 2px 0;
         padding: 0;
+    }
+
+    body .hashedit-modal .hashedit-list-item small{
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
     }
 
     body .hashedit-modal .hashedit-list-item h2 span{
