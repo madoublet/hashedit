@@ -1,6 +1,6 @@
 {
   "name": "hashedit",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "A visual editor for websites.",
   "main": "js/hashedit.js",
   "directories": {
