@@ -643,7 +643,7 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.4.7',
+        version: '0.4.9',
 
         // set debug messages
         debug: true,
@@ -1152,7 +1152,7 @@ hashedit = (function () {
 
                 if (hashedit.demo === true) {
 
-                    hashedit.showToast('Cannot save in demo mode', 'failure');
+                    hashedit.app.showToast('Cannot save in demo mode', 'failure');
 
                     // clear localStorage
                     localStorage.clear();
@@ -1176,7 +1176,7 @@ hashedit = (function () {
                             // done
                             localStorage.clear();
 
-                            hashedit.showToast('Updates saved!', 'success');
+                            hashedit.app.showToast('Updates saved!', 'success');
 
                         };
 
@@ -1950,7 +1950,7 @@ hashedit = (function () {
 
                 if (hashedit.demo === true) {
 
-                    hashedit.showToast('Cannot add page in demo mode', 'failure');
+                    hashedit.app.showToast('Cannot add page in demo mode', 'failure');
 
                 } else {
 
@@ -2000,7 +2000,7 @@ hashedit = (function () {
                                 document.getElementById('hashedit-add-page').removeAttribute('visible');
 
                                 // log success
-                                hashedit.showToast('Page added at ' + url, 'success');
+                                hashedit.app.showToast('Page added at ' + url, 'success');
 
                             };
 
@@ -2008,7 +2008,7 @@ hashedit = (function () {
                     }
                     else{
                         // show success
-                        hashedit.showToast('URL required', 'failure');
+                        hashedit.app.showToast('URL required', 'failure');
                     }
                 }
 
@@ -2031,7 +2031,7 @@ hashedit = (function () {
 
                 if (hashedit.demo === true) {
 
-                    hashedit.showToast('Cannot save settings in demo mode', 'failure');
+                    hashedit.app.showToast('Cannot save settings in demo mode', 'failure');
 
                 } else {
 
@@ -2062,7 +2062,7 @@ hashedit = (function () {
                             document.getElementById('hashedit-page-settings').removeAttribute('visible');
 
                             // show success
-                            hashedit.showToast('Settings updated successfully!', 'success');
+                            hashedit.app.showToast('Settings updated successfully!', 'success');
 
                         };
 
@@ -2824,8 +2824,8 @@ hashedit = (function () {
                 hashedit.setupSortable(config.sortable);
                 hashedit.setupContentEditableEvents();
                 hashedit.setupMenu(config.path);
-                hashedit.setupToast();
-                hashedit.setupDrawer();
+                hashedit.app.setupToast();
+                hashedit.app.setupDrawer();
                 hashedit.createMenu(config.path);
                 hashedit.loadHTML(config.path);
 
