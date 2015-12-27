@@ -2,14 +2,16 @@
  * Hashedit (#edit) is a simple, web-based editor for static HTML sites. Learn more at hashedit.io. Download from Github at github.com/madoublet/hashedit
  * @author: Matthew Smith
  */
-var hashedit = (function () {
+var hashedit = hashedit || {};
+
+hashedit = (function () {
 
     'use strict';
 
     return {
 
         // set version
-        version: '0.4.6',
+        version: '0.4.7',
 
         // set debug messages
         debug: true,
@@ -21,7 +23,7 @@ var hashedit = (function () {
         path: '/node_modules/hashedit/',
 
         // path to stylesheet
-        stylesheet: '/node_modules/hashedit/dist/hashedit-min.css',
+        stylesheet: ['/node_modules/hashedit/dist/hashedit-min.css'],
 
         // pointers to selected elements
         current: {
@@ -57,26 +59,6 @@ var hashedit = (function () {
                 'image': '',
                 'code': ''
             }
-        },
-
-        // define the drawer
-        drawer: {
-          page: [
-            {
-                text: 'Add Page',
-                attr: 'hashedit-add-page'
-            },
-            {
-                text: 'Page Settings',
-                attr: 'hashedit-page-settings'
-            }
-          ],
-          app: [
-            {
-                text: 'Exit',
-                attr: 'hashedit-exit'
-            }
-          ]
         },
 
         // define the menu
@@ -281,7 +263,6 @@ var hashedit = (function () {
         newElementCount: 0,
 
         // API urls
-        authUrl: '/api/auth',
         saveUrl: '/api/pages/save',
         addPageURL: '/api/pages/add',
         pageSettingsURL: '/api/pages/settings',
@@ -520,172 +501,6 @@ var hashedit = (function () {
         },
 
         /**
-         * Create the auth
-         */
-        showAuth: function() {
-
-            // create a login
-            var login = document.createElement('nav');
-            login.setAttribute('class', 'hashedit-login');
-            login.innerHTML = 'You need to signin to begin editing. <a href="/auth/google">Sign In with Google</a>';
-
-            // append menu
-            hashedit.current.container.appendChild(login);
-
-        },
-
-        /**
-         * Create the drawer
-         */
-        setupDrawer: function() {
-
-            var drawer, desc, meta, x, el, option, html;
-
-            // create a menu
-            drawer = document.createElement('nav');
-            drawer.setAttribute('class', 'hashedit-drawer');
-
-            // setup drawer from hashedit.drawer
-            html = '<ul>';
-
-            html += '<li class="hashedit-drawer-title"><span>Page</span></li>'
-
-            for(x= 0; x<hashedit.drawer.page.length; x++){
-              html += '<li ' + hashedit.drawer.page[x].attr + '><a>' + hashedit.drawer.page[x].text + '</a></li>';
-            }
-
-            html += '<li class="hashedit-drawer-title"><span>App</span></li>'
-
-            for(x= 0; x<hashedit.drawer.app.length; x++){
-              html += '<li ' + hashedit.drawer.app[x].attr + '><a>' + hashedit.drawer.app[x].text + '</a></li>';
-            }
-
-            html += '</ul>';
-
-            drawer.innerHTML = html;
-
-            // append menu
-            hashedit.current.container.appendChild(drawer);
-
-            // show add page
-            document.querySelector('[hashedit-add-page]').addEventListener('click', function() {
-
-                // hide drawer
-                drawer = document.querySelector('.hashedit-drawer');
-                drawer.removeAttribute('visible');
-
-                // init url
-                document.getElementById('hashedit-add-page-url').value = '';
-
-                // show modal
-                document.getElementById('hashedit-add-page').setAttribute('visible', '');
-
-                if (hashedit.pathListLoaded === false) {
-
-                    // load the pages
-                    fetch(hashedit.pathListUrl, {
-                            credentials: 'include'
-                        })
-                        .then(function(response) {
-
-                            return response.json();
-
-                        }).then(function(json) {
-
-                            el = document.getElementById('hashedit-add-page-path');
-
-                            for (x = 0; x < json.length; x += 1) {
-                                option = document.createElement('option');
-                                option.setAttribute('value', json[x]);
-                                option.innerHTML = json[x];
-
-                                el.appendChild(option);
-                            }
-
-                            hashedit.pathListLoaded = true;
-
-                        }).catch(function(ex) {
-                            console.log('parsing failed', ex);
-                        });
-
-
-                }
-
-            });
-
-            // show settings
-            document.querySelector('[hashedit-page-settings]').addEventListener('click', function() {
-
-                // hide drawer
-                drawer = document.querySelector('.hashedit-drawer');
-                drawer.removeAttribute('visible');
-
-                // get description
-                desc = '';
-                meta = document.querySelector('meta[name="description"]');
-
-                if (meta !== null) {
-                    desc = meta.getAttribute('content');
-                }
-
-                // set title and description
-                document.getElementById('hashedit-page-title').value = document.title;
-                document.getElementById('hashedit-page-desc').value = desc;
-
-                // show modal
-                document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
-            });
-
-
-        },
-
-        /**
-         * Create the toast
-         */
-        setupToast: function() {
-
-          var toast;
-
-          toast = document.createElement('div');
-          toast.setAttribute('class', 'hashedit-toast');
-          toast.innerHTML = 'Sample Toast';
-
-          // append toast
-          hashedit.current.container.appendChild(toast);
-
-        },
-
-        /**
-         * Shows the toast
-         */
-        showToast: function(text, status) {
-
-          var toast;
-
-          toast = document.querySelector('.hashedit-toast');
-          toast.innerHTML = text;
-          toast.removeAttribute('success');
-          toast.removeAttribute('failure');
-
-          toast.setAttribute('active', '');
-
-          // add success/failure
-          if (status == 'success'){
-            toast.setAttribute('success', '');
-          }
-          else if (status == 'failure'){
-            toast.setAttribute('failure', '');
-          }
-
-          // hide toast
-          setTimeout(function(){
-            toast.removeAttribute('active');
-          }, 2000);
-
-        },
-
-
-        /**
          * Create the menu
          */
         setupMenu: function() {
@@ -699,19 +514,6 @@ var hashedit = (function () {
 
             // append menu
             hashedit.current.container.appendChild(menu);
-
-            // toggle drawer
-            document.querySelector('.hashedit-more').addEventListener('click', function() {
-
-                drawer = document.querySelector('.hashedit-drawer');
-
-                if (drawer.hasAttribute('visible')) {
-                    drawer.removeAttribute('visible');
-                } else {
-                    drawer.setAttribute('visible', '');
-                }
-
-            });
 
             // save
             document.querySelector('.hashedit-save').addEventListener('click', function() {
@@ -2347,6 +2149,8 @@ var hashedit = (function () {
          */
         setupEditor: function(config) {
 
+            var x, style;
+
             console.log('Hashedit version: ' + hashedit.version);
 
             // set path
@@ -2367,9 +2171,13 @@ var hashedit = (function () {
             // append container to body
             document.body.appendChild(hashedit.current.container);
 
+            // create style
+            style = document.createElement('style');
+
             // append scoped stylesheet to container
-            var style = document.createElement('style');
-            style.innerHTML = '@import url(' + hashedit.stylesheet + ')';
+            for(x =0; x<hashedit.stylesheet.length; x++){
+                style.innerHTML += '@import url(' + hashedit.stylesheet[x] + ');';
+            }
 
             hashedit.current.container.appendChild(style);
 
@@ -2390,7 +2198,8 @@ var hashedit = (function () {
                 hashedit.loadHTML(config.path);
 
             } else {
-                fetch(hashedit.authUrl, {
+
+                fetch(hashedit.app.authUrl, {
                         credentials: 'include'
                     })
                     .then(function(response) {
@@ -2398,7 +2207,7 @@ var hashedit = (function () {
                         if (response.status !== 200) {
 
                             // show authorization
-                            hashedit.showAuth();
+                            hashedit.app.showAuth();
 
                         } else {
 
@@ -2408,8 +2217,8 @@ var hashedit = (function () {
                             hashedit.setupSortable(config.sortable);
                             hashedit.setupContentEditableEvents();
                             hashedit.setupMenu(config.path);
-                            hashedit.setupToast();
-                            hashedit.setupDrawer();
+                            hashedit.app.setupToast();
+                            hashedit.app.setupDrawer();
                             hashedit.createMenu(config.path);
                             hashedit.loadHTML(config.path);
 
