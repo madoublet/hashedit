@@ -11,7 +11,7 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.4.9',
+        version: '0.5.0',
 
         // set debug messages
         debug: true,
