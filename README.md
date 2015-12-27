@@ -56,7 +56,7 @@ The JS looks for the #edit in the URL and then calls setup on the hashedit singl
   // setup hashedit
   hashedit.setup({
     path: '/node_modules/hashedit/',
-    stylesheet: '/node_modules/hashedit/dist/hashedit-min.css',
+    stylesheet: ['/node_modules/hashedit/dist/hashedit-min.css'],
     sortable: ['.column']  
   });
 
