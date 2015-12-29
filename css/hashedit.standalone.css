@@ -93,7 +93,7 @@ body .hashedit-list{
         text-transform: uppercase;
     }
 
-    body .hashedit-list-item h2 span{
+    body .hashedit-list-item h2 span.secondary{
         font-size: 11px;
         font-weight: normal;
         color: #888;
@@ -171,7 +171,7 @@ body .hashedit-list{
 
 /* menu */
 .hashedit-menu{
-    background-color: #98C33E;
+    background-color: #00ADE3;
     color: #fff;
     box-shadow: none;
     border: none;
@@ -182,12 +182,12 @@ body .hashedit-list{
         font-weight: 300;
     }
 
-    .hashedit-menu .hashedit-more{
-		background-color: #98C33E;
-		color: #fff;
+    .hashedit-menu .hashedit-more, .hashedit-menu .hashedit-add{
+		background-color: #00ADE3;
+		color: #fff !important;
 	}
 
-	    .hashedit-menu .hashedit-more:hover{
+	    .hashedit-menu .hashedit-more:hover, .hashedit-menu .hashedit-add:hover{
 		    background-color: #00ADE3;
             color: #fff !important;
             height: 50px;

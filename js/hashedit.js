@@ -11,7 +11,7 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.5.0',
+        version: '0.5.1',
 
         // set debug messages
         debug: true,
@@ -270,12 +270,10 @@ hashedit = (function () {
         uploadUrl: '/api/images/add',
         imagesListUrl: '/api/images/list',
         pagesListUrl: '/api/pages/list',
-        pathListUrl: '/api/pages/path/list',
 
         // loading indicators
         imagesListLoaded: false,
         pagesListLoaded: false,
-        pathListLoaded: false,
 
         /**
          * Retrieve HTML
@@ -597,10 +595,10 @@ hashedit = (function () {
                     for (x = 0; x < hashedit.menu.length; x += 1) {
                         if (hashedit.menu[x].action == action) {
                             html = hashedit.menu[x].html;
-                            html = hashedit.replaceAll(html, '{{path}}', hashedit.path);
-                            html = hashedit.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
-                            html = hashedit.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
-                            html = hashedit.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
+                            html = hashedit.app.replaceAll(html, '{{path}}', hashedit.path);
+                            html = hashedit.app.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
+                            html = hashedit.app.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
+                            html = hashedit.app.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
 
 
                             hashedit.append(html);
@@ -689,7 +687,7 @@ hashedit = (function () {
 
             // set current element, container, and node
             hashedit.current.element = element;
-            hashedit.current.parent = hashedit.findParentBySelector(element, '.hashedit-element');
+            hashedit.current.parent = hashedit.app.findParentBySelector(element, '.hashedit-element');
             hashedit.current.node = hashedit.current.parent.firstChild;
 
             // hide drawer
@@ -774,7 +772,7 @@ hashedit = (function () {
                     arr[x].addEventListener(e, function(e) {
 
                         // determine if the event occurred within a hashedit-lement
-                        parent = hashedit.findParentBySelector(e.target, '.hashedit-element');
+                        parent = hashedit.app.findParentBySelector(e.target, '.hashedit-element');
                         element = null;
 
                         if (parent !== null) {
@@ -796,14 +794,14 @@ hashedit = (function () {
                         // check for properties
                         showProperties = false;
 
-                        if (hashedit.findParentBySelector(e.target, '.hashedit-properties') !== null) {
+                        if (hashedit.app.findParentBySelector(e.target, '.hashedit-properties') !== null) {
                             showProperties = true;
                         }
 
                         // remove element
                         removeElement = false;
 
-                        if (hashedit.findParentBySelector(e.target, '.hashedit-remove') !== null) {
+                        if (hashedit.app.findParentBySelector(e.target, '.hashedit-remove') !== null) {
                             removeElement = true;
                         }
 
@@ -1333,17 +1331,17 @@ hashedit = (function () {
 
                     if(url !== ''){
                         // cleanup url
-                        url = hashedit.replaceAll(url, '.html', '');
-                        url = hashedit.replaceAll(url, '.htm', '');
-                        url = hashedit.replaceAll(url, '.', '-');
-                        url = hashedit.replaceAll(url, ' ', '-');
-                        url = hashedit.replaceAll(url, '/', '-');
+                        url = hashedit.app.replaceAll(url, '.html', '');
+                        url = hashedit.app.replaceAll(url, '.htm', '');
+                        url = hashedit.app.replaceAll(url, '.', '-');
+                        url = hashedit.app.replaceAll(url, ' ', '-');
+                        url = hashedit.app.replaceAll(url, '/', '-');
 
                         // append path to url
                         url = path + '/' + url + '.html';
 
                         // fix duplicates
-                        url = hashedit.replaceAll(url, '//', '/');
+                        url = hashedit.app.replaceAll(url, '//', '/');
 
                         // set params
                         params = {
@@ -1386,14 +1384,14 @@ hashedit = (function () {
             document.querySelector('[hashedit-exit]').addEventListener('click', function() {
 
                 // redirect without #edit
-                var url = hashedit.replaceAll(window.location.href, '#edit', '');
+                var url = hashedit.app.replaceAll(window.location.href, '#edit', '');
 
                 // redirect to the URL
                 window.location.href = url;
 
             });
 
-            // handle page creation
+            // apply page settings
             document.querySelector('[hashedit-apply-page-settings]').addEventListener('click', function() {
 
 
@@ -1649,9 +1647,9 @@ hashedit = (function () {
                                 // clear existing alignments
                                 value = input.value;
 
-                                value = hashedit.replaceAll(value, 'text-center', '');
-                                value = hashedit.replaceAll(value, 'text-left', '');
-                                value = hashedit.replaceAll(value, 'text-right', '');
+                                value = hashedit.app.replaceAll(value, 'text-center', '');
+                                value = hashedit.app.replaceAll(value, 'text-left', '');
+                                value = hashedit.app.replaceAll(value, 'text-right', '');
                                 value += ' text-left';
 
                                 // update value and trigger change
@@ -1669,9 +1667,9 @@ hashedit = (function () {
                                 // clear existing alignments
                                 value = input.value;
 
-                                value = hashedit.replaceAll(value, 'text-center', '');
-                                value = hashedit.replaceAll(value, 'text-left', '');
-                                value = hashedit.replaceAll(value, 'text-right', '');
+                                value = hashedit.app.replaceAll(value, 'text-center', '');
+                                value = hashedit.app.replaceAll(value, 'text-left', '');
+                                value = hashedit.app.replaceAll(value, 'text-right', '');
                                 value += ' text-right';
 
                                 // update value and trigger change
@@ -1689,9 +1687,9 @@ hashedit = (function () {
                                 // clear existing alignments
                                 value = input.value;
 
-                                value = hashedit.replaceAll(value, 'text-center', '');
-                                value = hashedit.replaceAll(value, 'text-left', '');
-                                value = hashedit.replaceAll(value, 'text-right', '');
+                                value = hashedit.app.replaceAll(value, 'text-center', '');
+                                value = hashedit.app.replaceAll(value, 'text-left', '');
+                                value = hashedit.app.replaceAll(value, 'text-right', '');
                                 value += ' text-center';
 
                                 // update value and trigger change
@@ -1906,27 +1904,6 @@ hashedit = (function () {
                     savedSel.select();
                 }
             }
-        },
-
-        /**
-         * Replace all occurrences of a string
-         * @param {String} src - Source string (e.g. haystack)
-         * @param {String} stringToFind - String to find (e.g. needle)
-         * @param {String} stringToReplace - String to replacr
-         */
-        replaceAll: function(src, stringToFind, stringToReplace) {
-
-            var temp, index;
-
-            temp = src;
-            index = temp.indexOf(stringToFind);
-
-            while (index != -1) {
-                temp = temp.replace(stringToFind, stringToReplace);
-                index = temp.indexOf(stringToFind);
-            }
-
-            return temp;
         },
 
         /**
@@ -2231,39 +2208,6 @@ hashedit = (function () {
                     });
             }
 
-        },
-
-        /**
-         * Helper for findParentBySelecotr
-         * @param {Array} config.sortable
-         */
-        collectionHas: function(a, b) { //helper function (see below)
-            var i, len;
-
-            len = a.length;
-
-            for (i = 0; i < len; i += 1) {
-                if (a[i] == b) {
-                    return true;
-                }
-            }
-            return false;
-        },
-
-        /**
-         * Find the parent by a selector ref: http://stackoverflow.com/questions/14234560/javascript-how-to-get-parent-element-by-selector
-         * @param {Array} config.sortable
-         */
-        findParentBySelector: function(elm, selector) {
-            var all, cur;
-
-            all = document.querySelectorAll(selector);
-            cur = elm.parentNode;
-
-            while (cur && !hashedit.collectionHas(all, cur)) { //keep going up until you find a match
-                cur = cur.parentNode; //go up
-            }
-            return cur; //will return null if not found
         },
 
         /**

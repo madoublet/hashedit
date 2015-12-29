@@ -28,6 +28,12 @@ hashedit.app = (function () {
           ]
         },
 
+        // api endpoints
+        pathListUrl: '/api/pages/path/list',
+
+        // loading indicators
+        pathListLoaded: false,
+
         /**
          * Create the auth
          */
@@ -51,9 +57,13 @@ hashedit.app = (function () {
         /**
          * Create the drawer
          */
-        setupDrawer: function() {
+        setupDrawer: function(config) {
 
             var drawer, desc, meta, x, el, option, html;
+
+            if(config == null){
+                config = {page: true, app: true};
+            }
 
             // toggle drawer
             document.querySelector('.hashedit-more').addEventListener('click', function() {
@@ -75,28 +85,32 @@ hashedit.app = (function () {
             // setup drawer from hashedit.app.drawer
             html = '<ul>';
 
-            html += '<li class="hashedit-drawer-title"><span>Page</span></li>'
+            if(config.page == true){
+                html += '<li class="hashedit-drawer-title"><span>Page</span></li>'
 
-            for(x= 0; x<hashedit.app.drawer.page.length; x++){
+                for(x= 0; x<hashedit.app.drawer.page.length; x++){
 
-                if(hashedit.app.drawer.page[x].attr != null){
-                    html += '<li ' + hashedit.app.drawer.page[x].attr + '><a>' + hashedit.app.drawer.page[x].text + '</a></li>';
+                    if(hashedit.app.drawer.page[x].attr != null){
+                        html += '<li ' + hashedit.app.drawer.page[x].attr + '><a>' + hashedit.app.drawer.page[x].text + '</a></li>';
+                    }
+                    else if(hashedit.app.drawer.page[x].href != null){
+                        html += '<li><a href="' + hashedit.app.drawer.page[x].href + '">' + hashedit.app.drawer.page[x].text + '</a></li>';
+                    }
+
+
                 }
-                else if(hashedit.app.drawer.page[x].href != null){
-                    html += '<li><a href="' + hashedit.app.drawer.page[x].href + '">' + hashedit.app.drawer.page[x].text + '</a></li>';
-                }
-
-
             }
 
-            html += '<li class="hashedit-drawer-title"><span>App</span></li>'
+            if(config.app == true){
+                html += '<li class="hashedit-drawer-title"><span>App</span></li>'
 
-            for(x= 0; x<hashedit.app.drawer.app.length; x++){
-                if(hashedit.app.drawer.app[x].attr != null){
-                    html += '<li ' + hashedit.app.drawer.app[x].attr + '><a>' + hashedit.app.drawer.app[x].text + '</a></li>';
-                }
-                else if(hashedit.app.drawer.app[x].href != null){
-                    html += '<li><a href="' + hashedit.app.drawer.app[x].href + '">' + hashedit.app.drawer.app[x].text + '</a></li>';
+                for(x= 0; x<hashedit.app.drawer.app.length; x++){
+                    if(hashedit.app.drawer.app[x].attr != null){
+                        html += '<li ' + hashedit.app.drawer.app[x].attr + '><a>' + hashedit.app.drawer.app[x].text + '</a></li>';
+                    }
+                    else if(hashedit.app.drawer.app[x].href != null){
+                        html += '<li><a href="' + hashedit.app.drawer.app[x].href + '">' + hashedit.app.drawer.app[x].text + '</a></li>';
+                    }
                 }
             }
 
@@ -113,73 +127,81 @@ hashedit.app = (function () {
             }
 
             // show add page
-            document.querySelector('[hashedit-add-page]').addEventListener('click', function() {
+            if(document.querySelector('[hashedit-add-page]') != null){
 
-                // hide drawer
-                drawer = document.querySelector('.hashedit-drawer');
-                drawer.removeAttribute('visible');
+                document.querySelector('[hashedit-add-page]').addEventListener('click', function() {
 
-                // init url
-                document.getElementById('hashedit-add-page-url').value = '';
+                    // hide drawer
+                    drawer = document.querySelector('.hashedit-drawer');
+                    drawer.removeAttribute('visible');
 
-                // show modal
-                document.getElementById('hashedit-add-page').setAttribute('visible', '');
+                    // init url
+                    document.getElementById('hashedit-add-page-url').value = '';
+                    document.getElementById('hashedit-add-page-title').value = '';
+                    document.getElementById('hashedit-add-page-desc').value = '';
 
-                if (hashedit.pathListLoaded === false) {
+                    // show modal
+                    document.getElementById('hashedit-add-page').setAttribute('visible', '');
 
-                    // load the pages
-                    fetch(hashedit.pathListUrl, {
-                            credentials: 'include'
-                        })
-                        .then(function(response) {
+                    if (hashedit.app.pathListLoaded === false) {
 
-                            return response.json();
+                        // load the pages
+                        fetch(hashedit.app.pathListUrl, {
+                                credentials: 'include'
+                            })
+                            .then(function(response) {
 
-                        }).then(function(json) {
+                                return response.json();
 
-                            el = document.getElementById('hashedit-add-page-path');
+                            }).then(function(json) {
 
-                            for (x = 0; x < json.length; x += 1) {
-                                option = document.createElement('option');
-                                option.setAttribute('value', json[x]);
-                                option.innerHTML = json[x];
+                                el = document.getElementById('hashedit-add-page-path');
 
-                                el.appendChild(option);
-                            }
+                                for (x = 0; x < json.length; x += 1) {
+                                    option = document.createElement('option');
+                                    option.setAttribute('value', json[x]);
+                                    option.innerHTML = json[x];
 
-                            hashedit.pathListLoaded = true;
+                                    el.appendChild(option);
+                                }
 
-                        }).catch(function(ex) {
-                            console.log('parsing failed', ex);
-                        });
+                                hashedit.app.pathListLoaded = true;
 
+                            }).catch(function(ex) {
+                                console.log('parsing failed', ex);
+                            });
 
-                }
+                    }
 
-            });
+                });
+            }
 
             // show settings
-            document.querySelector('[hashedit-page-settings]').addEventListener('click', function() {
+            if(document.querySelector('[hashedit-page-settings]') != null){
 
-                // hide drawer
-                drawer = document.querySelector('.hashedit-drawer');
-                drawer.removeAttribute('visible');
+                document.querySelector('[hashedit-page-settings]').addEventListener('click', function() {
 
-                // get description
-                desc = '';
-                meta = document.querySelector('meta[name="description"]');
+                    // hide drawer
+                    drawer = document.querySelector('.hashedit-drawer');
+                    drawer.removeAttribute('visible');
 
-                if (meta !== null) {
-                    desc = meta.getAttribute('content');
-                }
+                    // get description
+                    desc = '';
+                    meta = document.querySelector('meta[name="description"]');
 
-                // set title and description
-                document.getElementById('hashedit-page-title').value = document.title;
-                document.getElementById('hashedit-page-desc').value = desc;
+                    if (meta !== null) {
+                        desc = meta.getAttribute('content');
+                    }
 
-                // show modal
-                document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
-            });
+                    // set title and description
+                    document.getElementById('hashedit-page-title').value = document.title;
+                    document.getElementById('hashedit-page-desc').value = desc;
+
+                    // show modal
+                    document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
+                });
+
+            }
 
 
         },
@@ -203,6 +225,27 @@ hashedit.app = (function () {
                 document.body.appendChild(toast);
             }
 
+        },
+
+        /**
+         * Replace all occurrences of a string
+         * @param {String} src - Source string (e.g. haystack)
+         * @param {String} stringToFind - String to find (e.g. needle)
+         * @param {String} stringToReplace - String to replacr
+         */
+        replaceAll: function(src, stringToFind, stringToReplace) {
+
+            var temp, index;
+
+            temp = src;
+            index = temp.indexOf(stringToFind);
+
+            while (index != -1) {
+                temp = temp.replace(stringToFind, stringToReplace);
+                index = temp.indexOf(stringToFind);
+            }
+
+            return temp;
         },
 
         /**
@@ -232,6 +275,39 @@ hashedit.app = (function () {
             toast.removeAttribute('active');
           }, 2000);
 
+        },
+
+        /**
+         * Find the parent by a selector ref: http://stackoverflow.com/questions/14234560/javascript-how-to-get-parent-element-by-selector
+         * @param {Array} config.sortable
+         */
+        findParentBySelector: function(elm, selector) {
+            var all, cur;
+
+            all = document.querySelectorAll(selector);
+            cur = elm.parentNode;
+
+            while (cur && !hashedit.app.collectionHas(all, cur)) { //keep going up until you find a match
+                cur = cur.parentNode; //go up
+            }
+            return cur; //will return null if not found
+        },
+
+        /**
+         * Helper for findParentBySelecotr
+         * @param {Array} config.sortable
+         */
+        collectionHas: function(a, b) { //helper function (see below)
+            var i, len;
+
+            len = a.length;
+
+            for (i = 0; i < len; i += 1) {
+                if (a[i] == b) {
+                    return true;
+                }
+            }
+            return false;
         }
 
     }
