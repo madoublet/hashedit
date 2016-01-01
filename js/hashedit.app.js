@@ -41,8 +41,21 @@ hashedit.app = (function () {
 
             // create a login
             var login = document.createElement('nav');
-            login.setAttribute('class', 'hashedit-login');
-            login.innerHTML = 'You need to signin to begin editing. <a href="/auth/google">Sign In with Google</a>';
+            login.setAttribute('class', 'hashedit-modal');
+            login.setAttribute('visible', '');
+            login.innerHTML = '<h2>Sign In</h2>';
+
+            // local strategy
+            login.innerHTML += '<form action="/auth/local" method="post">' +
+                    '<label>Username:</label>' +
+                    '<input type="text" name="username">' +
+                    '<label>Password:</label>' +
+                    '<input type="password" name="password">' +
+                    '<input type="submit" value="Sign In">' +
+                '</form>';
+
+            // google strategy
+            login.innerHTML += '<span class="hashedit-signin-or">-- or --</span><a class="hashedit-google-signin" href="/auth/google">Sign In with Google</a>';
 
             // append menu
             if(hashedit.current){

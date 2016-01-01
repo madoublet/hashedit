@@ -337,6 +337,14 @@ body .hashedit-modal{
         width: 100%;
     }
 
+    body .hashedit-modal input[type=submit]{
+        background-color: #f0f0f0;
+        font-size: 13px;
+        padding: 15px 10px;
+        text-transform: uppercase;
+        border: 1px solid #ddd;
+    }
+
      body .hashedit-modal select{
 			font-size: 13px;
 			box-shadow: none;
@@ -516,3 +524,26 @@ body .dropzone .dz-message{
   .hashedit-list-item:last-child{
     border-bottom: none;
   }
+
+/* sign in */
+body .hashedit-signin-or{
+    display: block;
+    padding: 10px 0;
+    text-align: center;
+    font-style: italic;
+    text-transform: uppercase;
+    color: #888;
+    font-size: 12px;
+}
+
+body a.hashedit-google-signin{
+    display: block;
+    padding: 15px 10px;
+    background-color: #DC4E41;
+    color: #fff !important;
+    font-size: 14px;
+    text-transform: uppercase;
+	text-align: center;
+	margin-top: 20px;
+	text-decoration: none;
+}
