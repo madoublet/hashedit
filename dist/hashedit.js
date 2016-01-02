@@ -404,7 +404,7 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.5.2',
+        version: '0.5.3',
 
         // set debug messages
         debug: true,
@@ -706,12 +706,13 @@ hashedit = (function () {
                         // create the mirror
                         doc = parser.parseFromString(text, 'text/html');
 
-                        // remove the first script tag (e.g. #edit load script)
-                        els = doc.getElementsByTagName('script');
+                        // remove excluded elements e.g. #edit load script)
+                        els = doc.querySelectorAll('[hashedit-exclude]');
 
-                        // remove this script
-                        el = els[0];
-                        el.parentNode.removeChild(el);
+                        // remove excluded scripts
+                        for (x = 0; x < els.length; x += 1) {
+                            els[x].remove();
+                        }
 
                         // get all elements
                         els = doc.getElementsByTagName('*');
