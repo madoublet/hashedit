@@ -404,7 +404,10 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.5.3',
+        version: '0.5.4',
+
+        // url to save
+        url: null,
 
         // set debug messages
         debug: true,
@@ -667,80 +670,6 @@ hashedit = (function () {
         // loading indicators
         imagesListLoaded: false,
         pagesListLoaded: false,
-
-        /**
-         * Retrieve HTML
-         */
-        init: function() {
-
-            var x, html, parser, key, doc, els, el;
-
-            // get HTML
-            html = '';
-            parser = null;
-
-            // set id
-            key = window.location.pathname;
-
-            // retrieve the ref HTML from session storage
-            if (localStorage.getItem(key) !== null) {
-                html = localStorage.getItem(key);
-
-                // start parser
-                parser = new DOMParser();
-
-                hashedit.mirror = parser.parseFromString(html, 'text/html');
-            } else { // we need to create the annotated [data-ref] html and send it to session storage
-
-                // fetch the html
-                fetch(hashedit.retrieveUrl, {
-                        credentials: 'include'
-                    })
-                    .then(function(response) {
-                        return response.text();
-                    }).then(function(text) {
-
-                        // start parser
-                        parser = new DOMParser();
-
-                        // create the mirror
-                        doc = parser.parseFromString(text, 'text/html');
-
-                        // remove excluded elements e.g. #edit load script)
-                        els = doc.querySelectorAll('[hashedit-exclude]');
-
-                        // remove excluded scripts
-                        for (x = 0; x < els.length; x += 1) {
-                            els[x].remove();
-                        }
-
-                        // get all elements
-                        els = doc.getElementsByTagName('*');
-
-                        // add [data-ref] attributes to all DOM elements
-                        for (x = 0; x < els.length; x += 1) {
-                            els[x].setAttribute('data-ref', x);
-                        }
-
-                        // clear localStorage
-                        localStorage.clear();
-
-                        // set the HTML in session
-                        localStorage.setItem(key, doc.documentElement.innerHTML);
-
-                        // rewrite the URL
-                        window.location.href = window.location.href;
-
-                        // reload the page
-                        location.reload();
-
-                    });
-
-
-            }
-
-
-        },
 
         /**
          * Adds a hashedit attribute to any selector in the editable array
@@ -1777,11 +1706,8 @@ hashedit = (function () {
             // handle page creation
             document.querySelector('[hashedit-exit]').addEventListener('click', function() {
 
-                // redirect without #edit
-                var url = hashedit.app.replaceAll(window.location.href, '#edit', '');
-
                 // redirect to the URL
-                window.location.href = url;
+                window.location.href = hashedit.url;
 
             });
 
@@ -2390,8 +2316,25 @@ hashedit = (function () {
                 data.push(el);
             }
 
-            return data;
+            return {
+                url: hashedit.url,
+                changes: data
+            };
 
+        },
+
+        /**
+         * Creates the mirror
+         */
+        createMirror: function(){
+
+            var html, parser;
+
+            html = document.documentElement.innerHTML;
+
+            parser = new DOMParser();
+
+            hashedit.mirror = parser.parseFromString(html, 'text/html');
         },
 
         /**
@@ -2508,10 +2451,70 @@ hashedit = (function () {
          * Setup the editor
          * @param {Array} config.sortable
          */
-        setup: function(config){
-            if(window.location.href.indexOf('#edit') != -1){
-                hashedit.setupEditor(config);
+        setup: function(){
+
+            var body, attr, path, stylesheet, sortable, demo, url;
+
+            // get body
+            body = document.querySelector('body');
+
+            // production
+            path = '/node_modules/hashedit/';
+            stylesheet = ['/node_modules/hashedit/dist/hashedit-min.css'];
+            sortable = ['.sortable'];
+            demo = false;
+            url = null;
+
+            // get attributes
+            if(body != null){
+
+                // setup development
+                if(body.hasAttribute('hashedit-dev') == true){
+                    path = '/hashedit/';
+                    stylesheet = ['/hashedit/css/hashedit.app.css', '/hashedit/css/hashedit.css'];
+                }
+
+                // setup demo
+                if(body.hasAttribute('hashedit-demo') == true){
+                    demo = true;
+                }
+
+                // setup sortable
+                if(body.hasAttribute('hashedit-sortable') == true){
+
+                    attr = body.getAttribute('hashedit-sortable');
+
+                    if(attr != ''){
+                        sortable = attr.split(',');
+                    }
+
+                    body.removeAttribute('hashedit-sortable');
+
+                }
+
+                // set url
+                if(body.hasAttribute('hashedit-url') == true){
+                    url = body.getAttribute('hashedit-url');
+                }
+
             }
+
+            // setup config
+            var config = {
+                path: path,
+                stylesheet: stylesheet,
+                sortable: sortable,
+                demo: demo
+            };
+
+            // set url
+            if(url != null){
+                config.url = url;
+            }
+
+            // setup editor
+            hashedit.setupEditor(config);
+
         },
 
         /**
@@ -2539,6 +2542,11 @@ hashedit = (function () {
                 hashedit.stylesheet = config.stylesheet;
             }
 
+            // set url
+            if(config.url !== null){
+                hashedit.url = config.url;
+            }
+
             // append container to body
             document.body.appendChild(hashedit.current.container);
 
@@ -2558,7 +2566,7 @@ hashedit = (function () {
                 hashedit.demo = true;
 
                 // init hashedit
-                hashedit.init();
+                hashedit.createMirror();
                 hashedit.setActive();
                 hashedit.setupSortable(config.sortable);
                 hashedit.setupContentEditableEvents();
@@ -2583,7 +2591,7 @@ hashedit = (function () {
                         } else {
 
                             // init hashedit
-                            hashedit.init();
+                            hashedit.createMirror();
                             hashedit.setActive();
                             hashedit.setupSortable(config.sortable);
                             hashedit.setupContentEditableEvents();
