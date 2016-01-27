@@ -11,7 +11,7 @@ hashedit = (function () {
     return {
 
         // set version
-        version: '0.5.4',
+        version: '0.5.5',
 
         // url to save
         url: null,
@@ -135,7 +135,7 @@ hashedit = (function () {
             display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
             html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
             configure: function() {
-                document.querySelector('#hashedit-table-settings').setAttribute('visible', '');
+                document.querySelector('#hashedit-table-settings-modal').setAttribute('visible', '');
             },
             change: function(attr, newValue, oldValue) {
 
@@ -613,7 +613,7 @@ hashedit = (function () {
          */
         showTextOptions: function(element) {
 
-            var x, drawer, link, form, fields;
+            var x, drawer, link, image, text, fields;
 
             // set current element, container, and node
             hashedit.current.element = element;
@@ -625,16 +625,16 @@ hashedit = (function () {
             drawer.removeAttribute('visible');
 
             // hide #hashedit-image
-            link = document.querySelector('#hashedit-image-settings');
-            link.removeAttribute('visible');
+            image = document.querySelector('#hashedit-image-settings-modal');
+            image.removeAttribute('visible');
 
             // hide #hashedit-link
-            link = document.querySelector('#hashedit-link-settings');
+            link = document.querySelector('#hashedit-link-settings-modal');
             link.removeAttribute('visible');
 
             // get #hashedit-config
-            form = document.querySelector('#hashedit-text-settings');
-            form.setAttribute('visible', '');
+            text = document.querySelector('#hashedit-text-settings');
+            text.setAttribute('visible', '');
 
             // clear form fields
             fields = document.querySelectorAll('[data-model]');
@@ -767,7 +767,7 @@ hashedit = (function () {
                             }
 
                             if (isDefault === true) {
-                                document.getElementById('hashedit-element-settings').setAttribute('visible', 'true');
+                                document.getElementById('hashedit-element-settings-modal').setAttribute('visible', 'true');
                             }
                         } else if (e.target.nodeName == 'A') {
 
@@ -1072,7 +1072,7 @@ hashedit = (function () {
                 }));
 
                 // flip card
-                card = document.getElementById('hashedit-image-settings');
+                card = document.getElementById('hashedit-image-settings-modal');
                 card.removeAttribute('hashedit-card-flipped');
 
             });
@@ -1096,7 +1096,7 @@ hashedit = (function () {
                         }));
 
                         // flip card
-                        card = document.getElementById('hashedit-image-settings');
+                        card = document.getElementById('hashedit-image-settings-modal');
                         card.removeAttribute('hashedit-card-flipped');
                     }
 
@@ -1140,7 +1140,7 @@ hashedit = (function () {
                     arr[x].addEventListener(e, function(e) {
 
                         // flip the card
-                        card = document.querySelector('#hashedit-image-settings');
+                        card = document.querySelector('#hashedit-image-settings-modal');
 
                         if (card.hasAttribute('hashedit-card-flipped')) {
                             card.removeAttribute('hashedit-card-flipped');
@@ -1293,7 +1293,7 @@ hashedit = (function () {
                             xhr.onloadend = function() {
 
                                 // hide modal
-                                document.getElementById('hashedit-add-page').removeAttribute('visible');
+                                document.getElementById('hashedit-add-page-modal').removeAttribute('visible');
 
                                 // log success
                                 hashedit.app.showToast('Page added at ' + url, 'success');
@@ -1352,7 +1352,7 @@ hashedit = (function () {
                         xhr.onloadend = function() {
 
                             // hide modal
-                            document.getElementById('hashedit-page-settings').removeAttribute('visible');
+                            document.getElementById('hashedit-page-settings-modal').removeAttribute('visible');
 
                             // show success
                             hashedit.app.showToast('Settings updated successfully!', 'success');
@@ -1665,7 +1665,7 @@ hashedit = (function () {
                 title = hashedit.currLink.getAttribute('title') || '';
 
                 // show the link dialog
-                link = document.querySelector('#hashedit-link-settings');
+                link = document.querySelector('#hashedit-link-settings-modal');
                 link.setAttribute('visible', '');
 
                 // sets start values
@@ -1696,7 +1696,7 @@ hashedit = (function () {
                 target = hashedit.current.node.getAttribute('target') || '';
 
                 // show the link dialog
-                link = document.querySelector('#hashedit-image-settings');
+                link = document.querySelector('#hashedit-image-settings-modal');
                 link.setAttribute('visible', '');
 
                 // sets start values

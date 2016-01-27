@@ -189,6 +189,7 @@ body .hashedit-config{
 	color: #888;
 	border-bottom: 1px solid #DDD;
 	overflow-x: auto;
+    overflow-y: hidden;
 	transition: all 0.2s ease;
 }
 

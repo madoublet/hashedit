@@ -47,7 +47,7 @@ hashedit.app = (function () {
 
             // local strategy
             login.innerHTML += '<form action="/auth/local" method="post">' +
-                    '<label>Username:</label>' +
+                    '<label>Email:</label>' +
                     '<input type="text" name="username">' +
                     '<label>Password:</label>' +
                     '<input type="password" name="password">' +
@@ -154,7 +154,7 @@ hashedit.app = (function () {
                     document.getElementById('hashedit-add-page-desc').value = '';
 
                     // show modal
-                    document.getElementById('hashedit-add-page').setAttribute('visible', '');
+                    document.getElementById('hashedit-add-page-modal').setAttribute('visible', '');
 
                     if (hashedit.app.pathListLoaded === false) {
 
@@ -211,7 +211,7 @@ hashedit.app = (function () {
                     document.getElementById('hashedit-page-desc').value = desc;
 
                     // show modal
-                    document.querySelector('#hashedit-page-settings').setAttribute('visible', '');
+                    document.querySelector('#hashedit-page-settings-modal').setAttribute('visible', '');
                 });
 
             }

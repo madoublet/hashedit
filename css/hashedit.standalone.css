@@ -132,6 +132,7 @@ body .hashedit-list{
         float: left;
         background-size: cover;
         background-repeat: no-repeat;
+        background-color: #ddd;
     }
 
     body .hashedit-list-item[read=true]{
