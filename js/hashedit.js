@@ -2160,8 +2160,8 @@ hashedit = (function() {
 
         // setup development
         if (body.hasAttribute('hashedit-dev') == true) {
-          path = '/hashedit/';
-          stylesheet = ['/hashedit/css/hashedit.css'];
+          path = '/dev/hashedit/';
+          stylesheet = ['/dev/hashedit/css/hashedit.css'];
         }
 
         // setup demo
