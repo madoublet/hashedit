@@ -1,6 +1,6 @@
 {
   "name": "hashedit",
-  "version": "0.5.4",
+  "version": "0.5.6",
   "description": "A visual editor for websites.",
   "main": "js/hashedit.js",
   "directories": {
@@ -22,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/madoublet/hashedit/issues"
   },
-  "homepage": "https://github.com/madoublet/hashedit#readme"
+  "homepage": "https://github.com/madoublet/hashedit#readme",
+  "devDependencies": {
+    "gulp-concat": "^2.6.0",
+    "gulp-minify": "0.0.5",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2"
+  }
 }
