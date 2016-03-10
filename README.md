@@ -4,17 +4,7 @@
 
 Hashedit aims to make that notion a reality.  It is a framework agnostic WYSIWYG editor for static web sites.  Hashedit supports inline rich text editing; the creation and destruction of HTML blocks (and elements); editing of links and images; and drag-and-drop reordering powered by the fantastic Sortable Library.  Hashedit is built in plain JS with just the Sortable and Dropzone dependency.  
 
-### Status
-
-We are in early, early pre-beta.  Expect changes to occur frequently as we build up the library.
-
-### Installation
-
-The best way to get started with Hashedit is to install Hashedit Spark.  Hashedit Spark is a Express (NodeJS) powered starter app that is built specifically to help you create sites using Hashedit.  Learn more:
-
-https://github.com/madoublet/hashedit-spark
-
-### Using Hashedit without Spark
+### Using Hashedit
 
 ##### 1. Install Hashedit
 
