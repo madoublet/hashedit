@@ -11,7 +11,7 @@ hashedit = (function() {
   return {
 
     // set version
-    version: '0.5.6',
+    version: '0.5.7',
 
     // url to page
     url: null,
@@ -20,7 +20,6 @@ hashedit = (function() {
     saveUrl: '/api/pages/save',
     addPageURL: '/api/pages/add',
     pageSettingsURL: '/api/pages/settings',
-    retrieveUrl: '/api/pages/retrieve',
     uploadUrl: '/api/images/add',
     imagesListUrl: '/api/images/list',
     pagesListUrl: '/api/pages/list',
