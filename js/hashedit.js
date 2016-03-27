@@ -11,7 +11,7 @@ hashedit = (function() {
   return {
 
     // set version
-    version: '0.5.7',
+    version: '0.5.8',
 
     // url to page
     url: null,
@@ -144,25 +144,6 @@ hashedit = (function() {
       configure: function() {
         hashedit.showImageDialog();
       }
-    }, {
-      action: "respond.map",
-      selector: "respond-map",
-      title: "Map",
-      display: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' height='100%' width='100%'><path d='M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z'/><path d='M0 0h24v24H0z' fill='none'/></svg>",
-      html: '<respond-map address="100 Washington Ave, St Louis, MO 63102" zoom="12"></respond-map>',
-      attributes: [
-        {
-          attr: 'address',
-          label: 'Address',
-          type: 'text'
-        },
-        {
-          attr: 'zoom',
-          label: 'Zoom',
-          type: 'select',
-          values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']
-        }
-      ]
     }, {
       action: "hashedit.table",
       selector: "table",
@@ -872,8 +853,16 @@ hashedit = (function() {
                           for(z=0; z<attr.values.length; z++){
 
                             option = document.createElement('option');
-                            option.setAttribute('value', attr.values[z]);
-                            option.innerHTML = attr.values[z];
+
+                            // determine if hashed array
+                            if(attr.values[z].text) {
+                              option.setAttribute('value', attr.values[z].value);
+                              option.innerHTML = attr.values[z].text;
+                            }
+                            else {
+                              option.setAttribute('value', attr.values[z]);
+                              option.innerHTML = attr.values[z];
+                            }
 
                             control.appendChild(option);
                           }
@@ -1180,15 +1169,24 @@ hashedit = (function() {
     setupModalEvents: function() {
 
       var x, dz, arr, card, list, item, path, url, title, description,
-        params, xhr, value, el;
+        params, xhr, value, el, options;
 
       // check for dropzone
       if(Dropzone != undefined && Dropzone != null) {
 
-        // create the dropzone
-        dz = new Dropzone("#hashedit-dropzone", {
+        // set dropzone options
+        var options = {
           url: hashedit.uploadUrl
-        });
+        };
+
+        // setup token headers
+        if(hashedit.useToken == true) {
+          options.headers = {};
+          options.headers[hashedit.authHeader] = hashedit.authHeaderPrefix + ' ' + localStorage.getItem(hashedit.tokenName);
+        }
+
+        // create the dropzone
+        dz = new Dropzone("#hashedit-dropzone", options);
 
         dz.on("complete", function(file) {
           dz.removeFile(file);
@@ -1196,7 +1194,7 @@ hashedit = (function() {
 
         dz.on("success", function(file, response) {
 
-          var value = 'images/' + file.name;
+          var value = 'files/' + file.name;
 
           // set value
           el = document.getElementById('hashedit-image-src');
@@ -1613,6 +1611,17 @@ hashedit = (function() {
                 hashedit.showLinkDialog();
 
                 return false;
+              } else if (action == 'hashedit.text.image') {
+
+                // add link html
+                text = hashedit.getSelectedText();
+                html = '<img src="{{path}}images/placeholder-inline.png" class="pull-left">';
+                html = hashedit.replaceAll(html, '{{path}}', hashedit.path);
+
+                document.execCommand("insertHTML", false, html);
+
+
+                return false;
               } else if (action == 'hashedit.text.code') {
 
                 // create code html
@@ -1984,10 +1993,6 @@ hashedit = (function() {
 
         // remove refs
         refs = els[x].querySelectorAll('[data-ref]');
-
-        for (y = 0; y < refs.length; y += 1) {
-          refs[y].removeAttribute('data-ref');
-        }
 
         el = {
           'selector': els[x].getAttribute('hashedit-selector'),

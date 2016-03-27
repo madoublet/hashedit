@@ -18,17 +18,15 @@
 
 .hashedit-element {
   position: relative;
-  border: 1px solid transparent;
+  display: block;
+  clear: both;
 }
 
 .hashedit-element[current-hashedit-element] {
   background-color: rgba(255,153,0,0.05);
-  border: 1px solid rgba(255,153,0,0.05);
 }
 
-.hashedit-element:hover {
-  border: 1px solid rgba(255,153,0,0.25);
-}
+.hashedit-element:hover { }
 
 .hashedit-element [contentEditable=true] {
   min-height: 25px;
