@@ -16,19 +16,19 @@
   border-bottom: 0;
 }
 
-.hashedit-element {
+[hashedit-element] {
   position: relative;
   display: block;
   clear: both;
 }
 
-.hashedit-element[current-hashedit-element] {
+[hashedit-element][current-hashedit-element] {
   background-color: rgba(255,153,0,0.05);
 }
 
-.hashedit-element:hover { }
+[hashedit-element]:hover { }
 
-.hashedit-element [contentEditable=true] {
+[hashedit-element][contentEditable=true] {
   min-height: 25px;
 }
 
@@ -49,7 +49,7 @@
   border-radius: 50%;
 }
 
-.hashedit-element:hover .hashedit-edit {
+[hashedit-element]:hover .hashedit-edit {
   background-color: rgba(255,153,0,0.75);
 }
 
@@ -87,13 +87,13 @@
   opacity: 0;
 }
 
-.hashedit-element[current-hashedit-element] .hashedit-move,.hashedit-element[current-hashedit-element] .hashedit-properties,.hashedit-element[current-hashedit-element] .hashedit-remove {
+[hashedit-element][current-hashedit-element] .hashedit-move, [hashedit-element][current-hashedit-element] .hashedit-properties, [hashedit-element][current-hashedit-element] .hashedit-remove {
   visibility: visible;
   top: -40px;
   opacity: 1;
 }
 
-.hashedit-element[current-hashedit-element] .hashedit-edit {
+[hashedit-element][current-hashedit-element] .hashedit-edit {
   display: none;
 }
 
@@ -128,13 +128,13 @@
 }
 
 /* properties icon */
-.hashedit-element[current-hashedit-element] .hashedit-properties {
+[hashedit-element][current-hashedit-element] .hashedit-properties {
   right: 45px;
   cursor: pointer;
 }
 
 /* remove icon */
-.hashedit-element[current-hashedit-element] .hashedit-remove {
+[hashedit-element][current-hashedit-element] .hashedit-remove {
   right: 85px;
   cursor: pointer;
 }
