@@ -633,6 +633,29 @@ hashedit = (function() {
     },
 
     /**
+     * Setup view
+     */
+    setupView: function() {
+
+      var x, y, item, els;
+
+      // walk through plugins
+      for (x = 0; x < hashedit.menu.length; x += 1) {
+
+        if(hashedit.menu[x].view !== undefined) {
+
+          els = document.querySelectorAll(hashedit.menu[x].selector);
+
+          for(y=0; y<els.length; y++) {
+            els[y].innerHTML = hashedit.menu[x].view;
+          }
+        }
+
+      }
+
+    },
+
+    /**
      * Shows the text options
      */
     showTextOptions: function(element) {
@@ -2344,6 +2367,7 @@ hashedit = (function() {
         // init hashedit
         hashedit.createMirror();
         hashedit.setActive();
+        hashedit.setupView();
         hashedit.setupSortable(config.sortable);
         hashedit.setContentEditable();
         hashedit.setupContentEditableEvents();
@@ -2383,6 +2407,7 @@ hashedit = (function() {
               // init hashedit
               hashedit.createMirror();
               hashedit.setActive();
+              hashedit.setupView();
               hashedit.setupSortable(config.sortable);
               hashedit.setContentEditable();
               hashedit.setupContentEditableEvents();
