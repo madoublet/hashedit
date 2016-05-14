@@ -555,7 +555,14 @@ hashedit = (function() {
               html = hashedit.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
               html = hashedit.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
               html = hashedit.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
-              hashedit.append(html);
+              
+              var node = hashedit.append(html);
+              
+              // add 
+              if(hashedit.menu[x].view != undefined) {
+                node.innerHTML += hashedit.menu[x].view;
+              }
+              
             }
           }
 
