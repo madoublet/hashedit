@@ -11,7 +11,7 @@ hashedit = (function() {
   return {
 
     // set version
-    version: '0.5.8',
+    version: '0.5.9',
 
     // url to page
     url: null,
@@ -555,7 +555,14 @@ hashedit = (function() {
               html = hashedit.replaceAll(html, '{{framework.image}}', hashedit.frameworkDefaults[hashedit.framework].image);
               html = hashedit.replaceAll(html, '{{framework.table}}', hashedit.frameworkDefaults[hashedit.framework].table);
               html = hashedit.replaceAll(html, '{{framework.code}}', hashedit.frameworkDefaults[hashedit.framework].code);
-              hashedit.append(html);
+
+              var node = hashedit.append(html);
+
+              // add
+              if(hashedit.menu[x].view != undefined) {
+                node.innerHTML += hashedit.menu[x].view;
+              }
+
             }
           }
 
@@ -629,6 +636,29 @@ hashedit = (function() {
 
       // make the menu draggable
       hashedit.setupDraggable();
+
+    },
+
+    /**
+     * Setup view
+     */
+    setupView: function() {
+
+      var x, y, item, els;
+
+      // walk through plugins
+      for (x = 0; x < hashedit.menu.length; x += 1) {
+
+        if(hashedit.menu[x].view !== undefined) {
+
+          els = document.querySelectorAll(hashedit.menu[x].selector);
+
+          for(y=0; y<els.length; y++) {
+            els[y].innerHTML = hashedit.menu[x].view;
+          }
+        }
+
+      }
 
     },
 
@@ -719,6 +749,24 @@ hashedit = (function() {
       var x, y, z, arr, edits, isEditable, configs, isConfig, el, ref, html,
         li, parent, els, showProperties, isDefault, removeElement,
         element, modal, body, attr, div, label, control, option, menuItem, els;
+
+
+      // clean pasted text, #ref: http://bit.ly/1Tr8IR3
+      document.addEventListener('paste', function(e) {
+
+        // cancel paste
+        e.preventDefault();
+
+        // get text representation of clipboard
+        var text = e.clipboardData.getData("text/plain");
+
+        // insert text manually
+        document.execCommand("insertHTML", false, text);
+
+        console.log('yay!');
+
+      });
+
 
       // get contentEditable elements
       arr = document.querySelectorAll('body');
@@ -2344,6 +2392,7 @@ hashedit = (function() {
         // init hashedit
         hashedit.createMirror();
         hashedit.setActive();
+        hashedit.setupView();
         hashedit.setupSortable(config.sortable);
         hashedit.setContentEditable();
         hashedit.setupContentEditableEvents();
@@ -2383,6 +2432,7 @@ hashedit = (function() {
               // init hashedit
               hashedit.createMirror();
               hashedit.setActive();
+              hashedit.setupView();
               hashedit.setupSortable(config.sortable);
               hashedit.setContentEditable();
               hashedit.setupContentEditableEvents();
