@@ -31,7 +31,7 @@ hashedit = (function() {
     imagesListLoaded: false,
     pagesListLoaded: false,
     pathListLoaded: false,
-
+    
     // set debug messages
     debug: true,
 
@@ -84,9 +84,9 @@ hashedit = (function() {
     menu: [{
       action: "hashedit.h1",
       selector: "h1",
-      title: "H1 Headline",
+      title: "H1",
       display: "H1",
-      html: "<h1>Start Typing...</h1>"
+      html: '<h1>Start Typing...</h1>'
     }, {
       action: "hashedit.h2",
       selector: "h2",
@@ -479,6 +479,8 @@ hashedit = (function() {
           } else {
 
             data = hashedit.retrieveUpdateArray();
+            
+            console.log(data);
 
             if (hashedit.saveUrl) {
 
@@ -625,7 +627,7 @@ hashedit = (function() {
 
         // create a menu item
         a = document.createElement('a');
-        a.setAttribute('title', item.title);
+        a.setAttribute('title', hashedit.i18n(item.title));
         a.setAttribute('data-selector', item.selector);
         a.innerHTML = item.display;
 
@@ -671,7 +673,7 @@ hashedit = (function() {
 
       // set current element, container, and node
       hashedit.current.element = element;
-      hashedit.current.parent = hashedit.findParentBySelector(element, '.hashedit-element');
+      hashedit.current.parent = hashedit.findParentBySelector(element, '[hashedit-element]');
       hashedit.current.node = hashedit.current.parent;
 
       // hide #hashedit-image
@@ -762,8 +764,6 @@ hashedit = (function() {
 
         // insert text manually
         document.execCommand("insertHTML", false, text);
-
-        console.log('yay!');
 
       });
 
@@ -1438,12 +1438,12 @@ hashedit = (function() {
 
                   list = document.getElementById('pages-list');
                   list.innerHTML = '';
-
+                  
                   for (x = 0; x < json.length; x += 1) {
                     item = document.createElement('div');
                     item.setAttribute('class', 'hashedit-list-item');
-                    item.innerHTML = json[x].Url;
-                    item.setAttribute('data-value', json[x].Url);
+                    item.innerHTML = json[x].url;
+                    item.setAttribute('data-value', json[x].url);
 
                     list.appendChild(item);
                   }
@@ -1500,8 +1500,7 @@ hashedit = (function() {
               if (el.hasAttribute('data-model')) {
 
                 if (hashedit.current.node !== null) {
-                  ref = hashedit.current.node.getAttribute(
-                    'data-ref');
+                  ref = hashedit.current.node.getAttribute('data-ref');
                 }
                 model = el.getAttribute('data-model');
                 value = '';
@@ -1557,12 +1556,16 @@ hashedit = (function() {
                   if (parts.length > 1) {
 
                     // get property
-                    attr = parts[1].replace(/([a-z])([A-Z])/g,
-                      '$1-$2').toLowerCase();
+                    attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 
                     // set attribute
                     hashedit.currLink.setAttribute(attr, value);
-
+                    
+                    // get current node
+                    if(hashedit.current.node == null){
+                      hashedit.current.node = hashedit.findParentBySelector(hashedit.currLink, '[hashedit-element]');
+                    }
+                    
                     // fire event
                     hashedit.current.node.dispatchEvent(new Event(
                       'input', {
@@ -1583,8 +1586,7 @@ hashedit = (function() {
                       '$1-$2').toLowerCase();
 
                     // get ref from image
-                    ref = hashedit.current.node.getAttribute(
-                      'data-ref');
+                    ref = hashedit.current.node.getAttribute('data-ref');
 
                     // set attribute
                     hashedit.current.node.setAttribute(attr, value);
@@ -1833,8 +1835,7 @@ hashedit = (function() {
 
         // sets start values
         document.getElementById('hashedit-image-id').value = id;
-        document.getElementById('hashedit-image-cssclass').value =
-          cssClass;
+        document.getElementById('hashedit-image-cssclass').value = cssClass;
         document.getElementById('hashedit-image-src').value = src;
         document.getElementById('hashedit-image-target').value = target;
 
@@ -2087,6 +2088,8 @@ hashedit = (function() {
           'selector': els[x].getAttribute('hashedit-selector'),
           'html': els[x].innerHTML
         };
+        
+        console.log(el);
 
         data.push(el);
       }
@@ -2234,7 +2237,7 @@ hashedit = (function() {
      * Setup the editor
      * @param {Array} config.sortable
      */
-    setup: function() {
+    setup: function(incoming) {
 
       var body, attr, path, stylesheet, sortable, demo, url, login;
 
@@ -2250,47 +2253,52 @@ hashedit = (function() {
       url = null;
 
       // get attributes
-      if (body != null) {
+      if(body != null) {
 
         // setup development
-        if (body.hasAttribute('hashedit-dev') == true) {
+        if(incoming.dev) {
           path = '/dev/hashedit/';
           stylesheet = ['/dev/hashedit/css/hashedit.css'];
         }
 
         // setup demo
-        if (body.hasAttribute('hashedit-demo') == true) {
+        if(body.hasAttribute('hashedit-demo') == true) {
           demo = true;
         }
 
         // setup sortable
-        if (body.hasAttribute('hashedit-sortable') == true) {
-
-          attr = body.getAttribute('hashedit-sortable');
-
-          if (attr != '') {
-            sortable = attr.split(',');
+        if(incoming.sortable) {
+        
+          if(incoming.sortable != '') {
+            sortable = incoming.sortable.split(',');
           }
-
-          body.removeAttribute('hashedit-sortable');
-
+          
+        }
+        
+        // setup editable
+        if(incoming.editable) {
+        
+          if(incoming.sortable != '') {
+            editable = incoming.editable.split(',');
+          }
+          
         }
 
         // set url
-        if (body.hasAttribute('hashedit-url') == true) {
-          url = body.getAttribute('hashedit-url');
+        if(incoming.url) {
+          url = incoming.url;
         }
 
         // set login
-        if (body.hasAttribute('hashedit-login') == true) {
-          login = body.getAttribute('hashedit-login');
+        if(incoming.login) {
+          login = incoming.login;
         }
 
         // handle alternative auth types (e.g. token based auth)
-        if(body.hasAttribute('hashedit-auth') == true) {
-
+        if(incoming.auth) {
+        
           // setup token auth
-          if(body.getAttribute('hashedit-auth') == 'token') {
+          if(incoming.auth === 'token') {
 
             // defaults
             hashedit.useToken = true;
@@ -2299,21 +2307,38 @@ hashedit = (function() {
             hashedit.tokenName = 'id_token';
 
             // override defaults
-            if(body.hasAttribute('hashedit-auth-header') == true) {
-              hashedit.authHeader = body.getAttribute('hashedit-auth-header');
+            if(incoming.authHeader) {
+              hashedit.authHeader = incoming.authHeader;
             }
 
-            if(body.hasAttribute('hashedit-auth-header-prefix') == true) {
-              hashedit.authHeader = body.getAttribute('hashedit-auth-header-prefix');
+            if(incoming.authHeaderPrefix) {
+              hashedit.authHeaderPrefix = incoming.authHeaderPrefix;
             }
 
-            if(body.hasAttribute('hashedit-auth-token') == true) {
-              hashedit.tokenName = body.getAttribute('hashedit-auth-token');
+            if(incoming.tokenName) {
+              hashedit.tokenName = incoming.tokenName;
             }
 
           }
 
         }
+
+        // handle language
+        if(incoming.translate) {
+        
+          hashedit.canTranslate = true;
+          hashedit.language = 'en';
+          hashedit.languagePath = '/i18n/{{language}}.json';
+          
+          if(incoming.languagePath) {
+            hashedit.languagePath = incoming.languagePath;
+          }
+
+          // get language
+          if(localStorage['user_language'] != null){
+    				hashedit.language = localStorage['user_language'];
+    			}
+    		}
 
       }
 
@@ -2325,7 +2350,7 @@ hashedit = (function() {
         sortable: sortable,
         demo: demo
       };
-
+      
       // set url
       if (url != null) {
         config.url = url;
@@ -2400,6 +2425,7 @@ hashedit = (function() {
         hashedit.setupToast();
         hashedit.createMenu(config.path);
         hashedit.loadHTML(config.path);
+        hashedit.translate();
 
       }
       else {
@@ -2440,6 +2466,7 @@ hashedit = (function() {
               hashedit.setupToast();
               hashedit.createMenu(config.path);
               hashedit.loadHTML(config.path);
+              hashedit.translate();
 
               // setup loaded event
               var event = new Event('hashedit.loaded');
@@ -2610,7 +2637,68 @@ hashedit = (function() {
         }
       }
       return false;
-    }
+    },
+
+    // translates a page
+  	translate: function(language){
+  	
+  	  var els, x, id, html;
+
+  		// select elements
+  		els = document.querySelectorAll('[data-i18n]');
+
+  		// walk through elements
+  		for(x=0; x<els.length; x++){
+  			id = els[x].getAttribute('data-i18n');
+
+  			// set id to text if empty
+  			if(id == ''){
+  				id = els[x].innerText();
+  			}
+
+  			// translate
+  			html = hashedit.i18n(id);
+
+  			els[x].innerHTML = html;
+  		}
+
+  	},
+
+  	// translates a text string
+  	i18n: function(text){
+
+    	var options, language, path;
+
+			language = hashedit.language;
+
+      // translatable
+      if(hashedit.canTranslate === true) {
+
+    		// make sure library is installed
+        if(i18n !== undefined) {
+
+          // get language path
+          path = hashedit.languagePath;
+          path = hashedit.replaceAll(path, '{{language}}', hashedit.language);
+
+    			// set language
+    			options = {
+    		        lng: hashedit.language,
+    		        getAsync : false,
+    		        useCookie: false,
+    		        useLocalStorage: false,
+    		        fallbackLng: 'en',
+    		        resGetPath: path,
+    		        defaultLoadingValue: ''
+    		    };
+
+    			i18n.init(options);
+    		}
+
+  		}
+
+  		return i18n.t(text);
+  	},
 
   };
 

@@ -46,22 +46,22 @@
 
     <div class="hashedit-card-front">
 
-        <h2>Link</h2>
+      <h2 data-i18n>Link</h2>
 
-    	<label>ID</label>
+    	<label data-i18n>ID</label>
     	<input id="hashedit-link-id" type="text" maxlength="128"
     		data-model="link.id" placeholder="id">
-        <label>Class</label>
+        <label data-i18n>CSS Class</label>
         <input id="hashedit-link-cssclass" type="text" maxlength="128"
     		data-model="link.class" placeholder="class">
-    		<label>URL <a class="toggle-select-url">Select URL</a></label>
+    		<label><span data-i18n>URL</span> <a class="toggle-select-url" data-i18n>Select URL</a></label>
     		<input id="hashedit-link-href" type="text" maxlength="128"
-    		data-model="link.href" placeholder="http://"><label>Target</label><input id="hashedit-link-target" type="text" maxlength="128"
-    		data-model="link.target" placeholder=""><label>Title</label><input id="hashedit-link-title" type="text" maxlength="128"
+    		data-model="link.href" placeholder="http://"><label data-i18n>Target</label><input id="hashedit-link-target" type="text" maxlength="128"
+    		data-model="link.target" placeholder=""><label data-i18n>Title</label><input id="hashedit-link-title" type="text" maxlength="128"
     		data-model="link.title" placeholder="">
 
         <div class="actions">
-            <a hashedit-cancel-modal class="primary">Done</a>
+            <a hashedit-cancel-modal class="primary" data-i18n>Done</a>
         </div>
 
     </div>
@@ -69,14 +69,14 @@
 
     <div class="hashedit-card-back">
 
-      <h2>Select URL</h2>
+      <h2 data-i18n>Select URL</h2>
 
       <div id="pages-list" class="hashedit-list">
-        <div class="hashedit-list-item">Placeholder</div>
+        <div class="hashedit-list-item" data-i18n>Placeholder</div>
       </div>
 
       <div class="actions">
-        <a class="primary toggle-select-url">Cancel</a>
+        <a class="primary toggle-select-url" data-i18n>Cancel</a>
       </div>
 
     </div>
@@ -89,27 +89,27 @@
 
     <div class="hashedit-card-front">
 
-      <h2>Image</h2>
+      <h2 data-i18n>Image</h2>
 
-      <label>ID</label>
+      <label data-i18n>ID</label>
       <input id="hashedit-image-id" type="text" maxlength="128"
       data-model="image.id" placeholder="id">
 
-      <label>Class</label>
+      <label data-i18n>Css Class</label>
       <input id="hashedit-image-cssclass" type="text" maxlength="128"
       data-model="image.class" placeholder="class">
 
-      <label>Source <a class="toggle-select-image">Upload or Select</a></label>
+      <label data-i18n>Source <a class="toggle-select-image">Upload or Select</a></label>
       <input id="hashedit-image-src" type="text" maxlength="128"
       data-model="image.src" placeholder="">
 
 
-      <label>Target</label>
+      <label data-i18n>Target</label>
       <input id="hashedit-image-target" type="text" maxlength="128"
       data-model="image.title" placeholder="">
 
       <div class="actions">
-        <a hashedit-cancel-modal class="primary">Done</a>
+        <a hashedit-cancel-modal class="primary" data-i18n>Done</a>
       </div>
 
     </div>
@@ -117,12 +117,12 @@
 
     <div class="hashedit-card-back">
 
-      <h2>Select Image</h2>
+      <h2 data-i18n>Select Image</h2>
 
       <form class="dropzone" id="hashedit-dropzone"></form>
 
       <div id="images-list" class="hashedit-list">
-        <div class="hashedit-list-item">Placeholder</div>
+        <div class="hashedit-list-item" data-i18n>Placeholder</div>
       </div>
 
       <div class="actions">
@@ -139,17 +139,17 @@
 
     <div class="hashedit-modal-body">
 
-        <h2><span id="hashedit-element-details-type"></span> Element</h2>
+        <h2><span id="hashedit-element-details-type"></span> <span data-i18n>Element</span></h2>
 
-    	<label>Id</label>
+    	<label data-i18n>Id</label>
     	<input name="id" type="text" maxlength="128"
     				data-model="node.id" placeholder="sample-id">
-        <label>Class</label>
+        <label data-i18n>CSS Class</label>
         <input name="cssClass" type="text" maxlength="128"
     				data-model="node.class" placeholder="sample-css-class">
 
         <div class="actions">
-            <a hashedit-cancel-modal class="primary">Done</a>
+            <a hashedit-cancel-modal class="primary" data-i18n>Done</a>
         </div>
 
     </div>
