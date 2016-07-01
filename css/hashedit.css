@@ -8,7 +8,6 @@
 }
 
 [hashedit-sortable]:empty {
-  background-color: red;
   min-height: 100px;
 }
 
@@ -44,6 +43,7 @@
   right: 5px;
   width: 35px;
   height: 35px;
+  line-height: 0;
   z-index: 10000;
   background-color: rgba(1,1,1,0.05);
   border-radius: 50%;
@@ -59,6 +59,7 @@
   right: -1px;
   width: 35px;
   height: 35px;
+  line-height: 0 !important;
   text-align: center;
   line-height: 15px;
   transition: all .15s ease;
@@ -68,7 +69,8 @@
 .hashedit-edit span svg {
   fill: currentColor;
   width: 50%;
-  margin: 0 auto;
+  margin: 2px auto 0 auto;
+  padding: 0;
   opacity: 1;
   transition: all .25s ease;
 }
@@ -397,7 +399,7 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
   color: #888 !important;
   width: 50px;
   height: 49px;
-  line-height: 50px;
+  line-height: 0;
   border: 0;
   outline: none;
   font-size: 20px;
@@ -413,7 +415,7 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
 
 .hashedit-menu .hashedit-save svg,.hashedit-menu .hashedit-add svg {
   fill: currentColor;
-  margin: 12px auto 0;
+  margin: 0 auto 0 auto;
 }
 
 /* menu */
@@ -429,6 +431,7 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
   color: #888;
   z-index: 2;
   background-color: transparent;
+  line-height: 0;
 }
 
 .hashedit-menu .hashedit-back:hover {
@@ -439,7 +442,7 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
 
 .hashedit-menu .hashedit-back svg {
   fill: currentColor;
-  margin: 12px auto 0 auto;
+  margin: 0 auto 0 auto;
 }
 
 .hashedit-menu a {

@@ -11,7 +11,7 @@ hashedit = (function() {
   return {
 
     // set version
-    version: '0.5.9',
+    version: '0.6.0',
 
     // url to page
     url: null,
@@ -31,7 +31,7 @@ hashedit = (function() {
     imagesListLoaded: false,
     pagesListLoaded: false,
     pathListLoaded: false,
-    
+
     // set debug messages
     debug: true,
 
@@ -140,7 +140,7 @@ hashedit = (function() {
       selector: "img",
       title: "Image",
       display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
-      html: '<img src="{{path}}images/placeholder.png" class="{{framework.image}}">',
+      html: '<p><img src="{{path}}images/placeholder.png" class="{{framework.image}}"></p>',
       configure: function() {
         hashedit.showImageDialog();
       }
@@ -479,7 +479,7 @@ hashedit = (function() {
           } else {
 
             data = hashedit.retrieveUpdateArray();
-            
+
             console.log(data);
 
             if (hashedit.saveUrl) {
@@ -499,6 +499,8 @@ hashedit = (function() {
               xhr.onloadend = function() {
 
                 hashedit.showToast('Updates saved!', 'success');
+
+                history.go(-1);
 
               };
 
@@ -1438,7 +1440,7 @@ hashedit = (function() {
 
                   list = document.getElementById('pages-list');
                   list.innerHTML = '';
-                  
+
                   for (x = 0; x < json.length; x += 1) {
                     item = document.createElement('div');
                     item.setAttribute('class', 'hashedit-list-item');
@@ -1560,12 +1562,12 @@ hashedit = (function() {
 
                     // set attribute
                     hashedit.currLink.setAttribute(attr, value);
-                    
+
                     // get current node
                     if(hashedit.current.node == null){
                       hashedit.current.node = hashedit.findParentBySelector(hashedit.currLink, '[hashedit-element]');
                     }
-                    
+
                     // fire event
                     hashedit.current.node.dispatchEvent(new Event(
                       'input', {
@@ -2088,7 +2090,7 @@ hashedit = (function() {
           'selector': els[x].getAttribute('hashedit-selector'),
           'html': els[x].innerHTML
         };
-        
+
         console.log(el);
 
         data.push(el);
@@ -2268,20 +2270,20 @@ hashedit = (function() {
 
         // setup sortable
         if(incoming.sortable) {
-        
+
           if(incoming.sortable != '') {
             sortable = incoming.sortable.split(',');
           }
-          
+
         }
-        
+
         // setup editable
         if(incoming.editable) {
-        
+
           if(incoming.sortable != '') {
             editable = incoming.editable.split(',');
           }
-          
+
         }
 
         // set url
@@ -2296,7 +2298,7 @@ hashedit = (function() {
 
         // handle alternative auth types (e.g. token based auth)
         if(incoming.auth) {
-        
+
           // setup token auth
           if(incoming.auth === 'token') {
 
@@ -2325,11 +2327,11 @@ hashedit = (function() {
 
         // handle language
         if(incoming.translate) {
-        
+
           hashedit.canTranslate = true;
           hashedit.language = 'en';
           hashedit.languagePath = '/i18n/{{language}}.json';
-          
+
           if(incoming.languagePath) {
             hashedit.languagePath = incoming.languagePath;
           }
@@ -2350,7 +2352,7 @@ hashedit = (function() {
         sortable: sortable,
         demo: demo
       };
-      
+
       // set url
       if (url != null) {
         config.url = url;
@@ -2641,7 +2643,7 @@ hashedit = (function() {
 
     // translates a page
   	translate: function(language){
-  	
+
   	  var els, x, id, html;
 
   		// select elements
