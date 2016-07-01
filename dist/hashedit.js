@@ -11,7 +11,7 @@ hashedit = (function() {
   return {
 
     // set version
-    version: '0.6.0',
+    version: '0.6.1',
 
     // url to page
     url: null,
