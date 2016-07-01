@@ -10,9 +10,6 @@ hashedit = (function() {
 
   return {
 
-    // set version
-    version: '0.6.1',
-
     // url to page
     url: null,
 
@@ -2370,8 +2367,6 @@ hashedit = (function() {
     setupEditor: function(config) {
 
       var x, style;
-
-      console.log('Hashedit version: ' + hashedit.version);
 
       // set path
       if (config.path != null) {
