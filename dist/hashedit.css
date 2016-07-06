@@ -330,6 +330,11 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
   transition: all .25s ease;
 }
 
+  .hashedit-toast svg {
+    fill: currentColor;
+    margin-top: 10px;
+  }
+
 .hashedit-toast[success] {
   background-color: #88C425;
 }

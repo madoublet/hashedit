@@ -119,7 +119,7 @@ hashedit = (function() {
       selector: "blockquote",
       title: "Blockquote",
       display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
-      html: "<blockquote></blockquote>"
+      html: "<blockquote>Start typing...</blockquote>"
     }, {
       action: "hashedit.ul",
       selector: "ul",
@@ -477,8 +477,6 @@ hashedit = (function() {
 
             data = hashedit.retrieveUpdateArray();
 
-            console.log(data);
-
             if (hashedit.saveUrl) {
 
               // construct an HTTP request
@@ -495,7 +493,10 @@ hashedit = (function() {
 
               xhr.onloadend = function() {
 
-                hashedit.showToast('Updates saved!', 'success');
+                hashedit.showToast('<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24">' +
+                  '<path d="M0 0h24v24H0z" fill="none"/>' +
+                  '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
+                  '</svg>', 'success');
 
                 history.go(-1);
 
@@ -2045,7 +2046,7 @@ hashedit = (function() {
 
       els = hashedit.mirror.documentElement.querySelectorAll('[hashedit]');
       data = [];
-
+      
       for (x = 0; x < els.length; x += 1) {
 
         // remove refs
@@ -2112,6 +2113,8 @@ hashedit = (function() {
         .then(function(response) {
           return response.text();
         }).then(function(text) {
+        
+          console.log(text);
 
           parser = new DOMParser();
           hashedit.mirror = parser.parseFromString(text, 'text/html');
