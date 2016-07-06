@@ -30,10 +30,13 @@ hashedit = (function() {
     pathListLoaded: false,
 
     // set debug messages
-    debug: true,
+    debug: false,
 
     // set demo mode
     demo: false,
+    
+    // init menu
+    menu: [],
 
     // path to hashedit library
     path: '/node_modules/hashedit/',
@@ -76,208 +79,6 @@ hashedit = (function() {
         'code': ''
       }
     },
-
-    // define the menu
-    menu: [{
-      action: "hashedit.h1",
-      selector: "h1",
-      title: "H1",
-      display: "H1",
-      html: '<h1>Start Typing...</h1>'
-    }, {
-      action: "hashedit.h2",
-      selector: "h2",
-      title: "H2 Headline",
-      display: "H2",
-      html: "<h2>Start Typing...</h2>"
-    }, {
-      action: "hashedit.h3",
-      selector: "h3",
-      title: "H3 Headline",
-      display: "H3",
-      html: "<h3>Start Typing...</h3>"
-    }, {
-      action: "hashedit.h4",
-      selector: "h4",
-      title: "H4 Headline",
-      display: "H4",
-      html: "<h4>Start Typing...</h4>"
-    }, {
-      action: "hashedit.h5",
-      selector: "h5",
-      title: "H5 Headline",
-      display: "H5",
-      html: "<h5>Start Typing...</h5>"
-    }, {
-      action: "hashedit.p",
-      selector: "p",
-      title: "Paragraph",
-      display: "P",
-      html: "<p>Start Typing...</p>"
-    }, {
-      action: "hashedit.blockquote",
-      selector: "blockquote",
-      title: "Blockquote",
-      display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
-      html: "<blockquote>Start typing...</blockquote>"
-    }, {
-      action: "hashedit.ul",
-      selector: "ul",
-      title: "Unordered List",
-      display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12.17c-.74 0-1.33.6-1.33 1.33s.6 1.33 1.33 1.33 1.33-.6 1.33-1.33-.59-1.33-1.33-1.33zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z'></path></g></svg>",
-      html: "<ul><li></li></ul>"
-    }, {
-      action: "hashedit.ol",
-      selector: "ol",
-      title: "Ordered List",
-      display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
-      html: "<ol><li></li></ol>"
-    }, {
-      action: "hashedit.image",
-      selector: "img",
-      title: "Image",
-      display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
-      html: '<p><img src="{{path}}images/placeholder.png" class="{{framework.image}}"></p>',
-      configure: function() {
-        hashedit.showImageDialog();
-      }
-    }, {
-      action: "hashedit.table",
-      selector: "table",
-      title: "Table",
-      display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
-      html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
-      attributes: [
-        {
-          attr: 'rows',
-          label: 'Rows',
-          type: 'select',
-          values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']
-        }  ,
-        {
-          attr: 'columns',
-          label: 'Columns',
-          type: 'select',
-          values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']
-        }
-      ],
-      change: function(attr, newValue, oldValue) {
-
-        var x, y, rows, curr_rows, columns, curr_columns, toBeAdded,
-          toBeRemoved, table, trs, th, tr, td, tbody;
-
-        if (newValue != oldValue) {
-
-          if (attr == 'columns') {
-
-            columns = newValue;
-            curr_columns = oldValue;
-
-            if (columns > curr_columns) { // add columns
-
-              toBeAdded = columns - curr_columns;
-
-              table = hashedit.current.node;
-              trs = hashedit.current.node.getElementsByTagName('tr');
-
-              // walk through table
-              for (x = 0; x < trs.length; x += 1) {
-
-                // add columns
-                for (y = 0; y < toBeAdded; y += 1) {
-                  if (trs[x].parentNode.nodeName == 'THEAD') {
-
-                    th = document.createElement('th');
-                    th.setAttribute('contentEditable', 'true');
-                    th.innerHTML = 'New Header';
-
-                    trs[x].appendChild(th);
-                  } else {
-                    td = document.createElement('td');
-                    td.setAttribute('contentEditable', 'true');
-                    td.innerHTML = 'Content';
-
-                    trs[x].appendChild(td);
-                  }
-                }
-              }
-
-            } else if (columns < curr_columns) { // remove columns
-
-              toBeRemoved = curr_columns - columns;
-
-              table = hashedit.current.node;
-              trs = hashedit.current.node.getElementsByTagName('tr');
-
-              // walk through table
-              for (x = 0; x < trs.length; x += 1) {
-
-                // remove columns
-                for (y = 0; y < toBeRemoved; y += 1) {
-                  if (trs[x].parentNode.nodeName == 'THEAD') {
-                    trs[x].querySelector('th:last-child').remove();
-                  } else {
-                    trs[x].querySelector('td:last-child').remove();
-                  }
-                }
-              }
-
-            }
-
-          } else if (attr == 'rows') {
-
-            rows = newValue;
-            curr_rows = oldValue;
-            table = hashedit.current.node;
-            columns = table.querySelectorAll(
-              'thead tr:first-child th').length;
-
-            if (rows > curr_rows) { // add rows
-
-              toBeAdded = rows - curr_rows;
-
-              // add rows
-              for (y = 0; y < toBeAdded; y += 1) {
-                tr = document.createElement('tr');
-
-                for (x = 0; x < columns; x += 1) {
-                  td = document.createElement('td');
-                  td.setAttribute('contentEditable', 'true');
-                  td.innerHTML = 'Content';
-                  tr.appendChild(td);
-                }
-
-                tbody = table.getElementsByTagName('tbody')[0];
-                tbody.appendChild(tr);
-              }
-
-            } else if (rows < curr_rows) { // remove columns
-
-              toBeRemoved = curr_rows - rows;
-
-              // remove rows
-              for (y = 0; y < toBeRemoved; y += 1) {
-                tr = table.querySelector('tbody tr:last-child');
-
-                if (tr !== null) {
-                  tr.remove();
-                }
-              }
-
-            }
-
-          }
-
-        }
-
-      }
-    }, {
-      action: "hashedit.code",
-      selector: "pre",
-      title: "Code",
-      display: "<svg viewBox='0 0 24 24'  height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'></path></g></svg>",
-      html: "<pre>Start adding code</pre>"
-    }],
 
     // stores a mirror of the DOM
     mirror: null,
@@ -498,7 +299,9 @@ hashedit = (function() {
                   '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
                   '</svg>', 'success');
 
-                history.go(-1);
+                if(hashedit.debug === false) {  
+                  history.go(-1);
+                }
 
               };
 
@@ -544,8 +347,10 @@ hashedit = (function() {
           // get item
           item = evt.item;
 
-          console.log(item);
-
+          if (hashedit.debug === true) {
+            console.log(item);
+          }
+            
           // get action
           selector = item.getAttribute('data-selector');
 
@@ -619,6 +424,80 @@ hashedit = (function() {
     createMenu: function() {
 
       var x, item, a;
+      
+      // setup menu
+      var menu = [{
+          action: "hashedit.h1",
+          selector: "h1",
+          title: "H1",
+          display: "H1",
+          html: '<h1>' + hashedit.i18n('Tap to update') + '</h1>'
+        }, {
+          action: "hashedit.h2",
+          selector: "h2",
+          title: "H2 Headline",
+          display: "H2",
+          html: '<h2>' + hashedit.i18n('Tap to update') + '</h2>'
+        }, {
+          action: "hashedit.h3",
+          selector: "h3",
+          title: "H3 Headline",
+          display: "H3",
+          html: '<h3>' + hashedit.i18n('Tap to update') + '</h3>'
+        }, {
+          action: "hashedit.h4",
+          selector: "h4",
+          title: "H4 Headline",
+          display: "H4",
+          html: '<h4>' + hashedit.i18n('Tap to update') + '</h4>'
+        }, {
+          action: "hashedit.h5",
+          selector: "h5",
+          title: "H5 Headline",
+          display: "H5",
+          html: '<h5>' + hashedit.i18n('Tap to update') + '</h5>'
+        }, {
+          action: "hashedit.p",
+          selector: "p",
+          title: "Paragraph",
+          display: "P",
+          html: '<p>' + hashedit.i18n('Tap to update') + '</p>'
+        }, {
+          action: "hashedit.blockquote",
+          selector: "blockquote",
+          title: "Blockquote",
+          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
+          html: '<blockquote>' + hashedit.i18n('Tap to update') + '</blockquote>'
+        }, {
+          action: "hashedit.ul",
+          selector: "ul",
+          title: "Unordered List",
+          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12.17c-.74 0-1.33.6-1.33 1.33s.6 1.33 1.33 1.33 1.33-.6 1.33-1.33-.59-1.33-1.33-1.33zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z'></path></g></svg>",
+          html: '<ul><li>' + hashedit.i18n('Tap to update') + '</li></ul>'
+        }, {
+          action: "hashedit.ol",
+          selector: "ol",
+          title: "Ordered List",
+          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
+          html: "<ol><li></li></ol>"
+        }, {
+          action: "hashedit.image",
+          selector: "img",
+          title: "Image",
+          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
+          html: '<p><img src="{{path}}images/placeholder.png" class="{{framework.image}}"></p>',
+          configure: function() {
+            hashedit.showImageDialog();
+          }
+        }, {
+          action: "hashedit.code",
+          selector: "pre",
+          title: "Code",
+          display: "<svg viewBox='0 0 24 24'  height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'></path></g></svg>",
+          html: "<pre>Start adding code</pre>"
+        }];
+        
+      hashedit.menu = menu.concat(hashedit.menu);
 
       // walk through plugins
       for (x = 0; x < hashedit.menu.length; x += 1) {
@@ -670,12 +549,17 @@ hashedit = (function() {
     showTextOptions: function(element) {
 
       var x, link, image, text, fields;
-
-      // set current element, container, and node
+      
+    
+      // set current element and node
       hashedit.current.element = element;
-      hashedit.current.parent = hashedit.findParentBySelector(element, '[hashedit-element]');
-      hashedit.current.node = hashedit.current.parent;
-
+      hashedit.current.node = element;
+      
+      // if the current element is not a [hashedit-element], find the parent that matches
+      if(hashedit.current.element.hasAttribute('hashedit-element') === false) {
+        hashedit.current.element = hashedit.findParentBySelector(element, '[hashedit-element]');
+      } 
+      
       // hide #hashedit-image
       image = document.querySelector('#hashedit-image-settings-modal');
       image.removeAttribute('visible');
@@ -748,9 +632,7 @@ hashedit = (function() {
      */
     setupContentEditableEvents: function() {
 
-      var x, y, z, arr, edits, isEditable, configs, isConfig, el, ref, html,
-        li, parent, els, showProperties, isDefault, removeElement,
-        element, modal, body, attr, div, label, control, option, menuItem, els;
+      var x, y, z, arr, edits, isEditable, configs, isConfig, el, ref, html,li, parent, els, showProperties, isDefault, removeElement, element, modal, body, attr, div, label, control, option, menuItem, els, text;
 
 
       // clean pasted text, #ref: http://bit.ly/1Tr8IR3
@@ -1032,7 +914,34 @@ hashedit = (function() {
               while (el !== null) {
                 if (el.hasAttribute('data-ref')) {
                   ref = el.getAttribute('data-ref');
+                 
+                  var node = el.childNodes[0];
+                  
+                  if (hashedit.debug === true) {
+                    console.log('input event');
+                    console.log(el.nodeName);
+                  }
+                  
+                  // create a text node if one does not exist
+                  if(el.nodeName === 'P' || el.nodeName === 'H1' || el.nodeName === 'H2' || el.nodeName === 'H3' || el.nodeName === 'H4' || el.nodeName === 'H5' || el.nodeName === 'PRE') {
+                  
+                    if(node.nodeName !== "#text") {
+                      text = document.createTextNode(hashedit.i18n('Tap to update'));
+                      el.insertBefore(text, el.firstChild);
+                    }
+                    
+                  }
+                 
+                  // get value of text node
+                  //node = el.childNodes[0];
+                 
                   html = el.innerHTML;
+                  
+                  // strip out &nbsps
+                  html = hashedit.replaceAll(html, '&nbsp;', ' ');
+                
+                  // trim
+                  html = html.trim();
 
                   // set the mirror HTML
                   hashedit.setMirrorHTML(ref, html);
@@ -1515,15 +1424,19 @@ hashedit = (function() {
                   if (parts.length > 1) {
 
                     // get property
-                    attr = parts[1].replace(/([a-z])([A-Z])/g,
-                      '$1-$2').toLowerCase();
+                    attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
 
                     // get currentValue
-                    var old = hashedit.current.node.getAttribute(
-                      attr);
+                    var old = hashedit.current.node.getAttribute(attr);
 
                     // set attribute
                     hashedit.current.node.setAttribute(attr, value);
+                    
+                    if(hashedit.debug === true) {
+                      console.log('setattribute on [data-model]');
+                      console.log('ref=' + ref + 'attr=' + attr + 'value=' + value);
+                    }
 
                     // set mirror attribute
                     hashedit.setMirrorAttribute(ref, attr, value);
@@ -1690,19 +1603,17 @@ hashedit = (function() {
                 document.execCommand("insertHTML", false, html);
                 return false;
               } else if (action == 'hashedit.text.alignLeft') {
-                input = document.querySelector(
-                  '.hashedit-modal [data-model="node.class"]');
+                input = document.querySelector('.hashedit-modal [data-model="node.class"]');
 
                 // clear existing alignments
                 value = input.value;
 
-                value = hashedit.replaceAll(value,
-                  'text-center', '');
-                value = hashedit.replaceAll(value,
-                  'text-left', '');
-                value = hashedit.replaceAll(value,
-                  'text-right', '');
+                value = hashedit.replaceAll(value,'text-center', '');
+                value = hashedit.replaceAll(value,'text-left', '');
+                value = hashedit.replaceAll(value,'text-right', '');
                 value += ' text-left';
+                
+                console.log(value);
 
                 // update value and trigger change
                 input.value = value.trim();
@@ -1714,18 +1625,14 @@ hashedit = (function() {
 
                 return false;
               } else if (action == 'hashedit.text.alignRight') {
-                input = document.querySelector(
-                  '.hashedit-modal [data-model="node.class"]');
+                input = document.querySelector('.hashedit-modal [data-model="node.class"]');
 
                 // clear existing alignments
                 value = input.value;
 
-                value = hashedit.replaceAll(value,
-                  'text-center', '');
-                value = hashedit.replaceAll(value,
-                  'text-left', '');
-                value = hashedit.replaceAll(value,
-                  'text-right', '');
+                value = hashedit.replaceAll(value, 'text-center', '');
+                value = hashedit.replaceAll(value, 'text-left', '');
+                value = hashedit.replaceAll(value, 'text-right', '');
                 value += ' text-right';
 
                 // update value and trigger change
@@ -1974,8 +1881,7 @@ hashedit = (function() {
      */
     createTextStyle: function(node) {
 
-      var style, textColor, textSize, textShadowColor,
-        textShadowHorizontal, textShadowVertical, textShadowBlur;
+      var style, textColor, textSize, textShadowColor, textShadowHorizontal, textShadowVertical, textShadowBlur;
 
       // get current node
       style = '';
@@ -1984,10 +1890,8 @@ hashedit = (function() {
       textColor = node.getAttribute('text-color') || '';
       textSize = node.getAttribute('text-size') || '';
       textShadowColor = node.getAttribute('text-shadow-color') || '';
-      textShadowHorizontal = node.getAttribute('text-shadow-horizontal') ||
-        '';
-      textShadowVertical = node.getAttribute('text-shadow-horizontal') ||
-        '';
+      textShadowHorizontal = node.getAttribute('text-shadow-horizontal') || '';
+      textShadowVertical = node.getAttribute('text-shadow-horizontal') || '';
       textShadowBlur = node.getAttribute('text-shadow-blur') || '';
 
       if (textColor !== '') {
@@ -2089,7 +1993,10 @@ hashedit = (function() {
           'html': els[x].innerHTML
         };
 
-        console.log(el);
+        if(hashedit.debug === true) {  
+          console.log('update array');
+          console.log(el);
+        }
 
         data.push(el);
       }
@@ -2114,8 +2021,6 @@ hashedit = (function() {
           return response.text();
         }).then(function(text) {
         
-          console.log(text);
-
           parser = new DOMParser();
           hashedit.mirror = parser.parseFromString(text, 'text/html');
 
@@ -2139,6 +2044,8 @@ hashedit = (function() {
      * Update the mirror HTML based on an edit
      */
     setMirrorHTML: function(ref, html) {
+    
+      console.log(ref);
 
       var node;
 
@@ -2159,7 +2066,7 @@ hashedit = (function() {
 
       node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
       node.setAttribute(attr, value);
-
+    
     },
 
     /**
@@ -2169,8 +2076,6 @@ hashedit = (function() {
      * @param {String} method - before, append
      */
     moveMirrorElement: function(ref, toRef, method) {
-
-      console.log('ref=' + ref + ' toRef=' + toRef + ' method=' + method);
 
       var node, to, parent;
 

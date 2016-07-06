@@ -423,6 +423,11 @@ body .hashedit-config a:hover,body .hashedit-config a:hover {
   margin: 0 auto 0 auto;
 }
 
+   .hashedit-menu .hashedit-save {
+    background-color: #fff;
+    border-left: 1px solid #ddd !important;
+  }
+
 /* menu */
 .hashedit-menu .hashedit-back {
   position: fixed;
