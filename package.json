@@ -23,7 +23,12 @@
     "url": "https://github.com/madoublet/hashedit/issues"
   },
   "homepage": "https://github.com/madoublet/hashedit#readme",
+  "dependencies": {
+    "dropzone": "4.3.0",
+    "sortablejs": "1.4.2"
+  },
   "devDependencies": {
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.0",
     "gulp-minify": "0.0.5",
     "gulp-minify-css": "^1.2.4",

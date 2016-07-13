@@ -6,7 +6,7 @@ var minify = require('gulp-minify');
 
 // concat js
 gulp.task('js', function() {
-  return gulp.src(['js/hashedit.js'])
+  return gulp.src(['js/fetch.min.js', 'js/i18next.js', 'node_modules/dropzone/dist/min/dropzone.min.js', 'node_modules/sortablejs/Sortable.min.js', 'js/hashedit.js'])
     .pipe(concat('hashedit.js'))
     .pipe(minify({
         exclude: ['tasks'],
@@ -17,7 +17,7 @@ gulp.task('js', function() {
 
 // concat css
 gulp.task('css', function() {
-  return gulp.src(['css/hashedit.css'])
+  return gulp.src(['node_modules/dropzone/dist/min/dropzone.min.css', 'css/hashedit.css'])
     .pipe(concat('hashedit.css'))
     .pipe(gulp.dest('dist/'))
     .pipe(minifyCss())
@@ -25,5 +25,4 @@ gulp.task('css', function() {
     .pipe(gulp.dest('dist/'));
 });
 
-
-gulp.task('default', ['js', 'css']);
+gulp.task('default', gulp.series(['js', 'css']));
