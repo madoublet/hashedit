@@ -2168,6 +2168,10 @@ hashedit = (function() {
           stylesheet = ['/dev/hashedit/dist/hashedit-min.css'];
         }
 
+        if(incoming.stylesheet) {
+          stylesheet = incoming.stylesheet;
+        }
+
         // setup demo
         if(body.hasAttribute('hashedit-demo') == true) {
           demo = true;
