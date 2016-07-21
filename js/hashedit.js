@@ -2167,6 +2167,10 @@ hashedit = (function() {
           path = '/dev/hashedit/';
           stylesheet = ['/dev/hashedit/dist/hashedit-min.css'];
         }
+        
+        if(incoming.path) {
+          path = incoming.path;
+        }
 
         if(incoming.stylesheet) {
           stylesheet = incoming.stylesheet;
