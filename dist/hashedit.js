@@ -492,6 +492,12 @@ hashedit = (function() {
           display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
           html: "<ol><li></li></ol>"
         }, {
+          action: "hashedit.hr",
+          selector: "hr",
+          title: "Break",
+          display: "<svg xmlns='http://www.w3.org/2000/svg' height='100%' viewBox='0 0 24 24' width='100%'><path d='M19 13H5v-2h14v2z'/><path d='M0 0h24v24H0z' fill='none'/></svg>",
+          html: "<hr>"
+        },{
           action: "hashedit.image",
           selector: "img",
           title: "Image",
@@ -848,6 +854,7 @@ hashedit = (function() {
             }
             else if (e.target.nodeName == 'IMG') {
                 hashedit.current.node = e.target;
+                hashedit.current.image = e.target;
 
                 // hide .hashedit-config, .hashedit-modal
                 edits = document.querySelectorAll('[hashedit]');
@@ -936,7 +943,7 @@ hashedit = (function() {
                   // create a text node if one does not exist
                   if(el.nodeName === 'P' || el.nodeName === 'H1' || el.nodeName === 'H2' || el.nodeName === 'H3' || el.nodeName === 'H4' || el.nodeName === 'H5' || el.nodeName === 'PRE') {
 
-                    if(node.nodeName !== "#text") {
+                    if(node.nodeName !== "#text" && el.childNodes.length === 4) {
                       text = document.createTextNode(hashedit.i18n('Tap to update'));
                       el.insertBefore(text, el.firstChild);
                     }
@@ -1506,18 +1513,22 @@ hashedit = (function() {
                   if (parts.length > 1) {
 
                     // get property
-                    attr = parts[1].replace(/([a-z])([A-Z])/g,
-                      '$1-$2').toLowerCase();
+                    attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+                    
+                    console.log(hashedit.current.image);
 
-                    // get ref from image
-                    ref = hashedit.current.node.getAttribute('data-ref');
-
+                 
                     // set attribute
-                    hashedit.current.node.setAttribute(attr, value);
-                    hashedit.setMirrorAttribute(ref, attr, value);
-
+                    hashedit.current.image.setAttribute(attr, value);
+                    
+                    hashedit.current.node = hashedit.findParentBySelector(hashedit.current.image, '[hashedit-element]');
+                    
+  
                     // fire event
                     if (hashedit.current.node !== null) {
+                    
+                      console.log(hashedit.current.node);
+                    
                       hashedit.current.node.dispatchEvent(new Event(
                         'input', {
                           'bubbles': true
@@ -2072,7 +2083,7 @@ hashedit = (function() {
      * @param {String} value
      */
     setMirrorAttribute: function(ref, attr, value) {
-
+    
       var node;
 
       node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
