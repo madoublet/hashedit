@@ -53,6 +53,20 @@ hashedit = (function() {
       image: null
     },
 
+    // new grid elements
+    grid: [
+      {
+        "name": "1 Column",
+        "desc": "100%",
+        "html": "<div class=\"block row\" hashedit-block><div class=\"col col-md-12\" hashedit-sortable></div></div>"
+      },
+      {
+        "name": "2 Column",
+        "desc": "100%",
+        "html": "<div class=\"block row\" hashedit-block><div class=\"col col-md-6\" hashedit-sortable></div><div class=\"col col-md-6\" hashedit-sortable></div></div>"
+      }
+    ],
+
     // handles text selection
     selection: null,
 
@@ -83,8 +97,9 @@ hashedit = (function() {
     // stores a mirror of the DOM
     mirror: null,
 
-    // count of new element
+    // counts and flags
     newElementCount: 0,
+    isI18nInit: false,
 
     /**
      * Set as active
@@ -105,7 +120,7 @@ hashedit = (function() {
 
       // setup [contentEditable=true]
       els = document.querySelectorAll(
-        'p[hashedit-element], [hashedit] h1[hashedit-element], [hashedit] h2[hashedit-element], h3[hashedit-element], h4[hashedit-element], h5[hashedit-element], ul[hashedit-element] li, ol[hashedit-element] li, table[hashedit-element] td, table[hashedit-element] th, blockquote[hashedit-element], pre[hashedit-element]'
+        'p[hashedit-element], [hashedit] h1[hashedit-element], [hashedit] h2[hashedit-element], h3[hashedit-element], h4[hashedit-element], h5[hashedit-element], span[hashedit-element], ul[hashedit-element] li, ol[hashedit-element] li, table[hashedit-element] td, table[hashedit-element] th, blockquote[hashedit-element], pre[hashedit-element]'
       );
 
       for (x = 0; x < els.length; x += 1) {
@@ -114,6 +129,42 @@ hashedit = (function() {
         els[x].setAttribute('contentEditable', 'true');
 
       }
+
+    },
+
+    /**
+     * Sets up block
+     * @param {Array} sortable
+     */
+    setupBlocks: function(blocks) {
+
+      var x, els, y, div;
+
+      // walk through sortable clases
+      for (x = 0; x < blocks.length; x += 1) {
+
+        // setup sortable classes
+        els = document.querySelectorAll('[hashedit] ' + blocks[x]);
+
+        // set [data-hashedit-sortable=true]
+        for (y = 0; y < els.length; y += 1) {
+
+          els[y].setAttribute('hashedit-block', '');
+
+          div = document.createElement('DIV');
+          div.setAttribute('class', 'hashedit-block-menu');
+
+          div.innerHTML = '<span class="hashedit-block-remove"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>' + 
+          '<span class="hashedit-block-down"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/><path d="M0-.75h24v24H0z" fill="none"/></svg></span>' +
+          '<span class="hashedit-block-up"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>'+
+          '<span class="hashedit-block-add"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>';
+
+          els[y].appendChild(div);
+
+        }
+
+      }
+
 
     },
 
@@ -156,6 +207,7 @@ hashedit = (function() {
         span.innerHTML =
           '<span><svg viewBox="0 0 24 24" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" fit="" style="pointer-events: none; display: block;"><g><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g></svg></span>';
 
+
         // append the handle to the wrapper
         els[y].appendChild(span);
 
@@ -182,7 +234,6 @@ hashedit = (function() {
 
         // append the handle to the wrapper
         els[y].appendChild(span);
-
 
 
       }
@@ -556,7 +607,6 @@ hashedit = (function() {
 
       var x, link, image, text, fields;
 
-
       // set current element and node
       hashedit.current.element = element;
       hashedit.current.node = element;
@@ -638,7 +688,7 @@ hashedit = (function() {
      */
     setupContentEditableEvents: function() {
 
-      var x, y, z, arr, edits, isEditable, configs, isConfig, el, ref, html,li, parent, els, showProperties, isDefault, removeElement, element, modal, body, attr, div, label, control, option, menuItem, els, text;
+      var x, y, z, arr, edits, isEditable, configs, isConfig, el, ref, html,li, parent, els, isDefault, removeElement, element, modal, body, attr, div, label, control, option, menuItem, els, text, block;
 
 
       // clean pasted text, #ref: http://bit.ly/1Tr8IR3
@@ -665,7 +715,7 @@ hashedit = (function() {
         ['click', 'focus'].forEach(function(e) {
 
           arr[x].addEventListener(e, function(e) {
-
+          
             if (e.target.hasAttribute('hashedit-element')) {
               element = e.target;
             }
@@ -685,21 +735,8 @@ hashedit = (function() {
               element.setAttribute('current-hashedit-element', 'true');
             }
 
-            // check for properties
-            showProperties = false;
-
-            if (hashedit.findParentBySelector(e.target, '.hashedit-properties') !== null) {
-              showProperties = true;
-            }
-
-            // remove element
-            removeElement = false;
-
+            // check for remove element
             if (hashedit.findParentBySelector(e.target, '.hashedit-remove') !== null) {
-              removeElement = true;
-            }
-
-            if (removeElement === true) {
               element.remove();
 
               var ref = element.getAttribute('data-ref');
@@ -709,7 +746,8 @@ hashedit = (function() {
                 hashedit.removeMirrorElement(ref);
               }
             }
-            else if (showProperties === true) {
+            // check for properties element
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-properties') !== null) {
 
               hashedit.current.node = element;
 
@@ -821,6 +859,35 @@ hashedit = (function() {
               }
 
             }
+            // add block
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-block-add') !== null) {
+            
+              block = hashedit.findParentBySelector(e.target, '[hashedit-block]');
+            
+              if(block !== null) {
+                hashedit.showLayoutDialog(block);
+              }
+              
+            }
+            // move block up
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-block-up') !== null) {
+            
+              alert('move block up');
+            
+            }
+            // move block down
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-block-down') !== null) {
+            
+              alert('move block down');
+            
+            }
+            // remove block
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-block-remove') !== null) {
+            
+              alert('remove block');
+            
+            }
+            // handle links
             else if (e.target.nodeName == 'A') {
 
                 // hide .hashedit-config, .hashedit-modal
@@ -949,6 +1016,8 @@ hashedit = (function() {
 
                   // trim
                   html = html.trim();
+
+                  console.log('setMirrorHTML, ref=' + ref + 'html=' + html);
 
                   // set the mirror HTML
                   hashedit.setMirrorHTML(ref, html);
@@ -1083,7 +1152,6 @@ hashedit = (function() {
           newNode.setAttribute('contentEditable', 'true');
         }
 
-
         // focus on first element
         if (editable.length > 0) {
           editable[0].focus();
@@ -1108,15 +1176,62 @@ hashedit = (function() {
           nextRef = newNode.nextSibling.getAttribute('data-ref');
           hashedit.insertMirrorElement(ref, nextRef, 'before', html);
 
-        } else if (newNode.parentNode) {
+        }
+        else if (newNode.parentNode) {
 
           parentRef = newNode.parentNode.getAttribute('data-ref');
           hashedit.insertMirrorElement(ref, parentRef, 'append', html);
 
         }
 
+      }
+
+      return newNode;
+
+    },
+
+    /**
+     * Appends blocks to the editor
+     */
+    appendBlock: function(html, current, position) {
+
+      var x, newNode, node, firstChild, ref, nextRef, toRef, parentRef;
+
+      // create a new node
+      newNode = document.createElement('div');
+      newNode.innerHTML = html;
+
+      // get new new node
+      newNode = newNode.childNodes[0];
+
+      // increment the new element count
+      hashedit.newElementCount = hashedit.newElementCount + 1;
+
+      // set data-ref
+      ref = 'new-' + hashedit.newElementCount;
+      newNode.setAttribute('data-ref', ref);
+
+      // create new node in mirror
+      if (position == 'before') {
+
+        // insert element
+        current.parentNode.insertBefore(newNode, current);
+
+        toRef = current.getAttribute('data-ref');
+
+        // update mirror
+        hashedit.insertMirrorElement(ref, toRef, 'before', html);
 
       }
+      else if (position == 'after') {
+
+        parentRef = newNode.parentNode.getAttribute('data-ref');
+        //hashedit.insertMirrorElement(ref, current, 'after', html);
+
+      }
+
+      // re-init sortable
+      hashedit.setupSortable(hashedit.config.sortable);
 
       return newNode;
 
@@ -1503,21 +1618,19 @@ hashedit = (function() {
 
                     // get property
                     attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-                    
-                    console.log(hashedit.current.image);
 
-                 
                     // set attribute
                     hashedit.current.image.setAttribute(attr, value);
-                    
+
                     hashedit.current.node = hashedit.findParentBySelector(hashedit.current.image, '[hashedit-element]');
-                    
-  
+
+                    console.log(hashedit.current.node);
+
                     // fire event
                     if (hashedit.current.node !== null) {
-                    
-                      console.log(hashedit.current.node);
-                    
+
+                      console
+
                       hashedit.current.node.dispatchEvent(new Event(
                         'input', {
                           'bubbles': true
@@ -1555,8 +1668,8 @@ hashedit = (function() {
 
             el = e.target;
 
-            if (el.nodeName == 'SVG') {
-              el = el.parentNode;
+            if (el.nodeName !== 'A') {
+              el = hashedit.findParentBySelector(el, '[data-action]');
             }
 
             // look for [data-model]
@@ -1582,7 +1695,8 @@ hashedit = (function() {
               } else if (action == 'hashedit.text.underline') {
                 document.execCommand("underline", false, null);
                 return false;
-              } else if (action == 'hashedit.text.link') {
+              }
+              else if (action == 'hashedit.text.link') {
 
                 // add link html
                 text = hashedit.getSelectedText();
@@ -1594,7 +1708,8 @@ hashedit = (function() {
                 hashedit.showLinkDialog();
 
                 return false;
-              } else if (action == 'hashedit.text.image') {
+              }
+              else if (action == 'hashedit.text.image') {
 
                 // add link html
                 text = hashedit.getSelectedText();
@@ -1605,7 +1720,8 @@ hashedit = (function() {
 
 
                 return false;
-              } else if (action == 'hashedit.text.code') {
+              }
+              else if (action == 'hashedit.text.code') {
 
                 // create code html
                 text = hashedit.getSelectedText();
@@ -1613,7 +1729,8 @@ hashedit = (function() {
 
                 document.execCommand("insertHTML", false, html);
                 return false;
-              } else if (action == 'hashedit.text.alignLeft') {
+              }
+              else if (action == 'hashedit.text.alignLeft') {
                 input = document.querySelector('.hashedit-modal [data-model="node.class"]');
 
                 // clear existing alignments
@@ -1635,7 +1752,8 @@ hashedit = (function() {
                 }));
 
                 return false;
-              } else if (action == 'hashedit.text.alignRight') {
+              }
+              else if (action == 'hashedit.text.alignRight') {
                 input = document.querySelector('.hashedit-modal [data-model="node.class"]');
 
                 // clear existing alignments
@@ -1655,7 +1773,8 @@ hashedit = (function() {
                 }));
 
                 return false;
-              } else if (action == 'hashedit.text.alignCenter') {
+              }
+              else if (action == 'hashedit.text.alignCenter') {
                 input = document.querySelector(
                   '.hashedit-modal [data-model="node.class"]');
 
@@ -1728,6 +1847,63 @@ hashedit = (function() {
         document.getElementById('hashedit-link-title').value = title;
 
       }
+
+    },
+
+    /**
+     * Sets up the layout dialog
+     */
+    showLayoutDialog: function(block) {
+
+      var x, dialog, list, html, el, target, i, items;
+
+      if(block !== null) {
+        block.setAttribute('hashedit-block-active', '');
+      }
+
+      // show the layout dialog
+      dialog = document.querySelector('#hashedit-layout-modal');
+
+      // get list
+      list = document.querySelector('#hashedit-layouts-list');
+
+      items = list.querySelectorAll('.hashedit-list-item');
+
+      // init items
+      if(items.length === 0) {
+
+        for(x=0; x<hashedit.grid.length; x++) {
+           el = document.createElement('DIV');
+           el.setAttribute('class', 'hashedit-list-item');
+           el.setAttribute('data-index', x);
+           el.innerHTML = '<h2>' + hashedit.grid[x].name + '</h2><small>' + hashedit.grid[x].desc + '</small>';
+
+           list.appendChild(el);
+        }
+
+        list.addEventListener('click', function(e) {
+
+          target = e.target;
+
+          if(target.nodeName.toUpperCase() !== 'DIV'){
+            target = hashedit.findParentBySelector(target, '.hashedit-list-item');
+          }
+
+          if(target != null) {
+
+            // append the block
+            i = target.getAttribute('data-index');
+            html = hashedit.grid[i].html;
+
+            hashedit.appendBlock(html, block, 'before');
+
+          }
+
+        });
+
+      }
+
+      dialog.setAttribute('visible', '');
 
     },
 
@@ -2044,6 +2220,8 @@ hashedit = (function() {
      */
     removeMirrorElement: function(ref) {
 
+      console.log(ref);
+
       var node;
 
       node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
@@ -2072,7 +2250,7 @@ hashedit = (function() {
      * @param {String} value
      */
     setMirrorAttribute: function(ref, attr, value) {
-    
+
       var node;
 
       node = hashedit.mirror.querySelector('[data-ref="' + ref + '"]');
@@ -2153,11 +2331,11 @@ hashedit = (function() {
 
     /**
      * Setup the editor
-     * @param {Array} config.sortable
+     * @param {Array} incoming
      */
     setup: function(incoming) {
 
-      var body, attr, path, stylesheet, sortable, demo, url, login;
+      var body, attr, path, stylesheet, sortable, demo, url, login, blocks;
 
       // get body
       body = document.querySelector('body');
@@ -2169,6 +2347,7 @@ hashedit = (function() {
       sortable = ['.sortable'];
       demo = false;
       url = null;
+      blocks = [];
 
       // get attributes
       if(body != null) {
@@ -2176,9 +2355,9 @@ hashedit = (function() {
         // setup development
         if(incoming.dev) {
           path = '/dev/hashedit/';
-          stylesheet = ['/dev/hashedit/dist/hashedit-min.css'];
+          stylesheet = ['/dev/hashedit/css/hashedit.css'];
         }
-        
+
         if(incoming.path) {
           path = incoming.path;
         }
@@ -2201,10 +2380,20 @@ hashedit = (function() {
 
         }
 
+
+        // setup blocks
+        if(incoming.blocks) {
+
+          if(incoming.blocks != '') {
+            blocks = incoming.blocks.split(',');
+          }
+
+        }
+
         // setup editable
         if(incoming.editable) {
 
-          if(incoming.sortable != '') {
+          if(incoming.editable != '') {
             editable = incoming.editable.split(',');
           }
 
@@ -2274,6 +2463,7 @@ hashedit = (function() {
         login: login,
         stylesheet: stylesheet,
         sortable: sortable,
+        blocks: blocks,
         demo: demo
       };
 
@@ -2294,6 +2484,9 @@ hashedit = (function() {
     setupEditor: function(config) {
 
       var x, style;
+
+      // save config
+      hashedit.config = config;
 
       // set path
       if (config.path != null) {
@@ -2343,6 +2536,7 @@ hashedit = (function() {
         hashedit.setActive();
         hashedit.setupView();
         hashedit.setupSortable(config.sortable);
+        hashedit.setupBlocks(config.blocks);
         hashedit.setContentEditable();
         hashedit.setupContentEditableEvents();
         hashedit.setupMenu(config.path);
@@ -2384,6 +2578,7 @@ hashedit = (function() {
               hashedit.setActive();
               hashedit.setupView();
               hashedit.setupSortable(config.sortable);
+              hashedit.setupBlocks(config.blocks);
               hashedit.setContentEditable();
               hashedit.setupContentEditableEvents();
               hashedit.setupMenu(config.path);
@@ -2601,22 +2796,29 @@ hashedit = (function() {
     		// make sure library is installed
         if(i18n !== undefined) {
 
-          // get language path
-          path = hashedit.languagePath;
-          path = hashedit.replaceAll(path, '{{language}}', hashedit.language);
+          if(hashedit.isI18nInit === false) {
 
-    			// set language
-    			options = {
-    		        lng: hashedit.language,
-    		        getAsync : false,
-    		        useCookie: false,
-    		        useLocalStorage: false,
-    		        fallbackLng: 'en',
-    		        resGetPath: path,
-    		        defaultLoadingValue: ''
-    		    };
+            // get language path
+            path = hashedit.languagePath;
+            path = hashedit.replaceAll(path, '{{language}}', hashedit.language);
 
-    			i18n.init(options);
+      			// set language
+      			options = {
+      		        lng: hashedit.language,
+      		        getAsync : false,
+      		        useCookie: false,
+      		        useLocalStorage: false,
+      		        fallbackLng: 'en',
+      		        resGetPath: path,
+      		        defaultLoadingValue: ''
+      		    };
+
+            // init
+      			i18n.init(options);
+
+      			// set flag
+      			hashedit.isI18nInit = true;
+    			}
     		}
 
   		}
