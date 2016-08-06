@@ -133,18 +133,20 @@ hashedit = (function() {
      * Sets up block
      * @param {Array} sortable
      */
-    setupBlocks: function(blocks) {
+    setupBlocks: function() {
 
-      var x, els, y, div;
+      var x, els, y, div, blocks, el, next, previous;
+     
+      blocks = hashedit.config.blocks;
 
-      // walk through sortable clases
-      for (x = 0; x < blocks.length; x += 1) {
+      // setup sortable classes
+      els = document.querySelectorAll('[hashedit] ' + blocks);
 
-        // setup sortable classes
-        els = document.querySelectorAll('[hashedit] ' + blocks[x]);
+      // set [data-hashedit-sortable=true]
+      for (y = 0; y < els.length; y += 1) {
 
-        // set [data-hashedit-sortable=true]
-        for (y = 0; y < els.length; y += 1) {
+        // setup blocks
+        if(els[y].querySelector('.hashedit-block-menu') === null) {
 
           els[y].setAttribute('hashedit-block', '');
 
@@ -160,8 +162,48 @@ hashedit = (function() {
 
         }
 
-      }
 
+        // next sibling
+        next = els[y].nextElementSibling;
+        el = els[y].querySelector('.hashedit-block-down');
+        
+        // check if the element exists and it is a block
+        if(next !== null && next.matches('[hashedit] ' + blocks)) {
+          
+          if(el !== null) {
+            el.style.display = 'block';
+          }
+          
+        }
+        else {
+
+          if(el !== null) {
+            el.style.display = 'none';
+          }
+          
+        }
+        
+        // previous sibling
+        previous = els[y].previousElementSibling;
+        el = els[y].querySelector('.hashedit-block-up');
+        
+        // check if the element exists and it is a block
+        if(previous !== null && previous.matches('[hashedit] ' + blocks)) {
+          
+          if(el !== null) {
+            el.style.display = 'block';
+          }
+          
+        }
+        else {
+
+          if(el !== null) {
+            el.style.display = 'none';
+          }
+          
+        }
+        
+      }
 
     },
 
@@ -850,6 +892,8 @@ hashedit = (function() {
 
               }
 
+              hashedit.setupBlocks();
+
             }
             // move block down
             else if (hashedit.findParentBySelector(e.target, '.hashedit-block-down') !== null) {
@@ -864,12 +908,16 @@ hashedit = (function() {
 
               }
 
+              hashedit.setupBlocks();
+
             }
             // remove block
             else if (hashedit.findParentBySelector(e.target, '.hashedit-block-remove') !== null) {
 
               block = hashedit.findParentBySelector(e.target, '[hashedit-block]');
               block.remove();
+
+              hashedit.setupBlocks();
 
             }
             // handle links
@@ -1832,6 +1880,10 @@ hashedit = (function() {
 
             hashedit.appendBlock(html, block, 'before');
 
+            hashedit.setupBlocks();
+
+            dialog.removeAttribute('visible');
+
           }
 
         });
@@ -2134,7 +2186,7 @@ hashedit = (function() {
      */
     setup: function(incoming) {
 
-      var body, attr, path, stylesheet, sortable, demo, url, login, blocks;
+      var body, attr, path, stylesheet, sortable, demo, url, login, blocks, grid;
 
       // get body
       body = document.querySelector('body');
@@ -2179,12 +2231,20 @@ hashedit = (function() {
 
         }
 
-
         // setup blocks
         if(incoming.blocks) {
 
           if(incoming.blocks != '') {
             blocks = incoming.blocks.split(',');
+          }
+
+        }
+
+        // setup grid
+        if(incoming.grid) {
+
+          if(incoming.grid != '') {
+            grid = incoming.grid;
           }
 
         }
@@ -2263,6 +2323,7 @@ hashedit = (function() {
         stylesheet: stylesheet,
         sortable: sortable,
         blocks: blocks,
+        grid: grid,
         demo: demo
       };
 
@@ -2295,6 +2356,11 @@ hashedit = (function() {
       // set login
       if (config.login != null) {
         hashedit.loginUrl = config.login;
+      }
+
+      // set grid
+      if (config.grid != null) {
+        hashedit.grid = config.grid;
       }
 
       // create container
@@ -2334,7 +2400,7 @@ hashedit = (function() {
         hashedit.setActive();
         hashedit.setupView();
         hashedit.setupSortable(config.sortable);
-        hashedit.setupBlocks(config.blocks);
+        hashedit.setupBlocks();
         hashedit.setContentEditable();
         hashedit.setupContentEditableEvents();
         hashedit.setupMenu(config.path);
@@ -2375,7 +2441,7 @@ hashedit = (function() {
               hashedit.setActive();
               hashedit.setupView();
               hashedit.setupSortable(config.sortable);
-              hashedit.setupBlocks(config.blocks);
+              hashedit.setupBlocks();
               hashedit.setContentEditable();
               hashedit.setupContentEditableEvents();
               hashedit.setupMenu(config.path);
