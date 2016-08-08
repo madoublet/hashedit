@@ -9,8 +9,10 @@
   min-height: 50px;
 }
 
-[hashedit-sortable]:empty {
+[hashedit-empty] {
   min-height: 100px;
+  background-color: rgba(255,153,0,1);
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 .hashedit-sortable {
@@ -50,13 +52,11 @@
 [hashedit-block] {
   box-sizing: border-box;
   position: relative;
-  padding-top: 40px !important;
-  margin-top: 25px !important;
   transition: box-shadow 0.2s;
 }
 
   [hashedit-block]:hover {
-    box-shadow: inset 0 0 0 1px #2F3243;
+    box-shadow: inset 0 0 0 1px #00ADE3;
   }
 
   [hashedit-block] .hashedit-block-menu {
@@ -65,7 +65,7 @@
     left: 0;
     height: 35px;
     transition: all .15s ease;
-    background-color: #2F3243;
+    background-color: #00ADE3;
     margin: 0;
     padding: 0;
     color: #888;
@@ -215,7 +215,7 @@
 
 /* highlight */
 .hashedit-highlight {
-  background-color: rgba(255,153,0,0.75);
+  background-color: rgba(255,153,0,1);
   min-height: 50px;
   display: block;
 }

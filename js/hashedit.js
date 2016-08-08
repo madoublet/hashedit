@@ -130,13 +130,41 @@ hashedit = (function() {
     },
 
     /**
+     * Sets up empty
+     * @param {Array} sortable
+     */
+    setupEmpty: function() {
+
+      console.log('setup empty!');
+
+      var x, sortable, els;
+
+      els = document.querySelectorAll('[hashedit-sortable]');
+
+
+      // walk through sortable clases
+      for (x = 0; x < els.length; x += 1) {
+
+        if(els[x].firstElementChild === null){
+          els[x].setAttribute('hashedit-empty', 'true');
+        }
+        else {
+          els[x].removeAttribute('hashedit-empty');
+        }
+
+      }
+
+    },
+
+
+    /**
      * Sets up block
      * @param {Array} sortable
      */
     setupBlocks: function() {
 
       var x, els, y, div, blocks, el, next, previous;
-     
+
       blocks = hashedit.config.blocks;
 
       // setup sortable classes
@@ -166,43 +194,43 @@ hashedit = (function() {
         // next sibling
         next = els[y].nextElementSibling;
         el = els[y].querySelector('.hashedit-block-down');
-        
+
         // check if the element exists and it is a block
         if(next !== null && next.matches('[hashedit] ' + blocks)) {
-          
+
           if(el !== null) {
             el.style.display = 'block';
           }
-          
+
         }
         else {
 
           if(el !== null) {
             el.style.display = 'none';
           }
-          
+
         }
-        
+
         // previous sibling
         previous = els[y].previousElementSibling;
         el = els[y].querySelector('.hashedit-block-up');
-        
+
         // check if the element exists and it is a block
         if(previous !== null && previous.matches('[hashedit] ' + blocks)) {
-          
+
           if(el !== null) {
             el.style.display = 'block';
           }
-          
+
         }
         else {
 
           if(el !== null) {
             el.style.display = 'none';
           }
-          
+
         }
-        
+
       }
 
     },
@@ -211,9 +239,11 @@ hashedit = (function() {
      * Adds a hashedit-sortable class to any selector in the sortable array, enables sorting
      * @param {Array} sortable
      */
-    setupSortable: function(sortable) {
+    setupSortable: function() {
 
-      var x, y, els, div, span, el, item, obj, menu;
+      var x, y, els, div, span, el, item, obj, menu, sortable;
+
+      sortable = hashedit.config.sortable;
 
       // walk through sortable clases
       for (x = 0; x < sortable.length; x += 1) {
@@ -304,12 +334,17 @@ hashedit = (function() {
             // get item
             item = evt.item;
 
+            // handle empty
+            hashedit.setupEmpty();
+
           }
 
         });
 
       }
 
+      // set the display of empty columns
+      hashedit.setupEmpty();
 
     },
 
@@ -440,6 +475,9 @@ hashedit = (function() {
 
             }
           }
+
+          // setup empty columns
+          hashedit.setupEmpty();
 
           return false;
 
@@ -1221,7 +1259,7 @@ hashedit = (function() {
       }
 
       // re-init sortable
-      hashedit.setupSortable(hashedit.config.sortable);
+      hashedit.setupSortable();
 
       return newNode;
 
@@ -2160,6 +2198,49 @@ hashedit = (function() {
           actions[y].parentNode.removeChild(actions[y]);
         }
 
+        // remove attributes
+        actions = els[x].querySelectorAll('[hashedit-block]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('hashedit-block');
+        }
+
+        // remove attributes
+        actions = els[x].querySelectorAll('[hashedit-element]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('hashedit-element');
+        }
+
+        // remove attributes
+        actions = els[x].querySelectorAll('[hashedit-sortable]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('hashedit-sortable');
+        }
+
+        // remove attributes
+        actions = els[x].querySelectorAll('[hashedit-empty]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('hashedit-empty');
+        }
+
+        // remove attributes
+        actions = els[x].querySelectorAll('[contenteditable]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('contenteditable');
+        }
+
+        // remove attributes
+        actions = els[x].querySelectorAll('[current-hashedit-element]');
+
+        for(y=0; y<actions.length; y++) {
+          actions[y].removeAttribute('current-hashedit-element');
+        }
+
+
         el = {
           'selector': els[x].getAttribute('hashedit-selector'),
           'html': els[x].innerHTML
@@ -2399,7 +2480,7 @@ hashedit = (function() {
         // init hashedit
         hashedit.setActive();
         hashedit.setupView();
-        hashedit.setupSortable(config.sortable);
+        hashedit.setupSortable();
         hashedit.setupBlocks();
         hashedit.setContentEditable();
         hashedit.setupContentEditableEvents();
@@ -2440,7 +2521,7 @@ hashedit = (function() {
               // init hashedit
               hashedit.setActive();
               hashedit.setupView();
-              hashedit.setupSortable(config.sortable);
+              hashedit.setupSortable();
               hashedit.setupBlocks();
               hashedit.setContentEditable();
               hashedit.setupContentEditableEvents();
