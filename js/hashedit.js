@@ -135,12 +135,9 @@ hashedit = (function() {
      */
     setupEmpty: function() {
 
-      console.log('setup empty!');
-
       var x, sortable, els;
 
       els = document.querySelectorAll('[hashedit-sortable]');
-
 
       // walk through sortable clases
       for (x = 0; x < els.length; x += 1) {
@@ -155,7 +152,6 @@ hashedit = (function() {
       }
 
     },
-
 
     /**
      * Sets up block
