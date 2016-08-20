@@ -609,6 +609,136 @@ hashedit = (function() {
             hashedit.showImageDialog();
           }
         }, {
+          action: "hashedit.table",
+          selector: "table",
+          title: "Table",
+          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
+          html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
+          attributes: [
+            {
+              attr: 'rows',
+              label: 'Rows',
+              type: 'select',
+              values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']
+            }  ,
+            {
+              attr: 'columns',
+              label: 'Columns',
+              type: 'select',
+              values: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']
+            }
+          ],
+          change: function(attr, newValue, oldValue) {
+
+            var x, y, rows, curr_rows, columns, curr_columns, toBeAdded,
+              toBeRemoved, table, trs, th, tr, td, tbody;
+
+            if (newValue != oldValue) {
+
+              if (attr == 'columns') {
+
+                columns = newValue;
+                curr_columns = oldValue;
+
+                if (columns > curr_columns) { // add columns
+
+                  toBeAdded = columns - curr_columns;
+
+                  table = hashedit.current.node;
+                  trs = hashedit.current.node.getElementsByTagName('tr');
+
+                  // walk through table
+                  for (x = 0; x < trs.length; x += 1) {
+
+                    // add columns
+                    for (y = 0; y < toBeAdded; y += 1) {
+                      if (trs[x].parentNode.nodeName == 'THEAD') {
+
+                        th = document.createElement('th');
+                        th.setAttribute('contentEditable', 'true');
+                        th.innerHTML = 'New Header';
+
+                        trs[x].appendChild(th);
+                      } else {
+                        td = document.createElement('td');
+                        td.setAttribute('contentEditable', 'true');
+                        td.innerHTML = 'Content';
+
+                        trs[x].appendChild(td);
+                      }
+                    }
+                  }
+
+                } else if (columns < curr_columns) { // remove columns
+
+                  toBeRemoved = curr_columns - columns;
+
+                  table = hashedit.current.node;
+                  trs = hashedit.current.node.getElementsByTagName('tr');
+
+                  // walk through table
+                  for (x = 0; x < trs.length; x += 1) {
+
+                    // remove columns
+                    for (y = 0; y < toBeRemoved; y += 1) {
+                      if (trs[x].parentNode.nodeName == 'THEAD') {
+                        trs[x].querySelector('th:last-child').remove();
+                      } else {
+                        trs[x].querySelector('td:last-child').remove();
+                      }
+                    }
+                  }
+
+                }
+
+              } else if (attr == 'rows') {
+
+                rows = newValue;
+                curr_rows = oldValue;
+                table = hashedit.current.node;
+                columns = table.querySelectorAll(
+                  'thead tr:first-child th').length;
+
+                if (rows > curr_rows) { // add rows
+
+                  toBeAdded = rows - curr_rows;
+
+                  // add rows
+                  for (y = 0; y < toBeAdded; y += 1) {
+                    tr = document.createElement('tr');
+
+                    for (x = 0; x < columns; x += 1) {
+                      td = document.createElement('td');
+                      td.setAttribute('contentEditable', 'true');
+                      td.innerHTML = 'Content';
+                      tr.appendChild(td);
+                    }
+
+                    tbody = table.getElementsByTagName('tbody')[0];
+                    tbody.appendChild(tr);
+                  }
+
+                } else if (rows < curr_rows) { // remove columns
+
+                  toBeRemoved = curr_rows - rows;
+
+                  // remove rows
+                  for (y = 0; y < toBeRemoved; y += 1) {
+                    tr = table.querySelector('tbody tr:last-child');
+
+                    if (tr !== null) {
+                      tr.remove();
+                    }
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+        },{
           action: "hashedit.code",
           selector: "pre",
           title: "Code",
@@ -1130,6 +1260,14 @@ hashedit = (function() {
                   e.stopPropagation();
 
                 }
+                else if (el.nodeName == 'P') {
+
+                  hashedit.append('<p>' + hashedit.i18n('Tap to update') + '</p>');
+
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                }
 
               }
 
@@ -1201,40 +1339,70 @@ hashedit = (function() {
       // get existing node
       node = document.querySelector('[hashedit-sortable] [data-selector]');
 
-      // if dragged placeholder exists
-      if (node !== null) {
+      if (node === null) {
 
-        // replace existing node with newNode
-        node.parentNode.replaceChild(newNode, node);
+        if (hashedit.current.node !== null) {
 
-        var types = 'p, h1, h2, h3, h4, h5, li, td, th, blockquote, pre';
+          // insert after current node
+          hashedit.current.node.parentNode.insertBefore(newNode, hashedit.current.node.nextSibling);
 
-        // set editable children
-        var editable = newNode.querySelectorAll(types);
-
-        for (x = 0; x < editable.length; x += 1) {
-          editable[x].setAttribute('contentEditable', 'true');
         }
-
-        if (types.indexOf(newNode.nodeName.toLowerCase()) != -1) {
-          newNode.setAttribute('contentEditable', 'true');
-        }
-
-        // focus on first element
-        if (editable.length > 0) {
-          editable[0].focus();
-
-          // show edit options for the text
-          hashedit.showTextOptions(editable[0]);
-
-          // select editable contents, #ref: http://bit.ly/1jxd8er
-          hashedit.selectElementContents(editable[0]);
-        }
-
-        // increment the new element count
-        hashedit.newElementCount = hashedit.newElementCount + 1;
 
       }
+      else {
+        // replace existing node with newNode
+        node.parentNode.replaceChild(newNode, node);
+      }
+
+      var types = 'p, h1, h2, h3, h4, h5, li, td, th, blockquote, pre';
+
+      // set editable children
+      var editable = newNode.querySelectorAll(types);
+
+      for (x = 0; x < editable.length; x += 1) {
+        editable[x].setAttribute('contentEditable', 'true');
+      }
+
+      if (types.indexOf(newNode.nodeName.toLowerCase()) != -1) {
+        newNode.setAttribute('contentEditable', 'true');
+      }
+
+      // select element
+      function selectElementContents(el) {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      // focus on first element
+      if (editable.length > 0) {
+
+        editable[0].focus();
+        selectElementContents(editable[0]);
+
+        // show edit options for the text
+        hashedit.showTextOptions(editable[0]);
+
+        // select editable contents, #ref: http://bit.ly/1jxd8er
+        hashedit.selectElementContents(editable[0]);
+      }
+      else {
+
+        if(newNode.matches(types)) {
+
+          newNode.focus();
+          selectElementContents(newNode);
+
+        }
+
+      }
+
+      // increment the new element count
+      hashedit.newElementCount = hashedit.newElementCount + 1;
+
+
 
       return newNode;
 
