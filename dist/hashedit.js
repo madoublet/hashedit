@@ -106,7 +106,6 @@ hashedit = (function() {
     },
 
     // counts and flags
-    newElementCount: 0,
     isI18nInit: false,
 
     /**
@@ -189,6 +188,7 @@ hashedit = (function() {
           div.setAttribute('class', 'hashedit-block-menu');
 
           div.innerHTML = '<span class="hashedit-block-remove"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>' +
+          '<span class="hashedit-block-duplicate"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></span>' +
           '<span class="hashedit-block-down"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/><path d="M0-.75h24v24H0z" fill="none"/></svg></span>' +
           '<span class="hashedit-block-up"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>'+
           '<span class="hashedit-block-add"><svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span>';
@@ -1095,6 +1095,16 @@ hashedit = (function() {
               hashedit.setupBlocks();
 
             }
+            // remove block
+            else if (hashedit.findParentBySelector(e.target, '.hashedit-block-duplicate') !== null) {
+
+              block = hashedit.findParentBySelector(e.target, '[hashedit-block]');
+              
+              hashedit.duplicateBlock(block, 'before');
+
+              hashedit.setupBlocks();
+
+            }
             // handle links
             else if (e.target.nodeName == 'A') {
 
@@ -1399,10 +1409,30 @@ hashedit = (function() {
 
       }
 
-      // increment the new element count
-      hashedit.newElementCount = hashedit.newElementCount + 1;
+      return newNode;
 
+    },
+    
+    /**
+     * Duplicates a block and appends it to the editor
+     */
+    duplicateBlock: function(current, position) {
 
+      var x, newNode, node, firstChild;
+
+      // create a new node
+      newNode = current.cloneNode(true);
+
+      // create new node in mirror
+      if (position == 'before') {
+
+        // insert element
+        current.parentNode.insertBefore(newNode, current);
+
+      }
+
+      // re-init sortable
+      hashedit.setupSortable();
 
       return newNode;
 
@@ -1421,9 +1451,6 @@ hashedit = (function() {
 
       // get new new node
       newNode = newNode.childNodes[0];
-
-      // increment the new element count
-      hashedit.newElementCount = hashedit.newElementCount + 1;
 
       // create new node in mirror
       if (position == 'before') {
