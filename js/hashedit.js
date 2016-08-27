@@ -87,7 +87,7 @@ hashedit = (function() {
         'image': '',
         'code': ''
       },
-      'foundation': {
+      'mdl': {
         'table': 'mdl-data-table',
         'image': '',
         'code': ''
@@ -599,7 +599,7 @@ hashedit = (function() {
           }
         }, {
           action: "hashedit.table",
-          selector: "table",
+          selector: "table[rows]",
           title: "Table",
           display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
           html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
@@ -685,8 +685,7 @@ hashedit = (function() {
                 rows = newValue;
                 curr_rows = oldValue;
                 table = hashedit.current.node;
-                columns = table.querySelectorAll(
-                  'thead tr:first-child th').length;
+                columns = table.querySelectorAll('thead tr:first-child th').length;
 
                 if (rows > curr_rows) { // add rows
 
@@ -2492,6 +2491,11 @@ hashedit = (function() {
         // setup demo
         if(body.hasAttribute('hashedit-demo') == true) {
           demo = true;
+        }
+        
+        // setup framework
+        if(incoming.framework) {
+          hashedit.framework = incoming.framework;
         }
 
         // setup sortable
