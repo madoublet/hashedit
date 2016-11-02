@@ -249,7 +249,7 @@ body [contentEditable=true] a {
 body .hashedit-config {
   font-family: 'Helvetica','Arial','sans-serif';
   position: fixed;
-  z-index: 1000;
+  z-index: 10000;
   top: -51px;
   left: 0;
   height: 50px;
@@ -433,10 +433,44 @@ body .hashedit-config .hashedit-layout {
 }
 
 /* hashedit-menu */
+.hashedit-help {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 30px;
+  padding: 6px 5px 0 10px;
+  width: 100%;
+  background-color: #2F3243;
+  color: #fff;
+  font-family: 'Helvetica','Arial','sans-serif';
+  font-size: 13px;
+  z-index: 10001;
+  text-align: left;
+  margin-bottom: -35px;
+  transition: all .1s ease;
+  transition-delay: .1s;
+}
+
+  .hashedit-help svg {
+    display: inline-block;
+    margin-bottom: -3px;
+  }
+
+  .hashedit-help b {
+    display: inline-block;
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+
+  .hashedit-help[active] {
+    margin-bottom: 0;
+  }
+
+/* hashedit-menu */
 .hashedit-menu {
   font-family: 'Helvetica','Arial','sans-serif';
   position: fixed;
-  z-index: 1002;
+  z-index: 10002;
   top: 0;
   left: 0;
   height: 50px;
@@ -613,6 +647,17 @@ body .hashedit-modal input, body .hashedit-modal select {
   color: #555;
   box-sizing: border-box;
   width: 100%;
+  border: 1px solid #ccc;
+}
+
+body .hashedit-modal textarea {
+  margin: 0 0 10px 0;
+  padding: 10px;
+  color: #555;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 150px;
+  border: 1px solid #ccc;
 }
 
 body .hashedit-modal input[type=submit] {

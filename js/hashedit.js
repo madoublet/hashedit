@@ -349,7 +349,7 @@ hashedit = (function() {
      */
     setupMenu: function() {
 
-      var menu, data, xhr, url;
+      var menu, data, xhr, url, help, els, x;
 
       // create a menu
       menu = document.createElement('menu');
@@ -359,6 +359,14 @@ hashedit = (function() {
 
       // append menu
       hashedit.current.container.appendChild(menu);
+
+      // create hashedit-help
+      help = document.createElement('section');
+      help.setAttribute('class', 'hashedit-help');
+      help.innerHTML = 'Sample help text';
+
+      // append help
+      hashedit.current.container.appendChild(help);
 
       // save
       document.querySelector('.hashedit-back').addEventListener('click', function() {
@@ -475,6 +483,14 @@ hashedit = (function() {
           // setup empty columns
           hashedit.setupEmpty();
 
+          // remove help
+          var help = document.querySelector('.hashedit-help');
+
+          if(help != null) {
+            help.innerHTML = '';
+            help.removeAttribute('active');
+          }
+
           return false;
 
         }
@@ -530,8 +546,8 @@ hashedit = (function() {
       // setup menu
       var menu = [{
           action: "hashedit.h1",
-          selector: "h1",
-          title: "H1",
+          selector: "H1",
+          title: "H1 Headline",
           display: "H1",
           html: '<h1>' + hashedit.i18n('Tap to update') + '</h1>'
         }, {
@@ -732,6 +748,12 @@ hashedit = (function() {
           title: "Code",
           display: "<svg viewBox='0 0 24 24'  height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'></path></g></svg>",
           html: "<pre>Start adding code</pre>"
+        }, {
+          action: "hashedit.html",
+          selector: "[respond-html]",
+          title: "HTML",
+          display: "HTML",
+          html: '<div respond-html>' + hashedit.i18n('Tap settings to edit HTML') + '</div>'
         }];
 
       hashedit.menu = menu.concat(hashedit.menu);
@@ -743,12 +765,48 @@ hashedit = (function() {
 
         // create a menu item
         a = document.createElement('a');
-        a.setAttribute('title', hashedit.i18n(item.title));
+        a.setAttribute('title', item.title);
         a.setAttribute('data-selector', item.selector);
         a.innerHTML = item.display;
 
+        // handle mouseover
+        a.addEventListener('mouseover', function(e) {
+
+          if(e.target != null) {
+            if(e.target.hasAttribute('title')) {
+              var help = document.querySelector('.hashedit-help');
+
+              if(help != null) {
+                help.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="15" viewBox="0 0 24 24" width="15"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><b>' + hashedit.i18n(e.target.getAttribute('title')) + '</b> ' + hashedit.i18n('Drag onto page to place elmement');
+                help.setAttribute('active', '');
+              }
+
+            }
+          }
+
+        });
+
+        // handle mouseout
+        a.addEventListener('mouseout', function(e) {
+
+          if(e.target != null) {
+            if(e.target.hasAttribute('title')) {
+              var help = document.querySelector('.hashedit-help');
+
+              if(help != null) {
+                help.innerHTML = '';
+                help.removeAttribute('active');
+              }
+
+            }
+          }
+
+        });
+
         // append the child to the menu
         document.querySelector('.hashedit-menu-body').appendChild(a);
+
+
 
       }
 
@@ -828,7 +886,7 @@ hashedit = (function() {
      */
     bind: function() {
 
-      var attrs, x, y, z, key, value, inputs;
+      var attrs, x, y, z, key, value, html, inputs, textarea;
 
       if (hashedit.current.node !== null) {
 
@@ -849,13 +907,24 @@ hashedit = (function() {
           }
 
           // set value
-          inputs = document.querySelectorAll('[data-model="node.' + key +
-            '"]');
+          inputs = document.querySelectorAll('[data-model="node.' + key + '"]');
 
           for (y = 0; y < inputs.length; y += 1) {
             inputs[y].value = value;
           }
 
+        }
+
+        // get html
+        html = hashedit.current.node.innerHTML;
+
+        // remove the element menu
+        html = hashedit.replaceAll(html, hashedit.elementMenu, '');
+
+        inputs = document.querySelectorAll('[data-model="node.html"]');
+
+        for (y = 0; y < inputs.length; y += 1) {
+          inputs[y].value = html;
         }
 
       }
@@ -874,14 +943,19 @@ hashedit = (function() {
       // clean pasted text, #ref: http://bit.ly/1Tr8IR3
       document.addEventListener('paste', function(e) {
 
-        // cancel paste
-        e.preventDefault();
+        if(e.target.nodeName == 'TEXTAREA') {
+          // do nothing
+        }
+        else {
+          // cancel paste
+          e.preventDefault();
 
-        // get text representation of clipboard
-        var text = e.clipboardData.getData("text/plain");
+          // get text representation of clipboard
+          var text = e.clipboardData.getData("text/plain");
 
-        // insert text manually
-        document.execCommand("insertHTML", false, text);
+          // insert text manually
+          document.execCommand("insertHTML", false, text);
+        }
 
       });
 
@@ -1087,7 +1161,7 @@ hashedit = (function() {
             else if (hashedit.findParentBySelector(e.target, '.hashedit-block-duplicate') !== null) {
 
               block = hashedit.findParentBySelector(e.target, '[hashedit-block]');
-              
+
               hashedit.duplicateBlock(block, 'before');
 
               hashedit.setupBlocks();
@@ -1400,7 +1474,7 @@ hashedit = (function() {
       return newNode;
 
     },
-    
+
     /**
      * Duplicates a block and appends it to the editor
      */
@@ -1763,28 +1837,35 @@ hashedit = (function() {
                     // get property
                     attr = parts[1].replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 
-                    // get currentValue
-                    var old = hashedit.current.node.getAttribute(attr);
-
-                    // set attribute
-                    hashedit.current.node.setAttribute(attr, value);
-
-                    if(hashedit.debug === true) {
-                      console.log('setattribute on [data-model]');
-                      console.log('attr=' + attr + 'value=' + value);
+                    if(attr === 'html') {
+                      hashedit.current.node.innerHTML = value + hashedit.elementMenu;
                     }
+                    else { // other elements
 
-                    // create text style
-                    style = hashedit.createTextStyle(hashedit.current.node);
+                      // get currentValue
+                      var old = hashedit.current.node.getAttribute(attr);
 
-                    hashedit.current.node.setAttribute('style', style);
+                      // set attribute
+                      hashedit.current.node.setAttribute(attr, value);
 
-                    // call change event
-                    for (x = 0; x < hashedit.menu.length; x += 1) {
+                      if(hashedit.debug === true) {
+                        console.log('setattribute on [data-model]');
+                        console.log('attr=' + attr + 'value=' + value);
+                      }
 
-                      if(hashedit.current.node.matches(hashedit.menu[x].selector)) {
-                        if(hashedit.menu[x].change) {
-                          hashedit.menu[x].change(attr, value, old);
+                      // create text style
+                      style = hashedit.createTextStyle(hashedit.current.node);
+
+                      hashedit.current.node.setAttribute('style', style);
+
+                      // call change event
+                      for (x = 0; x < hashedit.menu.length; x += 1) {
+
+                        if(hashedit.current.node.matches(hashedit.menu[x].selector)) {
+                          if(hashedit.menu[x].change) {
+                            hashedit.menu[x].change(attr, value, old);
+                          }
+
                         }
 
                       }
@@ -2492,7 +2573,7 @@ hashedit = (function() {
         if(body.hasAttribute('hashedit-demo') == true) {
           demo = true;
         }
-        
+
         // setup framework
         if(incoming.framework) {
           hashedit.framework = incoming.framework;

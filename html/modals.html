@@ -114,14 +114,18 @@
 
     <div class="hashedit-modal-body">
 
-        <h2><span id="hashedit-element-details-type"></span> <span data-i18n>Element</span></h2>
+      <h2><span id="hashedit-element-details-type"></span> <span data-i18n>Element</span></h2>
 
     	<label data-i18n>Id</label>
     	<input name="id" type="text" maxlength="128"
     				data-model="node.id" placeholder="sample-id">
-        <label data-i18n>CSS Class</label>
-        <input name="cssClass" type="text" maxlength="128"
-    				data-model="node.class" placeholder="sample-css-class">
+
+      <label data-i18n>CSS Class</label>
+      <input name="cssClass" type="text" maxlength="128"
+  				data-model="node.class" placeholder="sample-css-class">
+
+       <label data-i18n>HTML</label>
+       <textarea name="cssClass" data-model="node.html"></textarea>
 
         <div class="actions">
             <a hashedit-cancel-modal class="primary" data-i18n>Done</a>
