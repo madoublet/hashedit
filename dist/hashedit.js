@@ -362,11 +362,20 @@ hashedit = (function() {
 
       var menu, data, xhr, url, help, els, x;
 
-      // create a menu
+      // create menu
       menu = document.createElement('menu');
       menu.setAttribute('class', 'hashedit-menu');
       menu.innerHTML =
-        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><button class="hashedit-save"><svg height="24" width="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"><g><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g></svg></button><div class="hashedit-menu-body"></div>';
+        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><div class="hashedit-menu-body"></div>';
+
+      // append menu
+      hashedit.current.container.appendChild(menu);
+
+      // create alternate menu
+      menu = document.createElement('menu');
+      menu.setAttribute('class', 'hashedit-menu-alternate');
+      menu.innerHTML = '<button class="hashedit-save" exit>Save and Exit</button>' +
+                        '<button class="hashedit-save primary">Save</button>';
 
       // append menu
       hashedit.current.container.appendChild(menu);
@@ -379,56 +388,75 @@ hashedit = (function() {
       // append help
       hashedit.current.container.appendChild(help);
 
-      // save
-      document.querySelector('.hashedit-back').addEventListener('click', function() {
-        history.go(-1);
-      });
+      // back
+      if(document.querySelector('.hashedit-back') != null) {
+        document.querySelector('.hashedit-back').addEventListener('click', function() {
+          history.go(-1);
+        });
+      }
 
       // save
-      document.querySelector('.hashedit-save').addEventListener('click', function() {
+      if(document.querySelector('.hashedit-save') != null) {
 
-          if (hashedit.demo === true) {
+        var els = document.querySelectorAll('.hashedit-save');
 
-            hashedit.showToast('Cannot save in demo mode',
-              'failure');
+        for(var x=0; x<els.length; x++) {
 
-          } else {
+          els[x].addEventListener('click', function(e) {
 
-            data = hashedit.retrieveUpdateArray();
+              var el = e.target;
 
-            if (hashedit.saveUrl) {
+              if (hashedit.demo === true) {
 
-              // construct an HTTP request
-              xhr = new XMLHttpRequest();
-              xhr.open('post', hashedit.saveUrl, true);
+                hashedit.showToast('Cannot save in demo mode',
+                  'failure');
 
-              // set token
-              if(hashedit.useToken == true) {
-                xhr.setRequestHeader(hashedit.authHeader, hashedit.authHeaderPrefix + ' ' + localStorage.getItem(hashedit.tokenName));
-              }
+              } else {
 
-              // send the collected data as JSON
-              xhr.send(JSON.stringify(data));
+                data = hashedit.retrieveUpdateArray();
 
-              xhr.onloadend = function() {
+                if (hashedit.saveUrl) {
 
-                hashedit.showToast('<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24">' +
-                  '<path d="M0 0h24v24H0z" fill="none"/>' +
-                  '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
-                  '</svg>', 'success');
+                  // construct an HTTP request
+                  xhr = new XMLHttpRequest();
+                  xhr.open('post', hashedit.saveUrl, true);
 
-                if(hashedit.debug === false) {
-                  history.go(-1);
+                  // set token
+                  if(hashedit.useToken == true) {
+                    xhr.setRequestHeader(hashedit.authHeader, hashedit.authHeaderPrefix + ' ' + localStorage.getItem(hashedit.tokenName));
+                  }
+
+                  // send the collected data as JSON
+                  xhr.send(JSON.stringify(data));
+
+                  xhr.onloadend = function() {
+
+                    hashedit.showToast('<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24">' +
+                      '<path d="M0 0h24v24H0z" fill="none"/>' +
+                      '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
+                      '</svg>', 'success');
+
+                    if(el.hasAttribute('exit') == true) {
+                      if(hashedit.debug === false) {
+                        history.go(-1);
+                      }
+                    }
+                    else {
+                      location.reload();
+                    }
+
+                  };
+
                 }
 
-              };
+              }
 
-            }
+
+            });
 
           }
 
-
-        });
+        }
 
     },
 
@@ -788,7 +816,7 @@ hashedit = (function() {
               var help = document.querySelector('.hashedit-help');
 
               if(help != null) {
-                help.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="15" viewBox="0 0 24 24" width="15"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><b>' + hashedit.i18n(e.target.getAttribute('title')) + '</b> ' + hashedit.i18n('Drag onto page to place elmement');
+                help.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="15" viewBox="0 0 24 24" width="15"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><b>' + hashedit.i18n(e.target.getAttribute('title')) + '</b> ' + hashedit.i18n('Drag onto page to place the plugin');
                 help.setAttribute('active', '');
               }
 
@@ -2680,6 +2708,10 @@ hashedit = (function() {
           if(localStorage['user_language'] != null){
     				hashedit.language = localStorage['user_language'];
     			}
+    		}
+
+    		if(incoming.saveUrl) {
+      		hashedit.saveUrl = incoming.saveUrl;
     		}
 
       }
