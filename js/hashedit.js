@@ -13,6 +13,9 @@ hashedit = (function() {
     // url to page
     url: null,
 
+    // page title
+    title: '',
+
     // API urls
     saveUrl: '/api/pages/save',
     addPageURL: '/api/pages/add',
@@ -349,39 +352,56 @@ hashedit = (function() {
      */
     setupMenu: function() {
 
-      var menu, data, xhr, url, help, els, x;
+      var menu, data, xhr, url, help, els, x, title = '', arr;
+
+      // create top menu
+      menu = document.createElement('menu');
+      menu.setAttribute('class', 'hashedit-top-menu');
+      menu.innerHTML =
+        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-add"><svg viewBox="0 0 24 24" width="24" height="24" preserveAspectRatio="xMidYMid meet"><g><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></g></svg></button>';
+
+      // append menu
+      hashedit.current.container.appendChild(menu);
 
       // create menu
       menu = document.createElement('menu');
       menu.setAttribute('class', 'hashedit-menu');
       menu.innerHTML =
-        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><div class="hashedit-menu-body"></div>';
+        '<div class="hashedit-menu-body"></div>';
 
       // append menu
       hashedit.current.container.appendChild(menu);
 
       // create alternate menu
       menu = document.createElement('menu');
-      menu.setAttribute('class', 'hashedit-menu-alternate');
+      menu.setAttribute('class', 'hashedit-bottom-menu');
       menu.innerHTML = '<button class="hashedit-save" exit>Save and Exit</button>' +
                         '<button class="hashedit-save primary">Save</button>';
 
       // append menu
       hashedit.current.container.appendChild(menu);
 
-      // create hashedit-help
-      help = document.createElement('section');
-      help.setAttribute('class', 'hashedit-help');
-      help.innerHTML = 'Sample help text';
-
-      // append help
-      hashedit.current.container.appendChild(help);
-
       // back
       if(document.querySelector('.hashedit-back') != null) {
         document.querySelector('.hashedit-back').addEventListener('click', function() {
           history.go(-1);
         });
+      }
+
+      // add
+      if(document.querySelector('.hashedit-add') != null) {
+
+        document.querySelector('.hashedit-add').addEventListener('click', function() {
+          menu = document.querySelector('.hashedit-menu');
+
+          if(menu.hasAttribute('active') == true) {
+            menu.removeAttribute('active');
+          }
+          else {
+            menu.setAttribute('active', true);
+          }
+        });
+
       }
 
       // save
@@ -475,6 +495,12 @@ hashedit = (function() {
         scroll: true, // or HTMLElement
         scrollSensitivity: 30, // px, how near the mouse must be to an edge to start scrolling.
         scrollSpeed: 10, // px
+
+        onStart: function(evt) {
+
+          document.querySelector('.hashedit-menu').removeAttribute('active');
+
+        },
 
         // dragging ended
         onEnd: function(evt) {
@@ -795,46 +821,10 @@ hashedit = (function() {
         a = document.createElement('a');
         a.setAttribute('title', item.title);
         a.setAttribute('data-selector', item.selector);
-        a.innerHTML = item.display;
-
-        // handle mouseover
-        a.addEventListener('mouseover', function(e) {
-
-          if(e.target != null) {
-            if(e.target.hasAttribute('title')) {
-              var help = document.querySelector('.hashedit-help');
-
-              if(help != null) {
-                help.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="15" viewBox="0 0 24 24" width="15"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg><b>' + hashedit.i18n(e.target.getAttribute('title')) + '</b> ' + hashedit.i18n('Drag onto page to place the plugin');
-                help.setAttribute('active', '');
-              }
-
-            }
-          }
-
-        });
-
-        // handle mouseout
-        a.addEventListener('mouseout', function(e) {
-
-          if(e.target != null) {
-            if(e.target.hasAttribute('title')) {
-              var help = document.querySelector('.hashedit-help');
-
-              if(help != null) {
-                help.innerHTML = '';
-                help.removeAttribute('active');
-              }
-
-            }
-          }
-
-        });
+        a.innerHTML = '<span class="icon">' + item.display + '</span><span class="title">' + item.title + '</span>';
 
         // append the child to the menu
         document.querySelector('.hashedit-menu-body').appendChild(a);
-
-
 
       }
 
@@ -2646,6 +2636,11 @@ hashedit = (function() {
         // set url
         if(incoming.url) {
           url = incoming.url;
+        }
+
+        // set title
+        if(incoming.title) {
+          hashedit.title = incoming.title;
         }
 
         // set login
