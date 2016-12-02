@@ -499,13 +499,7 @@ body .hashedit-config .hashedit-layout {
     line-height: 0;
   }
 
-  .hashedit-menu .hashedit-back:hover {
-    background-color: #2F3243;
-    color: #fff !important;
-    height: 50px;
-  }
-
-  .hashedit-menu .hashedit-back svg {
+  .hashedit-top-menu .hashedit-back svg {
     fill: currentColor;
     margin: 0 auto 0 auto;
   }
@@ -523,12 +517,6 @@ body .hashedit-config .hashedit-layout {
     z-index: 2;
     background-color: transparent;
     line-height: 0;
-  }
-
-  .hashedit-top-menu .hashedit-add:hover {
-    background-color: #2F3243;
-    color: #fff !important;
-    height: 50px;
   }
 
  .hashedit-top-menu .hashedit-add svg {
