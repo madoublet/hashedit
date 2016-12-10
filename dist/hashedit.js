@@ -610,79 +610,67 @@ hashedit = (function() {
 
       // setup menu
       var menu = [{
-          action: "hashedit.h1",
           selector: "H1",
           title: "H1 Headline",
           display: "H1",
           html: '<h1>' + hashedit.i18n('Tap to update') + '</h1>'
         }, {
-          action: "hashedit.h2",
           selector: "h2",
           title: "H2 Headline",
           display: "H2",
           html: '<h2>' + hashedit.i18n('Tap to update') + '</h2>'
         }, {
-          action: "hashedit.h3",
           selector: "h3",
           title: "H3 Headline",
           display: "H3",
           html: '<h3>' + hashedit.i18n('Tap to update') + '</h3>'
         }, {
-          action: "hashedit.h4",
           selector: "h4",
           title: "H4 Headline",
           display: "H4",
           html: '<h4>' + hashedit.i18n('Tap to update') + '</h4>'
         }, {
-          action: "hashedit.h5",
           selector: "h5",
           title: "H5 Headline",
           display: "H5",
           html: '<h5>' + hashedit.i18n('Tap to update') + '</h5>'
         }, {
-          action: "hashedit.p",
           selector: "p",
           title: "Paragraph",
           display: "P",
           html: '<p>' + hashedit.i18n('Tap to update') + '</p>'
         }, {
-          action: "hashedit.blockquote",
           selector: "blockquote",
           title: "Blockquote",
-          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z'></path></g></svg>",
+          display: "<i class=\"material-icons\">format_quote</i>",
           html: '<blockquote>' + hashedit.i18n('Tap to update') + '</blockquote>'
         }, {
-          action: "hashedit.ul",
           selector: "ul",
           title: "Unordered List",
-          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12.17c-.74 0-1.33.6-1.33 1.33s.6 1.33 1.33 1.33 1.33-.6 1.33-1.33-.59-1.33-1.33-1.33zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z'></path></g></svg>",
+          display: "<i class=\"material-icons\">format_list_bulleted</i>",
           html: '<ul><li>' + hashedit.i18n('Tap to update') + '</li></ul>'
         }, {
-          action: "hashedit.ol",
           selector: "ol",
           title: "Ordered List",
-          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z'></path></g></svg>",
+          display: "<i class=\"material-icons\">format_list_numbered</i>",
           html: "<ol><li></li></ol>"
         }, {
-          action: "hashedit.hr",
           selector: "hr",
           title: "Break",
-          display: "<svg xmlns='http://www.w3.org/2000/svg' height='100%' viewBox='0 0 24 24' width='100%'><path d='M19 13H5v-2h14v2z'/><path d='M0 0h24v24H0z' fill='none'/></svg>",
+          display: "<i class=\"material-icons\">remove</i>",
           html: "<hr>"
         },{
-          action: "hashedit.image",
           selector: "img",
           title: "Image",
-          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><path d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'></path></g></svg>",
+          display: "<i class=\"material-icons\">insert_photo</i>",
           html: '<p><img src="{{path}}images/placeholder.png" class="{{framework.image}}"></p>',
           configure: function() {
             hashedit.showImageDialog();
           }
         }, {
-          action: "hashedit.table",
           selector: "table[rows]",
           title: "Table",
-          display: "<svg viewBox='0 0 24 24' height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z'></path></g></svg>",
+          display: "<i class=\"material-icons\">grid_on</i>",
           html: '<table class="{{framework.table}}" rows="1" columns="2"><thead><tr><th>Header</th><th>Header</th></tr></thead><tbody><tr><td>Content</td><td>Content</td></tr></tbody></table>',
           attributes: [
             {
@@ -808,13 +796,11 @@ hashedit = (function() {
 
           }
         },{
-          action: "hashedit.code",
           selector: "pre",
           title: "Code",
-          display: "<svg viewBox='0 0 24 24'  height='100%' width='100%' preserveAspectRatio='xMidYMid meet' style='pointer-events: none; display: block;'><g><path d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'></path></g></svg>",
+          display: "<i class=\"material-icons\">code</i>",
           html: "<pre>Start adding code</pre>"
         }, {
-          action: "hashedit.html",
           selector: "[respond-html]",
           title: "HTML",
           display: "HTML",

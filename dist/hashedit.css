@@ -391,6 +391,11 @@ body .hashedit-config .hashedit-layout {
   box-sizing: border-box;
 }
 
+  .hashedit-menu .material-icons {
+    font-family: 'Material Icons' !important;
+    font-size: 24px !important;
+  }
+
 /* hashedit-toast */
 .hashedit-toast {
   font-family: 'Helvetica','Arial','sans-serif';
