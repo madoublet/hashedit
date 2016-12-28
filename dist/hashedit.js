@@ -23,6 +23,7 @@ hashedit = (function() {
 
     // url to page
     url: null,
+    previewUrl: null,
 
     // page title
     title: '',
@@ -369,7 +370,7 @@ hashedit = (function() {
       menu = document.createElement('menu');
       menu.setAttribute('class', 'hashedit-top-menu');
       menu.innerHTML =
-        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-add"><svg viewBox="0 0 24 24" width="24" height="24" preserveAspectRatio="xMidYMid meet"><g><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></g></svg></button>';
+        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-view"><i class="material-icons">launch</i></button><button class="hashedit-add"><i class="material-icons">add</i></button>';
 
       // append menu
       hashedit.current.container.appendChild(menu);
@@ -412,6 +413,19 @@ hashedit = (function() {
             menu.setAttribute('active', true);
           }
         });
+
+      }
+
+      // view
+      if(document.querySelector('.hashedit-view') != null) {
+
+        var el = document.querySelector('.hashedit-view');
+
+        el.addEventListener('click', function(e) {
+
+          window.open(hashedit.previewUrl, '_blank');
+
+          });
 
       }
 
@@ -2633,6 +2647,14 @@ hashedit = (function() {
         // set url
         if(incoming.url) {
           url = incoming.url;
+        }
+
+        // set previewUrl
+        if(incoming.previewUrl) {
+          hashedit.previewUrl = incoming.previewUrl;
+        }
+        else {
+          hashedit.previewUrl = url;
         }
 
         // set title

@@ -526,8 +526,28 @@ body .hashedit-config .hashedit-layout {
     line-height: 0;
   }
 
- .hashedit-top-menu .hashedit-add svg {
-    fill: currentColor;
+ .hashedit-top-menu .hashedit-add i {
+    color: #00ADE3;
+    margin: 0 auto 0 auto;
+  }
+
+  .hashedit-top-menu .hashedit-view {
+    position: fixed;
+    top: 0;
+    right: 50px;
+    width: 50px;
+    height: 49px;
+    border: 0;
+    outline: none;
+    font-size: 20px;
+    color: #00ADE3;
+    z-index: 2;
+    background-color: transparent;
+    line-height: 0;
+  }
+
+ .hashedit-top-menu .hashedit-view i {
+    color: #00ADE3;
     margin: 0 auto 0 auto;
   }
 
@@ -624,14 +644,6 @@ body .hashedit-config .hashedit-layout {
     .hashedit-menu a:hover .title {
       color: #fff;
     }
-
-
-  .hashedit-menu a svg {
-    display: block;
-    margin: 0 auto;
-    height: 25px;
-    fill: currentColor;
-  }
 
 /* hashedit-bottom-menu */
 .hashedit-bottom-menu {
