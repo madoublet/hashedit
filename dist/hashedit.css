@@ -5,6 +5,10 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+.hashedit-container h2, .hashedit-container label,  .hashedit-container input,  .hashedit-container select,  .hashedit-container button {
+  font-family: 'Open Sans', sans-serif;
+}
+
 [hashedit-sortable] {
   min-height: 50px;
 }
@@ -684,6 +688,10 @@ body .hashedit-config .hashedit-layout {
     margin: 5px 10px 5px 10px;
     line-height: 40px;
   }
+
+    .hashedit-bottom-menu button[disabled] {
+      color: #ccc;
+    }
 
   .hashedit-bottom-menu button.alternate {
     float: left;

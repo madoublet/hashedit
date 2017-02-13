@@ -440,7 +440,12 @@ hashedit = (function() {
 
               var el = e.target;
 
+              // disable button
+              el.setAttribute("disabled", "disabled");
+
               if (hashedit.demo === true) {
+
+                el.removeAttribute("disabled");
 
                 hashedit.showToast('Cannot save in demo mode',
                   'failure');
@@ -469,6 +474,8 @@ hashedit = (function() {
                       '<path d="M0 0h24v24H0z" fill="none"/>' +
                       '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
                       '</svg>', 'success');
+
+                    el.removeAttribute("disabled");
 
                     if(el.hasAttribute('exit') == true) {
                       if(hashedit.debug === false) {
