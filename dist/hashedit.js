@@ -1974,12 +1974,8 @@ hashedit = (function() {
 
                     hashedit.current.node = hashedit.findParentBySelector(hashedit.current.image, '[hashedit-element]');
 
-                    console.log(hashedit.current.node);
-
                     // fire event
                     if (hashedit.current.node !== null) {
-
-                      console
 
                       hashedit.current.node.dispatchEvent(new Event(
                         'input', {
@@ -2266,7 +2262,7 @@ hashedit = (function() {
      */
     showImageDialog: function() {
 
-      var id, cssClass, src, target, link;
+      var id, cssClass, src, target, link, alt, title;
 
       // populate link values
       if (hashedit.current.node !== null) {
@@ -2275,7 +2271,9 @@ hashedit = (function() {
         id = hashedit.current.node.getAttribute('id') || '';
         cssClass = hashedit.current.node.getAttribute('class') || '';
         src = hashedit.current.node.getAttribute('src') || '';
-        target = hashedit.current.node.getAttribute('target') || '';
+        alt = hashedit.current.node.getAttribute('alt') || '';
+        title = hashedit.current.node.getAttribute('title') || '';
+
 
         // show the link dialog
         link = document.querySelector('#hashedit-image-settings-modal');
@@ -2285,7 +2283,8 @@ hashedit = (function() {
         document.getElementById('hashedit-image-id').value = id;
         document.getElementById('hashedit-image-cssclass').value = cssClass;
         document.getElementById('hashedit-image-src').value = src;
-        document.getElementById('hashedit-image-target').value = target;
+        document.getElementById('hashedit-image-alt').value = alt;
+        document.getElementById('hashedit-image-title').value = title;
 
       }
 
