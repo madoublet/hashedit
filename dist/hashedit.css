@@ -505,7 +505,6 @@ body .hashedit-config .hashedit-layout {
   overflow-x: auto;
   overflow-y: hidden;
   -ms-overflow-style: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,.1);
 }
 
   .hashedit-top-menu .hashedit-back {
@@ -568,6 +567,26 @@ body .hashedit-config .hashedit-layout {
     margin: 0 auto 0 auto;
   }
 
+  .hashedit-top-menu .hashedit-focused {
+    position: fixed;
+    top: 0;
+    right: 100px;
+    width: 50px;
+    height: 49px;
+    border: 0;
+    outline: none;
+    font-size: 20px;
+    color: #00ADE3;
+    z-index: 2;
+    background-color: transparent;
+    line-height: 0;
+  }
+
+ .hashedit-top-menu .hashedit-focused i {
+    color: #00ADE3;
+    margin: 0 auto 0 auto;
+  }
+
   .hashedit-top-menu h2 {
     height: 20px;
     line-height: 20px;
@@ -583,7 +602,7 @@ body .hashedit-config .hashedit-layout {
   font-family: 'Helvetica','Arial','sans-serif';
   position: fixed;
   z-index: 10002;
-  top: 50px;
+  top: 51px;
   right: -155px;
   height: calc(100% - 99px);
   width: 152px;
@@ -673,13 +692,14 @@ body .hashedit-config .hashedit-layout {
   width: 100%;
   background-color: rgba(255,255,255,1);
   margin: 0;
-  padding: 0 10px;
+  padding: 0;
   color: #2F3243;
   border-top: 1px solid #DDD;
   text-align: right;
 }
 
   .hashedit-bottom-menu button {
+    font-family: 'Helvetica','Arial','sans-serif';
     display: inline-block;
     color: #00ADE3;
     border: none;
@@ -687,6 +707,8 @@ body .hashedit-config .hashedit-layout {
     height: 40px;
     margin: 5px 10px 5px 10px;
     line-height: 40px;
+    font-size: 14px;
+    text-transform: capitalize;
   }
 
     .hashedit-bottom-menu button[disabled] {
@@ -708,7 +730,7 @@ body .hashedit-modal {
   position: fixed;
   left: 50%;
   top: 50%;
-  z-index: 10001;
+  z-index: 100001;
   width: 400px;
   background-color: #fff;
   margin: 5px;
@@ -724,6 +746,11 @@ body .hashedit-modal {
   box-shadow: 2px 2px 5px rgba(0,0,0,.25);
   box-sizing: border-box;
 }
+
+  body .hashedit-modal-body {
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+  }
 
 body .hashedit-modal a,body .hashedit-modal a:visited {
   color: #00ADE3;

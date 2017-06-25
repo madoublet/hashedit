@@ -372,7 +372,7 @@ hashedit = (function() {
       menu = document.createElement('menu');
       menu.setAttribute('class', 'hashedit-top-menu');
       menu.innerHTML =
-        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-view"><i class="material-icons">launch</i></button><button class="hashedit-add"><i class="material-icons">add</i></button>';
+        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-focused"><i class="material-icons">create</i></button><button class="hashedit-view"><i class="material-icons">launch</i></button><button class="hashedit-add"><i class="material-icons">add</i></button>';
 
       // append menu
       hashedit.current.container.appendChild(menu);
@@ -426,6 +426,31 @@ hashedit = (function() {
         el.addEventListener('click', function(e) {
 
           window.open(hashedit.previewUrl, '_blank');
+
+          });
+
+      }
+
+
+      // focused
+      if(document.querySelector('.hashedit-focused') != null) {
+
+        var el = document.querySelector('.hashedit-focused');
+
+        if(document.querySelector('[focused-content]') == null) {
+          el.style.display = 'none';
+        }
+
+        el.addEventListener('click', function(e) {
+
+          var url = window.location.href.replace('mode=page', 'mode=focused');
+          //location.href = url;
+
+          var iframe = window.parent.document.getElementsByTagName('iframe')[0];
+
+          iframe.setAttribute('src', url);
+
+          console.log(iframe);
 
           });
 
@@ -1392,7 +1417,9 @@ hashedit = (function() {
                 }
                 else if (el.nodeName == 'P') {
 
-                  hashedit.append('<p>' + hashedit.i18n('Tap to update') + '</p>');
+                  var node = hashedit.append('<p>' + hashedit.i18n('Tap to update') + '</p>');
+
+                  hashedit.current.node = node;
 
                   e.preventDefault();
                   e.stopPropagation();
