@@ -1037,15 +1037,15 @@ hashedit = (function() {
 
             if (e.target.hasAttribute('hashedit-element')) {
               element = e.target;
-              
+
               // get value of text node
               var text = hashedit.getTextNodeValue(element);
-              
+
               // if text is set to "Tap to update" select all the text
               if(text === hashedit.i18n('Tap to update')) {
                 document.execCommand('selectAll', false, null);
               }
-              
+
             }
             else {
               element = hashedit.findParentBySelector(e.target, '[hashedit-element]');
@@ -1352,13 +1352,13 @@ hashedit = (function() {
         // delegate INPUT event
         ['input'].forEach(function(e) {
           arr[x].addEventListener(e, function(e) {
-          
+
             if (e.target.hasAttribute('contentEditable')) {
 
               el = e.target;
-              
+
               while (el !== null) {
-              
+
                 var node = el.childNodes[0];
 
                 if (hashedit.debug === true) {
@@ -1368,9 +1368,9 @@ hashedit = (function() {
 
                 // get value of text node
                 var text = hashedit.getTextNodeValue(el);
-                
-                // if text is blank, add "Tap to update" to prevent the editor from breaking
-                if(text === '') {
+
+                // if text is blank and the element has only one child node, add "Tap to update" to prevent the editor from breaking
+                if(text === '' && el.childNodes.length == 1) {
                   text = document.createTextNode(hashedit.i18n('Tap to update'));
                   el.insertBefore(text, el.firstChild);
                   document.execCommand('selectAll', false, null);
@@ -1426,7 +1426,7 @@ hashedit = (function() {
                   var node = hashedit.append('<p>' + hashedit.i18n('Tap to update') + '</p>');
 
                   hashedit.current.node = node;
-                  
+
 
                   e.preventDefault();
                   e.stopPropagation();
@@ -1456,9 +1456,9 @@ hashedit = (function() {
                   }
 
                 } // end LI
-                
+
               }
-              
+
             }
 
 
@@ -1469,31 +1469,31 @@ hashedit = (function() {
       }
 
     },
-    
+
     /**
      * Returns the value of the text node
      */
     getTextNodeValue: function(el) {
-    
+
       var text = '';
-    
+
       for (var i = 0; i < el.childNodes.length; i++) {
           var curNode = el.childNodes[i];
           var whitespace = /^\s*$/;
-          
+
           if(curNode === undefined) {
             text = "";
             break;
           }
-          
+
           if (curNode.nodeName === "#text" && !(whitespace.test(curNode.nodeValue))) {
               text = curNode.nodeValue;
               break;
           }
       }
-      
+
       return text;
-      
+
     },
 
     /**
