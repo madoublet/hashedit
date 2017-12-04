@@ -368,15 +368,6 @@ hashedit = (function() {
 
       var menu, data, xhr, url, help, els, x, title = '', arr;
 
-      // create top menu
-      menu = document.createElement('menu');
-      menu.setAttribute('class', 'hashedit-top-menu');
-      menu.innerHTML =
-        '<button class="hashedit-back"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><h2>' + hashedit.title + '</h2><button class="hashedit-focused"><i class="material-icons">create</i></button><button class="hashedit-view"><i class="material-icons">launch</i></button><button class="hashedit-add"><i class="material-icons">add</i></button>';
-
-      // append menu
-      hashedit.current.container.appendChild(menu);
-
       // create menu
       menu = document.createElement('menu');
       menu.setAttribute('class', 'hashedit-menu');
@@ -385,52 +376,6 @@ hashedit = (function() {
 
       // append menu
       hashedit.current.container.appendChild(menu);
-
-      // create alternate menu
-      menu = document.createElement('menu');
-      menu.setAttribute('class', 'hashedit-bottom-menu');
-      menu.innerHTML = '<button class="hashedit-save" exit>Save and Exit</button>' +
-                        '<button class="hashedit-save primary">Save</button>';
-
-      // append menu
-      hashedit.current.container.appendChild(menu);
-
-      // back
-      if(document.querySelector('.hashedit-back') != null) {
-        document.querySelector('.hashedit-back').addEventListener('click', function() {
-          history.go(-1);
-        });
-      }
-
-      // add
-      if(document.querySelector('.hashedit-add') != null) {
-
-        document.querySelector('.hashedit-add').addEventListener('click', function() {
-          menu = document.querySelector('.hashedit-menu');
-
-          if(menu.hasAttribute('active') == true) {
-            menu.removeAttribute('active');
-          }
-          else {
-            menu.setAttribute('active', true);
-          }
-        });
-
-      }
-
-      // view
-      if(document.querySelector('.hashedit-view') != null) {
-
-        var el = document.querySelector('.hashedit-view');
-
-        el.addEventListener('click', function(e) {
-
-          window.open(hashedit.previewUrl, '_blank');
-
-          });
-
-      }
-
 
       // focused
       if(document.querySelector('.hashedit-focused') != null) {
@@ -456,75 +401,54 @@ hashedit = (function() {
 
       }
 
-      // save
-      if(document.querySelector('.hashedit-save') != null) {
+    },
 
-        var els = document.querySelectorAll('.hashedit-save');
+    /**
+     * Shows the menu
+     */
+    showMenu: function() {
 
-        for(var x=0; x<els.length; x++) {
+      var menu = document.querySelector('.hashedit-menu');
 
-          els[x].addEventListener('click', function(e) {
+      if(menu.hasAttribute('active') == true) {
+        menu.removeAttribute('active');
+      }
+      else {
+        menu.setAttribute('active', true);
+      }
 
-              var el = e.target;
+    },
 
-              // disable button
-              el.setAttribute("disabled", "disabled");
+    /**
+      * Saves the content
+      */
+    save: function() {
 
-              if (hashedit.demo === true) {
+      var data, xhr;
 
-                el.removeAttribute("disabled");
+      data = hashedit.retrieveUpdateArray();
 
-                hashedit.showToast('Cannot save in demo mode',
-                  'failure');
+      if (hashedit.saveUrl) {
 
-              } else {
+        // construct an HTTP request
+        xhr = new XMLHttpRequest();
+        xhr.open('post', hashedit.saveUrl, true);
 
-                data = hashedit.retrieveUpdateArray();
-
-                if (hashedit.saveUrl) {
-
-                  // construct an HTTP request
-                  xhr = new XMLHttpRequest();
-                  xhr.open('post', hashedit.saveUrl, true);
-
-                  // set token
-                  if(hashedit.useToken == true) {
-                    xhr.setRequestHeader(hashedit.authHeader, hashedit.authHeaderPrefix + ' ' + localStorage.getItem(hashedit.tokenName));
-                  }
-
-                  // send the collected data as JSON
-                  xhr.send(JSON.stringify(data));
-
-                  xhr.onloadend = function() {
-
-                    hashedit.showToast('<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24">' +
-                      '<path d="M0 0h24v24H0z" fill="none"/>' +
-                      '<path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>' +
-                      '</svg>', 'success');
-
-                    el.removeAttribute("disabled");
-
-                    if(el.hasAttribute('exit') == true) {
-                      if(hashedit.debug === false) {
-                        history.go(-1);
-                      }
-                    }
-                    else {
-                      location.reload();
-                    }
-
-                  };
-
-                }
-
-              }
-
-
-            });
-
-          }
-
+        // set token
+        if(hashedit.useToken == true) {
+          xhr.setRequestHeader(hashedit.authHeader, hashedit.authHeaderPrefix + ' ' + localStorage.getItem(hashedit.tokenName));
         }
+
+        // send the collected data as JSON
+        xhr.send(JSON.stringify(data));
+
+        xhr.onloadend = function() {
+
+          location.reload();
+
+        };
+
+      }
 
     },
 
@@ -3049,34 +2973,6 @@ hashedit = (function() {
       }
 
       return temp;
-    },
-
-    /**
-     * Shows the toast
-     */
-    showToast: function(text, status) {
-
-      var toast;
-
-      toast = document.querySelector('.hashedit-toast');
-      toast.innerHTML = text;
-      toast.removeAttribute('success');
-      toast.removeAttribute('failure');
-
-      toast.setAttribute('active', '');
-
-      // add success/failure
-      if (status == 'success') {
-        toast.setAttribute('success', '');
-      } else if (status == 'failure') {
-        toast.setAttribute('failure', '');
-      }
-
-      // hide toast
-      setTimeout(function() {
-        toast.removeAttribute('active');
-      }, 2000);
-
     },
 
     /**
