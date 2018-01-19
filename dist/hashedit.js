@@ -578,10 +578,14 @@ hashedit = (function() {
      */
     createMenu: function() {
 
-      var x, item, a;
+      var x, item, a, div;
 
       // setup menu
-      var menu = [{
+      var menu = [
+        {
+          separator: hashedit.i18n('Text')
+        },
+        {
           selector: "H1",
           title: "H1 Headline",
           display: "H1",
@@ -616,7 +620,16 @@ hashedit = (function() {
           title: "Blockquote",
           display: "<i class=\"material-icons\">format_quote</i>",
           html: '<blockquote>' + hashedit.i18n('Tap to update') + '</blockquote>'
-        }, {
+        },{
+          selector: "pre",
+          title: "Code",
+          display: "<i class=\"material-icons\">code</i>",
+          html: "<pre>Start adding code</pre>"
+        },
+        {
+          separator: hashedit.i18n('Lists')
+        },
+        {
           selector: "ul",
           title: "Unordered List",
           display: "<i class=\"material-icons\">format_list_bulleted</i>",
@@ -626,7 +639,11 @@ hashedit = (function() {
           title: "Ordered List",
           display: "<i class=\"material-icons\">format_list_numbered</i>",
           html: "<ol><li></li></ol>"
-        }, {
+        },
+        {
+          separator: hashedit.i18n('Design')
+        },
+        {
           selector: "hr",
           title: "Break",
           display: "<i class=\"material-icons\">remove</i>",
@@ -768,15 +785,13 @@ hashedit = (function() {
 
           }
         },{
-          selector: "pre",
-          title: "Code",
-          display: "<i class=\"material-icons\">code</i>",
-          html: "<pre>Start adding code</pre>"
-        }, {
           selector: "[respond-html]",
           title: "HTML",
           display: "HTML",
           html: '<div respond-html>' + hashedit.i18n('Tap settings to edit HTML') + '</div>'
+        },
+        {
+          separator: hashedit.i18n('Plugins')
         }];
 
       hashedit.menu = menu.concat(hashedit.menu);
@@ -786,14 +801,25 @@ hashedit = (function() {
 
         item = hashedit.menu[x];
 
-        // create a menu item
-        a = document.createElement('a');
-        a.setAttribute('title', item.title);
-        a.setAttribute('data-selector', item.selector);
-        a.innerHTML = '<span class="icon">' + item.display + '</span><span class="title">' + item.title + '</span>';
+        if(item.separator != undefined) {
 
-        // append the child to the menu
-        document.querySelector('.hashedit-menu-body').appendChild(a);
+          div = document.createElement('div');
+          div.innerHTML = '<div class="separator"><h4>' + menu[x].separator + '</h4></div>';
+
+          // append the child to the menu
+          document.querySelector('.hashedit-menu-body').appendChild(div);
+
+        }
+        else {
+          // create a menu item
+          a = document.createElement('a');
+          a.setAttribute('title', item.title);
+          a.setAttribute('data-selector', item.selector);
+          a.innerHTML = '<span class="icon">' + item.display + '</span><span class="title">' + item.title + '</span>';
+
+          // append the child to the menu
+          document.querySelector('.hashedit-menu-body').appendChild(a);
+        }
 
       }
 
