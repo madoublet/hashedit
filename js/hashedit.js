@@ -387,7 +387,6 @@ hashedit = (function() {
         el.addEventListener('click', function(e) {
 
           var url = window.location.href.replace('mode=page', 'mode=focused');
-          //location.href = url;
 
           var iframe = window.parent.document.getElementsByTagName('iframe')[0];
 
@@ -414,6 +413,31 @@ hashedit = (function() {
       else {
         menu.setAttribute('active', true);
       }
+
+    },
+
+    /**
+     * Updates the UI with the attributes
+     */
+    update: function(attrs) {
+
+      let el = hashedit.current.node;
+
+      Object.keys(attrs).forEach(function(key,index) {
+
+          if(key == 'id') {
+            el.id = attrs.id;
+          }
+          else if(key == 'cssClass') {
+            el.className = attrs.cssClass;
+          }
+          else if(key == 'html') {
+            el.innerHTML = attrs.html;
+          }
+
+          });
+
+      hashedit.setupElementMenu(el);
 
     },
 
@@ -1021,6 +1045,25 @@ hashedit = (function() {
             else if (e.target.matches('.hashedit-properties')  ||  hashedit.findParentBySelector(e.target, '.hashedit-properties') !== null) {
 
               hashedit.current.node = element;
+
+              let html = element.innerHTML;
+              var i = html.indexOf('<span class="hashedit-element-menu"');
+              html = html.substring(0, i);
+
+              window.parent.postMessage({
+                type: 'edit',
+                element: 'default',
+                attrs: {
+                  id: element.id,
+                  cssClass: element.className,
+                  html: html
+                }
+              }, '*');
+
+              // call configure plugin
+              //window.parent.configurePlugin(element);
+
+              return; // temp
 
               isDefault = true;
 

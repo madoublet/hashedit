@@ -699,6 +699,9 @@ body .hashedit-config .hashedit-layout {
   border-left: 1px solid #DDD;
   overflow: hidden;
   transition: all .1s ease;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
 }
 
   .hashedit-menu[active] {
