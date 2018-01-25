@@ -418,22 +418,31 @@ hashedit = (function() {
 
     /**
      * Updates the UI with the attributes
+     * obj = { properties: {id, cssClass, html}, attributes: { custom1, custom2, custom3 } }
      */
-    update: function(attrs) {
+    update: function(obj) {
 
       let el = hashedit.current.node;
 
-      Object.keys(attrs).forEach(function(key,index) {
+      Object.keys(obj.properties).forEach(function(key,index) {
 
           if(key == 'id') {
-            el.id = attrs.id;
+            el.id = obj.properties.id;
           }
           else if(key == 'cssClass') {
-            el.className = attrs.cssClass;
+            el.className = obj.properties.cssClass;
           }
           else if(key == 'html') {
-            el.innerHTML = attrs.html;
+            el.innerHTML = obj.properties.html;
           }
+
+          });
+
+      console.log(obj.attributes);
+
+      Object.keys(obj.attributes).forEach(function(key,index) {
+
+          el.setAttribute(obj.attributes[index].attr, obj.attributes[index].value);
 
           });
 
@@ -1044,133 +1053,48 @@ hashedit = (function() {
             // check for properties element
             else if (e.target.matches('.hashedit-properties')  ||  hashedit.findParentBySelector(e.target, '.hashedit-properties') !== null) {
 
+              let selector = null, attributes = [], title = "Element";
+
+              // set current node
               hashedit.current.node = element;
 
+              // see if the element matches a plugin selector
+              for (x = 0; x < hashedit.menu.length; x += 1) {
+                if (element.matches(hashedit.menu[x].selector)) {
+                  title = hashedit.menu[x].title;
+                  selector = hashedit.menu[x].selector;
+
+                  // get null or not defined
+                  if(hashedit.menu[x].attributes != null && hashedit.menu[x].attributes != undefined) {
+                    attributes = hashedit.menu[x].attributes;
+                  }
+
+                }
+              }
+
+              // get current values for each attribute
+              for (x = 0; x < attributes.length; x++) {
+                attributes[x].value = element.getAttribute(attributes[x].attr) || '';
+              }
+
+              // get the html of the element
               let html = element.innerHTML;
               var i = html.indexOf('<span class="hashedit-element-menu"');
               html = html.substring(0, i);
 
               window.parent.postMessage({
                 type: 'edit',
-                element: 'default',
-                attrs: {
+                selector: selector,
+                title: title,
+                properties: {
                   id: element.id,
                   cssClass: element.className,
                   html: html
-                }
+                },
+                attributes: attributes
               }, '*');
 
-              // call configure plugin
-              //window.parent.configurePlugin(element);
-
-              return; // temp
-
-              isDefault = true;
-
-              // get menuItem
-              menuItem = null;
-
-              // see if the element matches a plugin selector
-              for (x = 0; x < hashedit.menu.length; x += 1) {
-
-                if (element.matches(hashedit.menu[x].selector)) {
-
-                  menuItem = hashedit.menu[x];
-
-                  if (hashedit.menu[x].configure) {
-                    isDefault = false;
-                    hashedit.menu[x].configure();
-                  }
-
-                }
-
-              }
-
-              if (isDefault === true) {
-
-                modal = document.getElementById('hashedit-element-settings-modal');
-                body = modal.querySelector('.hashedit-modal-body');
-
-                // remove existing custom attributes
-                els = body.querySelectorAll('.hashedit-custom-attr');
-
-                for(y=0; y<els.length; y++) {
-                  els[y].parentNode.removeChild(els[y]);
-                }
-
-                // setup custom attributes
-                if(menuItem != null) {
-
-                  if(menuItem.attributes) {
-
-                    for(y=0; y<menuItem.attributes.length; y++){
-
-                      attr = menuItem.attributes[y];
-
-                      div = document.createElement('div');
-                      div.setAttribute('class', 'hashedit-custom-attr');
-
-                      label = document.createElement('label');
-                      label.innerHTML = attr.label;
-
-                      div.appendChild(label);
-
-                      if(attr.type == 'text'){
-                        control = document.createElement('input');
-                        control.setAttribute('type', 'text');
-                        control.setAttribute('data-model', 'node.' + attr.attr);
-                        control.setAttribute('name', 'attr');
-
-                        div.appendChild(control);
-                      }
-
-                      if(attr.type == 'select'){
-                        control = document.createElement('select');
-                        control.setAttribute('data-model', 'node.' + attr.attr);
-                        control.setAttribute('name', 'attr');
-
-                        // create options
-                        if(attr.values != null) {
-
-                          for(z=0; z<attr.values.length; z++){
-
-                            option = document.createElement('option');
-
-                            // determine if hashed array
-                            if(attr.values[z].text) {
-                              option.setAttribute('value', attr.values[z].value);
-                              option.innerHTML = attr.values[z].text;
-                            }
-                            else {
-                              option.setAttribute('value', attr.values[z]);
-                              option.innerHTML = attr.values[z];
-                            }
-
-                            control.appendChild(option);
-                          }
-
-                        }
-
-                        div.appendChild(control);
-
-                      }
-
-                      body.appendChild(div);
-
-                    }
-
-
-                  }
-
-                }
-
-                // bind
-                hashedit.bind();
-
-                // show modal
-                modal.setAttribute('visible', 'true');
-
-              }
+              return;
 
             }
             // add block
